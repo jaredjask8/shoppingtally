@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.shoppingtally.model.Employee;
 import com.app.shoppingtally.service.EmployeeService;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/employee")
@@ -56,4 +57,5 @@ public class EmployeeResource {
 		employeeService.deleteEmployee(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
 }
