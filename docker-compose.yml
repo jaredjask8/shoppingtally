@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+ server:
+  build: .
+  restart: always
+  ports:
+   - 8080:8080
+  depends_on:
+   - mysqldb
+ mysqldb:
+  platform: linux/x86_64
+  image: "mysql:5.7"
+  ports:
+   - 3306:3306
+  environment:
+   MYSQL_DATABASE: employeemanager
+   MYSQL_USER: jaredj8
+   MYSQL_PASSWORD: 1306
+   MYSQL_ROOT_PASSWORD: 1306
+ ui-employee:
+  build: ./employeeFrontend
+  container_name: ui-employee
+  ports:
+  - 4200:80
+  links:
+  - server
+  
+volumes: 
+ mysql-data:
+ 
+ 
+ 
