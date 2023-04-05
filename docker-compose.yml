@@ -21,7 +21,7 @@ services:
   build: ./employeeFrontend
   container_name: ui-employee
   ports:
-  - 4200:443
+  - 4200:4200
   links:
   - server
   
