@@ -21,9 +21,7 @@ services:
   build: ./employeeFrontend
   container_name: ui-employee
   ports:
-  - 4200:4200
-  links:
-  - server
+  - 4200:80
   
 volumes: 
  mysql-data:
