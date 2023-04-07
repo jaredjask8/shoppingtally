@@ -11,6 +11,6 @@ export class EmployeeService {
   constructor(private http:HttpClient) {}
   
   getEmployeeList():Observable<Employee[]>{
-	  return this.http.get<Employee[]>("http://localhost:8080/employee/all");
+	  return this.http.get<Employee[]>("https://shoppingtally.click/shoppingtally-0.0.2-SNAPSHOT/employee/all");
   }
 }
