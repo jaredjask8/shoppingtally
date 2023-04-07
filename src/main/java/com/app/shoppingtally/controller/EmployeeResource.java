@@ -19,7 +19,7 @@ import com.app.shoppingtally.service.EmployeeService;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("/api/employee")
 public class EmployeeResource {
 	private final EmployeeService employeeService;
 	

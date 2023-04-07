@@ -11,6 +11,6 @@ export class EmployeeService {
   constructor(private http:HttpClient) {}
   
   getEmployeeList():Observable<Employee[]>{
-	  return this.http.get<Employee[]>("https://shoppingtally.click/employee/all");
+	  return this.http.get<Employee[]>("https://shoppingtally.click/api/employee/all");
   }
 }
