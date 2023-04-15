@@ -1,0 +1,8 @@
+<form [formGroup]="myForm">
+    <input formControlName="name" #name>
+    <input formControlName="email" #email>
+    <input formControlName="jobTitle" #job>
+    <input formControlName="phone" #phone>
+    <input formControlName="imgUrl" #img>
+    <button type="submit" (click)="submit(name.value, email.value, job.value, phone.value, img.value)">Go</button>
+  </form>
