@@ -15,10 +15,10 @@ export class LoginService {
   }
 
   getUsers():Observable<User[]>{
-    return this.http.get<User[]>("http://shoppingtally.click/api/user/all")
+    return this.http.get<User[]>("https://shoppingtally.click/api/user/all");
   }
 
   authenticateUser(user: User):Observable<User>{
-    return this.http.post<User>("http://shoppingtally.click/api/user/authenticate", user)
+    return this.http.post<User>("http://shoppingtally.click/api/user/authenticate", user);
   }
 }

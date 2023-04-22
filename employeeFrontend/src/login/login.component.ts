@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Employee } from 'src/employee/Employee';
 import { EmployeeService } from 'src/employee/employee.service';
 import { LoginService } from './login.service';
+import { User } from 'src/models/User';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,7 @@ ngOnInit() {
 
 submit(email:string, password:string){
   this.service.getUsers().subscribe(x => console.log(x));
-  //this.service.postEmployees(new User(email,password)).subscribe(x => console.log(x))
+  this.service.authenticateUser(new User(email,password)).subscribe(x => console.log(x))
 }
 
 }
