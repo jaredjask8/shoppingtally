@@ -14,7 +14,7 @@ export class EmployeeService {
 	  return this.http.get<Employee[]>("http://shoppingtally.click/api/employee/all");
   }
 
-  postEmployees(employee:Employee){
-	  return this.http.post("http://shoppingtally.click/api/employee/add", employee);
+  postEmployees(employee:Employee):Observable<Employee>{
+	  return this.http.post<Employee>("http://shoppingtally.click/api/employee/add", employee);
   }
 }

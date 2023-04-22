@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Employee } from 'src/employee/Employee';
 import { EmployeeService } from 'src/employee/employee.service';
+import { LoginService } from './login.service';
 
 @Component({
   selector: 'app-login',
@@ -11,21 +12,18 @@ import { EmployeeService } from 'src/employee/employee.service';
 export class LoginComponent implements OnInit{
   myForm: FormGroup; 
   employee: Employee
-constructor(private fb: FormBuilder, private service:EmployeeService) { }
+constructor(private fb: FormBuilder, private service:LoginService) { }
 
 ngOnInit() {
   this.myForm = this.fb.group({
-    name:'',
     email:'',
-    jobTitle:'',
-    phone:'',
-    imgUrl:''
+    password:''
   })
 }
 
-async submit(name:string, email:string, job:string, phone:string, img:string){
-  this.service.getEmployees().subscribe(x => console.log(x));
-  await this.service.postEmployees(new Employee(name, email,job,phone,img))
+submit(email:string, password:string){
+  this.service.getUsers().subscribe(x => console.log(x));
+  //this.service.postEmployees(new User(email,password)).subscribe(x => console.log(x))
 }
 
 }

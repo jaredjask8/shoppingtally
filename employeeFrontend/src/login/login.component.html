@@ -1,0 +1,5 @@
+<form [formGroup]="myForm">
+    <input formControlName="email" #email>
+    <input formControlName="password" #password>
+    <button type="submit" (click)="submit(email.value, password.value)">Go</button>
+  </form>

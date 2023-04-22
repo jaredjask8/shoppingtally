@@ -10,6 +10,9 @@ import com.app.shoppingtally.exception.UserNotFoundException;
 import com.app.shoppingtally.model.Employee;
 import com.app.shoppingtally.repo.EmployeeRepo;
 
+import jakarta.transaction.Transactional;
+
+@Transactional 
 @Service
 public class EmployeeService {
 	private final EmployeeRepo employeeRepo;
