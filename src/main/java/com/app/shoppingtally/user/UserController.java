@@ -2,6 +2,7 @@ package com.app.shoppingtally.user;
 
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,6 +28,7 @@ public class UserController {
 	
 	public UserController(UserService userService) {
 		this.userService = userService;
+
 	}
 	
 	@GetMapping("/all")
@@ -35,36 +37,31 @@ public class UserController {
 		return new ResponseEntity<>(users,HttpStatus.OK);
 	}
 
-	@PostMapping("/add")
-	public ResponseEntity<User> addUser(@RequestBody User user){
-		User newUser = userService.addUser(user);
-		return new ResponseEntity<>(newUser,HttpStatus.CREATED);
-	}
-	
-	@PutMapping("/update")
-	public ResponseEntity<User> updateUser(@RequestBody User user){
-		User updateUser = userService.updateEmployee(user);
-		return new ResponseEntity<>(updateUser,HttpStatus.OK);
-	}
-	
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable("id") Long id){
-		userService.deleteUser(id);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+//	@PostMapping("/add")
+//	public ResponseEntity<User> addUser(@RequestBody User user){
+//		User newUser = userService.addUser(user);
+//		return new ResponseEntity<>(newUser,HttpStatus.CREATED);
+//	}
+//	
+//	@PutMapping("/update")
+//	public ResponseEntity<User> updateUser(@RequestBody User user){
+//		User updateUser = userService.updateEmployee(user);
+//		return new ResponseEntity<>(updateUser,HttpStatus.OK);
+//	}
+//	
+//	@DeleteMapping("/delete/{id}")
+//	public ResponseEntity<?> deleteUser(@PathVariable("id") Long id){
+//		userService.deleteUser(id);
+//		return new ResponseEntity<>(HttpStatus.OK);
+//	}
 	
 	@PostMapping("/authenticate")
-	public String authenticateUser(@RequestBody User user) {
-		if(userService.authenticateUser(user)) {
-			return "yup";
-		}else {
-			return "nope";
-		}
-//		if() {
-//			return "yup";
-//		}else {
-//			return "nope";
-//		}
+	public ResponseEntity<User> authenticateUser(@RequestBody User user) {
+		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	
+	@PostMapping("/register")
+	public ResponseEntity<User> registerUser(@RequestBody User user) {
+		return new ResponseEntity<User>(user, HttpStatus.OK);
+	}
 }
