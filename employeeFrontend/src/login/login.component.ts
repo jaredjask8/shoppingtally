@@ -18,13 +18,16 @@ constructor(private fb: FormBuilder, private service:LoginService) { }
 ngOnInit() {
   this.myForm = this.fb.group({
     email:'',
-    password:''
+    password:'',
+    firstname:'',
+    lastname:'',
+    role:''
   })
 }
 
-submit(email:string, password:string){
+submit(firstname:string, lastname:string, email:string, password:string, role:string){
   this.service.getUsers().subscribe(x => console.log(x));
-  this.service.authenticateUser(new User(email,password)).subscribe(x => console.log(x))
+  this.service.authenticateUser(new User(firstname,lastname,email,password,role)).subscribe(x => console.log(x))
 }
 
 }

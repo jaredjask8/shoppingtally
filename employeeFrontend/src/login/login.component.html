@@ -1,5 +1,8 @@
 <form [formGroup]="myForm">
-    <input formControlName="email" #email>
-    <input formControlName="password" #password>
-    <button type="submit" (click)="submit(email.value, password.value)">Go</button>
+  <input formControlName="firstname" #firstname>
+  <input formControlName="lastname" #lastname>
+  <input formControlName="email" #email>
+  <input formControlName="password" #password>
+  <input formControlName="role" #role>
+  <button type="submit" (click)="submit(firstname.value, lastname.value, email.value, password.value, role.value)">Go</button>
   </form>

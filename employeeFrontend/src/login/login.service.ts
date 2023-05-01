@@ -19,6 +19,6 @@ export class LoginService {
   }
 
   authenticateUser(user: User):Observable<User>{
-    return this.http.post<User>("https://shoppingtally.click/api/user/authenticate", user);
+    return this.http.post<User>("https://shoppingtally.click/register", user);
   }
 }
