@@ -7,15 +7,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavComponent } from 'src/global/nav/nav.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from 'src/login/login.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatIconModule } from '@angular/material/icon'
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    NavComponent
     
   ],
   imports: [
@@ -24,9 +26,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
-    NgbModule,
-    NavComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatToolbarModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent],

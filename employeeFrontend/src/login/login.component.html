@@ -1,8 +1,14 @@
-<form [formGroup]="myForm">
-  <input formControlName="firstname" #firstname>
-  <input formControlName="lastname" #lastname>
-  <input formControlName="email" #email>
-  <input formControlName="password" #password>
-  <input formControlName="role" #role>
-  <button type="submit" (click)="submit(firstname.value, lastname.value, email.value, password.value, role.value)">Go</button>
-  </form>
+<div class="body">
+  <div class="container">
+    
+    <form [formGroup]="myForm" class="formContainer">
+      <input placeholder="First" formControlName="firstname" #firstname>
+      <input placeholder="Last" formControlName="lastname" #lastname>
+      <input placeholder="Email" formControlName="email" #email>
+      <input placeholder="Password"formControlName="password" #password>
+      <input placeholder="Role" formControlName="role" #role>
+      <button type="submit" (click)="submit(firstname.value, lastname.value, email.value, password.value, role.value)">Go</button>
+    </form>
+  </div>
+</div>
+

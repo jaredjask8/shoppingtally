@@ -13,6 +13,8 @@ import { User } from 'src/models/User';
 export class LoginComponent implements OnInit{
   myForm: FormGroup; 
   employee: Employee
+  loginActive:boolean = false;
+  registerActive:boolean = false;
 constructor(private fb: FormBuilder, private service:LoginService) { }
 
 ngOnInit() {
@@ -26,8 +28,9 @@ ngOnInit() {
 }
 
 submit(firstname:string, lastname:string, email:string, password:string, role:string){
-  this.service.getUsers().subscribe(x => console.log(x));
-  this.service.authenticateUser(new User(firstname,lastname,email,password,role)).subscribe(x => console.log(x))
+  //this.service.getUsers().subscribe(x => console.log(x));
+  this.service.loginUser("bruce@gmail.com", "test").subscribe(x => console.log(x));
+  //this.service.registerUser(new User(firstname,lastname,email,password,role)).subscribe(x => console.log(x))
 }
 
 }
