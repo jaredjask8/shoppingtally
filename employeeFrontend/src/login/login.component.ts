@@ -29,7 +29,7 @@ ngOnInit() {
 
 submit(firstname:string, lastname:string, email:string, password:string, role:string){
   //this.service.getUsers().subscribe(x => console.log(x));
-  this.service.loginUser("bruce@gmail.com", "test").subscribe(x => console.log(x));
+  this.service.loginUser("bruce@gmail.com", "$2a$10$UZ714NywTiPGwFtu66B6T..Yc7q3fJY0HRreRCi0X96OwPAzS75S.").subscribe(x => console.log(x));
   //this.service.registerUser(new User(firstname,lastname,email,password,role)).subscribe(x => console.log(x))
 }
 

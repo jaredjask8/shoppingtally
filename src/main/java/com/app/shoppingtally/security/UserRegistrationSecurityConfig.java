@@ -21,7 +21,7 @@ public class UserRegistrationSecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
 				.cors()
-				.and()
+				.disable()
 				.csrf()
 				.disable()
 				.authorizeHttpRequests()

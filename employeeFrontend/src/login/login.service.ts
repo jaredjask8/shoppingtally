@@ -16,7 +16,7 @@ export class LoginService {
 
   loginUser(email:string, password:string):Observable<User[]>{
     const headers = new HttpHeaders({Authorization: 'Basic ' + email + ":" + password})
-    return this.http.get<User[]>("http://localhost:8080/api/user/all", {headers})
+    return this.http.get<User[]>("http://shoppingtally.click/api/user/all", {headers})
   }
 
   getUsers():Observable<User[]>{
