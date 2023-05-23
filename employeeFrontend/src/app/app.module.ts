@@ -7,17 +7,26 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavComponent } from 'src/global/nav/nav.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { LoginComponent } from 'src/login/login.component';
+import { RegisterComponent } from 'src/register/register.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatIconModule } from '@angular/material/icon'
+import {MatIconModule } from '@angular/material/icon';
+import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HomeComponent } from 'src/home/home/home.component';
+import {MatTableModule} from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
+import { LoginComponent } from 'src/login/login.component';
+import { EnvironmentService } from 'src/global/utility/environment.service';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    NavComponent
+    RegisterComponent,
+    HomeComponent,
+    LoginComponent
     
   ],
   imports: [
@@ -28,9 +37,14 @@ import {MatIconModule } from '@angular/material/icon'
     FormsModule,
     ReactiveFormsModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    MdbCollapseModule,
+    NgbModule,
+    NavComponent,
+    MatTableModule,
+    MatInputModule
   ],
-  providers: [],
+  providers: [EnvironmentService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -1,0 +1,12 @@
+<ngb-datepicker
+	[displayMonths]="displayMonths"
+	[navigation]="navigation"
+	[showWeekNumbers]="showWeekNumbers"
+	[outsideDays]="outsideDays"
+	#dp 
+	[(ngModel)]="model" 
+	(navigate)="date = $event.next"
+	(click)="setCurrentDate()"
+>
+</ngb-datepicker>
+

@@ -22,7 +22,7 @@ import jakarta.persistence.Tuple;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/login")
 public class UserController {
 	private final UserService userService;
 	

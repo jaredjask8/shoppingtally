@@ -1,14 +1,11 @@
 <div class="body">
-  <div class="container">
-    
-    <form [formGroup]="myForm" class="formContainer">
-      <input placeholder="First" formControlName="firstname" #firstname>
-      <input placeholder="Last" formControlName="lastname" #lastname>
-      <input placeholder="Email" formControlName="email" #email>
-      <input placeholder="Password"formControlName="password" #password>
-      <input placeholder="Role" formControlName="role" #role>
-      <button type="submit" (click)="submit(firstname.value, lastname.value, email.value, password.value, role.value)">Go</button>
-    </form>
-  </div>
+    <div class="example-container">
+        <mat-form-field>
+          <mat-label>Enter your email</mat-label>
+          <input matInput placeholder="pat@example.com" [formControl]="email" required>
+          <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <button mat-raised-button (click)="setEnvironment(email.value)">Go</button>
 </div>
 
