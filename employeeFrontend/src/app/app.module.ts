@@ -19,6 +19,7 @@ import {MatTableModule} from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { LoginComponent } from 'src/login/login.component';
 import { EnvironmentService } from 'src/global/utility/environment.service';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -40,9 +41,10 @@ import { EnvironmentService } from 'src/global/utility/environment.service';
     MatIconModule,
     MdbCollapseModule,
     NgbModule,
-    NavComponent,
     MatTableModule,
-    MatInputModule
+    MatInputModule,
+    NavComponent,
+    MatButtonModule
   ],
   providers: [EnvironmentService],
   bootstrap: [AppComponent],

@@ -17,9 +17,11 @@ import com.app.shoppingtally.user.User;
 import com.app.shoppingtally.user.UserRepo;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
 	
 	private final UserRepo repository;
@@ -53,11 +55,21 @@ public class AuthenticationService {
 		
 	}
 
-	public AuthenticationResponse authenticate(AuthenticationRequest request) {
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
-		var user = repository.findByEmail(request.getEmail()).orElseThrow();
-		var jwtToken = jwtService.generateToken(user);
-		return AuthenticationResponse.builder().token(jwtToken).build();
+	public AuthenticationResponse authenticate(AuthenticationRequest request){
+		
+		try {
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
+			var user = repository.findByEmail(request.getEmail()).orElseThrow();
+			var jwtToken = jwtService.generateToken(user);
+			saveUserToken(user, jwtToken);
+			return AuthenticationResponse.builder().token(jwtToken).build();
+		}catch(Exception e){
+			return AuthenticationResponse.builder().token(e.getMessage()).build();
+		}
+		
+		
+		
+		
 	}
 	
 }

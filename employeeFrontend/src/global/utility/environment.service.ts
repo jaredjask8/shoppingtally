@@ -7,11 +7,11 @@ import { Observable } from "rxjs";
   export class EnvironmentService{
     email:string;
     
-    setEnvironment(email:string){
-        sessionStorage.setItem("email",email);
+    setEnvironment(token:string){
+        sessionStorage.setItem("token",token);
     }
 
     getEnvironment():string{
-        return sessionStorage.getItem("email")
+        return sessionStorage.getItem("token")
     }
   }

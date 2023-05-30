@@ -19,7 +19,7 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 	
-	private static final String SECRET_KEY = "5A7134743777217A25432A462D4A614E645267556A586E3272357538782F413F";
+	private static final String SECRET_KEY = "50645367566B5970337336763979244226452948404D6351655468576D5A7134";
 
 	public String extractUsername(String token) {
 		// TODO Auto-generated method stub

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.shoppingtally.user.User;
-import com.app.shoppingtally.user.UserService;
 
 import jakarta.persistence.Tuple;
 
@@ -24,17 +23,12 @@ import jakarta.persistence.Tuple;
 @RestController
 @RequestMapping("/login")
 public class UserController {
-	private final UserService userService;
 	
-	public UserController(UserService userService) {
-		this.userService = userService;
-
-	}
 	
 	@GetMapping("/all")
 	public ResponseEntity<List<User>> getUsers(){
-		List<User> users = userService.getUsers();
-		return new ResponseEntity<>(users,HttpStatus.OK);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 //	@PostMapping("/add")

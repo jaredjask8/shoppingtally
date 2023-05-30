@@ -39,7 +39,7 @@ import lombok.Setter;
 @Table(name = "_user")
 public class User implements UserDetails{
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, updatable = false)
 	private Long id;
 	
@@ -50,7 +50,6 @@ public class User implements UserDetails{
 	
 	@Enumerated(EnumType.STRING)
 	private Role role;
-	private boolean isEnabled = false;
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
@@ -80,5 +79,10 @@ public class User implements UserDetails{
 	public String getPassword() {
 		// TODO Auto-generated method stub
 		return password;
+	}
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }

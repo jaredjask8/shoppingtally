@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.shoppingtally.user.User;
-import com.app.shoppingtally.user.UserService;
 
 @CrossOrigin(origins = "*")
 @RestController

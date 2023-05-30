@@ -1,7 +1,7 @@
 import { JsonPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbDatepickerModule, NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbDateStruct, NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { DatepickerService } from './datepicker.service';
 
 @Component({
@@ -17,7 +17,6 @@ export class DatepickerComponent {
 
   model: NgbDateStruct;
 	date: { year: number; month: number};
-
   displayMonths = 2;
 	navigation = 'select';
 	showWeekNumbers = false;
@@ -28,7 +27,10 @@ export class DatepickerComponent {
 	}
 
   setCurrentDate(){
-    console.log(this.model)
     this.dateService.setDate(this.model)
+  }
+
+  isDisabled(date: NgbDateStruct) {
+    return date.day==13  && date.month == 1 || date.day==12 && date.month == 1;
   }
 }

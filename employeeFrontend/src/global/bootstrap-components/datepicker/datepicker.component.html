@@ -3,7 +3,8 @@
 	[navigation]="navigation"
 	[showWeekNumbers]="showWeekNumbers"
 	[outsideDays]="outsideDays"
-	#dp 
+	#dp
+	[markDisabled]="isDisabled" 
 	[(ngModel)]="model" 
 	(navigate)="date = $event.next"
 	(click)="setCurrentDate()"

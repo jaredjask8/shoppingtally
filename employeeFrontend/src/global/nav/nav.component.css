@@ -47,9 +47,20 @@ border-radius: 2px;
     background-color: black;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+    
 }
+
+.left-nav{
+    margin-left: 20px;
+}
+
+.right-nav{
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
 
 .margin-icons{
     margin-right: 20px;
@@ -98,3 +109,9 @@ a{
     color:black;
     text-decoration: none;
 }
+
+.mat-success{
+    background-color: rgb(182,136,104) !important;
+}
+
+

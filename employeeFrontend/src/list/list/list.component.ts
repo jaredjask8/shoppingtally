@@ -1,15 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import { GroceryService } from 'src/global/grocery_items/grocery.service';
-import { Branded } from './models/Branded';
-import { ListItem } from './models/ListItem';
+import { Branded } from '../models/Branded';
+import { ListItem } from '../models/ListItem';
 import { MatTable } from '@angular/material/table';
-import { FormsModule } from '@angular/forms';
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { EnvironmentService } from 'src/global/utility/environment.service';
 import { ListService } from './list.service';
-import { User } from 'src/models/User';
 import { DatepickerService } from 'src/global/bootstrap-components/datepicker/datepicker.service';
-import { Date } from './models/Date';
+import { ListToDB } from '../models/ListToDB';
 
 
 
@@ -20,6 +17,7 @@ import { Date } from './models/Date';
 })
 export class ListComponent {
   list:ListItem[] = [];
+  listToDb:ListToDB = new ListToDB;
   value:string;
   email:string;
   onScheduler:boolean=false;
@@ -33,9 +31,7 @@ export class ListComponent {
     1,2,3,4,5,6,7,8,9,10
   ]
 
-  constructor(private service:GroceryService, private userService:EnvironmentService, private listService:ListService, private dateService:DatepickerService){
-    
-  }
+  constructor(private service:GroceryService, private userService:EnvironmentService, private listService:ListService, private dateService:DatepickerService){}
 
 
   getItems(event){
@@ -51,6 +47,55 @@ export class ListComponent {
     this.currentQuantity = quantity;
   }
 
+
+  changeToScheduler(){
+    this.onList =false
+    this.onScheduler = true;
+    console.log(this.userService.getEnvironment());
+  }
+
+  changeToConfirm(){
+    this.onList =false
+    this.onScheduler = false;
+    this.onConfirm = true;
+  }
+
+
+  sendList(){
+    this.listToDb.token = this.userService.getEnvironment();
+    this.listService.postList(this.listToDb).subscribe(d=>console.log(d));
+  }
+
+  toDbList(item,index,length){
+    console.log(length + "  " + index)
+    if(length == index){
+      this.listToDb.list+=item.name+"+"+item.quantity
+    }else{
+      this.listToDb.list+=item.name+"+"+item.quantity+",";
+    }
+  }
+
+  addList(){
+    let length = this.list.length-1;
+    this.list.forEach((d,index) => this.toDbList(d,index,length))
+    
+  }
+
+  addDate(){
+    this.listToDb.date = this.dateService.getDateToDb();
+  }
+
+
+
+
+
+
+
+
+
+
+
+
   addToList(){
     var item = new ListItem(this.currentItem,this.currentQuantity)
     this.list.push(item)
@@ -65,32 +110,5 @@ export class ListComponent {
    this.table.renderRows();
   }
 
-  changeToScheduler(){
-    this.onList =false
-    this.onScheduler = true;
-    console.log(this.userService.getEnvironment());
-  }
-
-  changeToConfirm(){
-    this.onList =false
-    this.onScheduler = false;
-    this.onConfirm = true;
-  }
-
-  sendDate(){
-    var email = this.userService.getEnvironment();
-    var date = this.dateService.getDate();
-    this.listService.postDates(new Date(email, date.month, date.year, date.day)).subscribe(d => console.log(d))
-    console.log("date sent")
-  }
-
-  getDates(){
-    var email = this.userService.getEnvironment();
-    this.listService.getDates(new User(email)).subscribe(d => console.log(d))
-  }
-
-  sendList(){
-    console.log("list sent")
-  }
 
 }

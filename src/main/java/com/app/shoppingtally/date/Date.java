@@ -30,7 +30,7 @@ import lombok.Setter;
 @Table(name="dates_available")
 public class Date implements Serializable{
 	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id", updatable = false, nullable = false)
 	private Long id;
 	

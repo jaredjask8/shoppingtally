@@ -27,10 +27,10 @@ ngOnInit() {
   })
 }
 
-submit(email:string, firstname:string, lastname:string,  password:string, role:string){
-  //this.service.getUsers().subscribe(x => console.log(x));
-  this.service.loginUser().subscribe(x => console.log(x));
-  //this.service.registerUser(new User(firstname,lastname,email,password,role)).subscribe(x => console.log(x))
+submit(email:string, firstname:string, lastname:string,  password:string){
+  //this.service.testLogin("rocky@gmail.com", "test").subscribe(x => console.log(x));
+  //this.service.loginUser().subscribe(x => console.log(x));
+  this.service.registerUser(new User(email,firstname,lastname,password)).subscribe(x => console.log(x))
 }
 
 }

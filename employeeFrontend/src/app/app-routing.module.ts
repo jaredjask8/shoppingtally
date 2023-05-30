@@ -7,7 +7,7 @@ const routes: Routes = [
 	{path: 'home', component:HomeComponent},
 	{path: 'register', component:RegisterComponent},
 	{path: 'login', loadChildren: () => import('../login/login.module').then(m => m.LoginModule)},
-	{ path: 'list', loadChildren: () => import('../list/list.module').then(m => m.ListModule) },
+	{ path: 'list', loadChildren: () => import('../list/list/list.module').then(m => m.ListModule) },
 	{ path: 'employee', loadChildren: () => import('../employee/employee.module').then(m => m.EmployeeModule) },
 	{ path: 'about', loadChildren: () => import('../about/about.module').then(m => m.AboutModule) },
 	{ path: '**', redirectTo: 'home' }
