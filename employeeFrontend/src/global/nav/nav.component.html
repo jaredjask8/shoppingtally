@@ -6,26 +6,26 @@
 		</div>
 		<div class="offcanvas-body">
 			<div class="side-nav-body-content mb-3">
-				<a class="mt-3 option-container" href="/home">
+				<a class="mt-3 option-container" routerLink="/home">
 					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-house margin-icons" viewBox="0 0 16 16">
 						<path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
 					</svg>
 					Home
 				</a>
-				<a class="mt-3 option-container" href="/about">
+				<a class="mt-3 option-container" routerLink="/about">
 					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-file-earmark-person margin-icons" viewBox="0 0 16 16">
 						<path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
 						<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2v9.255S12 12 8 12s-5 1.755-5 1.755V2a1 1 0 0 1 1-1h5.5v2z"/>
 					</svg>
 					About
 				</a>
-				<a class="mt-3 option-container" href="/reviews">
+				<a class="mt-3 option-container" routerLink="/reviews">
 					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-hearts margin-icons" viewBox="0 0 16 16">
 						<path fill-rule="evenodd" d="M4.931.481c1.627-1.671 5.692 1.254 0 5.015-5.692-3.76-1.626-6.686 0-5.015Zm6.84 1.794c1.084-1.114 3.795.836 0 3.343-3.795-2.507-1.084-4.457 0-3.343ZM7.84 7.642c2.71-2.786 9.486 2.09 0 8.358-9.487-6.268-2.71-11.144 0-8.358Z"/>
 					</svg>
 					Reviews
 				</a>
-				<a class="mt-3 option-container" href="list">
+				<a class="mt-3 option-container" routerLink="/list">
 					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-card-checklist margin-icons" viewBox="0 0 16 16">
 						<path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
 						<path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
@@ -33,7 +33,7 @@
 					List
 				</a>
 				
-				<a class="mt-3 option-container" href="/payment">
+				<a class="mt-3 option-container" routerLink="/payment">
 					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-credit-card margin-icons" viewBox="0 0 16 16">
 						<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
 						<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
@@ -42,21 +42,21 @@
 				</a>
 			</div>
 			<div class="side-nav-body-user">
-				<a class="mt-5 option-container" href="/login" *ngIf="checkLogin()">
+				<a class="mt-5 option-container" routerLink="/login" *ngIf="showLogin">
 					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-door-open margin-icons" viewBox="0 0 16 16">
 						<path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z"/>
 						<path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117zM11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5zM4 1.934V15h6V1.077l-6 .857z"/>
 					  </svg>
 					  Login
 				</a>
-				<a class="mt-5 option-container" href="/profile" *ngIf="checkProfile()">
+				<a class="mt-5 option-container" routerLink="/profile" *ngIf="showProfile()">
 					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-door-open margin-icons" viewBox="0 0 16 16">
 						<path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z"/>
 						<path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117zM11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5zM4 1.934V15h6V1.077l-6 .857z"/>
 					  </svg>
 					  Profile
 				</a>
-				<a class="mt-2 mb-5 option-container" href="/register">
+				<a class="mt-2 mb-5 option-container" routerLink="/register">
 					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-clipboard-plus margin-icons" viewBox="0 0 16 16">
 						<path fill-rule="evenodd" d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"/>
 						<path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
@@ -104,7 +104,7 @@
 		<img class="ml-3"  src="../../assets/img/drawing.png"/>
 	</div>
 	<div class="right-nav" >
-		<a href="/login" *ngIf="checkLogin()">
+		<a routerLink="/login" *ngIf="showLogin">
 			<button mat-raised-button color="success" class="margin-icons">
 				Login
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
@@ -112,15 +112,15 @@
 				</svg>
 			</button>
 		</a>
-		<a href="/profile" *ngIf="checkProfile()">
-			<button mat-raised-button color="success" class="margin-icons">
+		<a routerLink="/profile" *ngIf="showProfile()">
+			<button mat-raised-button color="success" class="margin-icons" (click)="loadUser()">
 				Profile
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
 				  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
 				</svg>
 			</button>
 		</a>
-		<a href="/register">
+		<a routerLink="/register">
 			<button mat-raised-button color="success" class="margin-icons">
 				Register
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
@@ -142,4 +142,6 @@
 	
 	
 </div>
+
+<router-outlet></router-outlet>
 

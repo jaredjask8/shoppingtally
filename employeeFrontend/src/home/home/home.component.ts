@@ -1,5 +1,6 @@
 import { Component,OnInit } from '@angular/core';
 import { GroceryService } from 'src/global/grocery_items/grocery.service';
+import { EnvironmentService } from 'src/global/utility/environment.service';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +8,7 @@ import { GroceryService } from 'src/global/grocery_items/grocery.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit{
-  constructor(private service:GroceryService){}
+  constructor(private userService:EnvironmentService){}
   ngOnInit(): void {
     
   }

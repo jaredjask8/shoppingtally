@@ -28,7 +28,11 @@ import { DatepickerComponent } from 'src/global/bootstrap-components/datepicker/
     MatButtonModule,
     FormsModule,
     MatIconModule,
-    DatepickerComponent
-  ]
+    DatepickerComponent,
+    
+
+    
+  ],
+  
 })
 export class ListModule { }

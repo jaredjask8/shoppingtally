@@ -21,7 +21,6 @@ import { LoginComponent } from 'src/login/login.component';
 import { EnvironmentService } from 'src/global/utility/environment.service';
 import { MatButtonModule } from '@angular/material/button';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,7 +43,9 @@ import { MatButtonModule } from '@angular/material/button';
     MatTableModule,
     MatInputModule,
     NavComponent,
-    MatButtonModule
+    MatButtonModule,
+    
+    
   ],
   providers: [EnvironmentService],
   bootstrap: [AppComponent],

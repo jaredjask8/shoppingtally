@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild} from '@angular/core';
 import { GroceryService } from 'src/global/grocery_items/grocery.service';
 import { Branded } from '../models/Branded';
 import { ListItem } from '../models/ListItem';
@@ -7,6 +7,7 @@ import { EnvironmentService } from 'src/global/utility/environment.service';
 import { ListService } from './list.service';
 import { DatepickerService } from 'src/global/bootstrap-components/datepicker/datepicker.service';
 import { ListToDB } from '../models/ListToDB';
+import { addItem} from '../state/list/list.actions';
 
 
 
@@ -15,7 +16,7 @@ import { ListToDB } from '../models/ListToDB';
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
-export class ListComponent {
+export class ListComponent{
   list:ListItem[] = [];
   listToDb:ListToDB = new ListToDB;
   value:string;
@@ -26,12 +27,14 @@ export class ListComponent {
   brandedArray:Branded[]=[];
   currentItem:string;
   currentQuantity:string;
+  //public fullList$ = this.store.select()
   @ViewChild(MatTable) table: MatTable<ListItem>;
   quantityArray:[
     1,2,3,4,5,6,7,8,9,10
   ]
 
   constructor(private service:GroceryService, private userService:EnvironmentService, private listService:ListService, private dateService:DatepickerService){}
+  
 
 
   getItems(event){
@@ -62,16 +65,15 @@ export class ListComponent {
 
 
   sendList(){
-    this.listToDb.token = this.userService.getEnvironment();
+    this.listToDb.token = this.userService.getEnvironment().token;
     this.listService.postList(this.listToDb).subscribe(d=>console.log(d));
   }
 
   toDbList(item,index,length){
-    console.log(length + "  " + index)
     if(length == index){
       this.listToDb.list+=item.name+"+"+item.quantity
     }else{
-      this.listToDb.list+=item.name+"+"+item.quantity+",";
+      this.listToDb.list+=item.name+"+"+item.quantity+"~";
     }
   }
 

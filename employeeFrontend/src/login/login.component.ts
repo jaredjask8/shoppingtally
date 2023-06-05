@@ -26,18 +26,15 @@ export class LoginComponent {
 
   checkToken(token:string){
     if(token === "Bad credentials"){
-      this.registerService.changeCredCheck(true);
-      
     }else{
-      this.registerService.changeCredCheck(false);
-      this.registerService.changeLoginCheck(false);
-      this.registerService.changeProfileCheck(true);
+      this.service.setEnvironment(token);
+      this.service.setLogin();
     }
 
-    this.registerService.currentCredCheck.subscribe(d => this.showBadCred = d)
   }
 
   setEnvironment(email:string,password:string){
     this.registerService.authLogin(email,password).subscribe(d => this.checkToken(d.token));
+    this.registerService.getUser(this.service.getEnvironment().token).subscribe(d=>this.service.setUser(d))
   }
 }
