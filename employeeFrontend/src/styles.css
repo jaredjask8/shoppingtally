@@ -2,7 +2,7 @@
 
 html, body { 
     height: 100%;
-    
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 body { 
     margin: 0; 
@@ -10,3 +10,5 @@ body {
     background: rgb(182,136,104);
 background: linear-gradient(90deg, rgba(182,136,104,1) 0%, rgba(177,135,105,1) 49%, rgba(186,135,100,1) 100%);
 }
+
+

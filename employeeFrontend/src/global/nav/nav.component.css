@@ -114,4 +114,10 @@ a{
     background-color: rgb(182,136,104) !important;
 }
 
+@media all and (max-width: 600px) {
+    .showLoginRegister {
+        display: none;
+    }
+}
+
 
