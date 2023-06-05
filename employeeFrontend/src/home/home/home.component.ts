@@ -8,6 +8,8 @@ import { EnvironmentService } from 'src/global/utility/environment.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit{
+  showMessage:boolean = false;
+
   constructor(private userService:EnvironmentService){}
   ngOnInit(): void {
     
