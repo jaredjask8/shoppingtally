@@ -1,11 +1,51 @@
-
-
-.table{
-    min-width: 200px;
-    max-width: 50%;
-    height: 0px;
+.mat-mdc-table {
+  width: 100%;
+  
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 4px;
+  border-radius: 10px;
+  margin-right: 20px;
+  
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(124, 139, 158);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+.mat-column-name{
+  width:20%;
+}
+
+.mat-column-quantity{
+  width:20%
+}
+
+.mat-column-delete{
+  width: 20%;
+}
+
+.tableContainer{
+  background-color: rgb(7, 34, 62);
+  width: 30%;
+  height: 570px;
+  overflow-y: auto;
+  border-radius: 10px;
+}
 
 
 
@@ -23,7 +63,6 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    /*background-color: red;*/
     justify-content: space-evenly;
   }
 
@@ -34,13 +73,14 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    align-content: center;
+    padding-top: 60px;
     /* background-color: black; */
   }
 
   .mdc-button{
     margin-left: 5px;
     margin-bottom: 20px;
+    padding: 10px;
   }
 
   .mat-mdc-form-field-type-mat-select{
@@ -48,36 +88,110 @@
   }
   
   .data-container{
-    position: relative;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 50%;
     justify-content: flex-start;
     align-items: center;
-    /*background-color: black;*/
+    align-content: center;
+    height: 100%;
+    background-color: rgb(7, 34, 62);
+    margin-left: 20px;
+    border-radius: 10px;
   }
 
   .api-container{
+    position: relative;
     width:100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    overflow-y: auto;
-    height:300px;
+    overflow: auto;
+    height: 200px;
   }
 
   .item-container{
     display: flex;
-    width: 50%;
-    height: 100%;
+    width: fit-content;
+  }
+
+  .customItem{
+    width: fit-content;
   }
 
   select.form-select {
     margin: 0.5rem 0.5rem 0 0;
     width: auto;
   }
+
+  .timeSlotContainer{
+    background-color: white;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin: 20px;
+  }
+
+  .appointmentContainer{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hours:hover{
+    cursor: pointer;
+    opacity: .5;
+  }
+
+  .hours{
+    text-align: center;
+    background-color: beige;
+    border-radius: 10px;
+    padding: 5px;
+    width: 50px;
+  }
+
+  .customItemContainer{
+    display: flex;
+    align-items: center;
+    align-content: center;
+  }
+
+  .container{
+    margin:5px;
+  }
+
+
+  .finalizedItemContainer{
+    background-color: white;
+    padding:20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    width:50%;
+  }
+
+  .stepperContainer{
+    padding-top: 100px;
+    background-color: rgb(124, 139, 158);
+  }
+
+  .stepperBtnsContainer{
+    display: flex;
+    align-content: center;
+    height: 40px;
+    font-size: 30px;
+    width: 100%;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+
+
+
 
 
 

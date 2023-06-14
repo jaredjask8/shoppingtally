@@ -1,0 +1,33 @@
+<div class="body">
+    
+    <div class="createReviewContainer mb-3">
+        <div class="reviewTitle">Leave a review!</div>
+        <mat-form-field>
+            <mat-label>Title</mat-label>
+            <input matInput>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Review</mat-label>
+            <textarea matInput></textarea>
+        </mat-form-field>
+        <mat-label>Rating</mat-label>
+        <ngb-rating 
+        [(rate)]="currentRate"
+        [max]="5"
+        ></ngb-rating>
+    </div>
+    <mat-divider [vertical]="true"></mat-divider>
+    <div class="reviewsContainer">
+        <div class="reviewTitle mt-3">Reviews</div>
+        <div *ngFor="let review of reviews" class="reviewDataContainer">
+            <div>{{review.title}}</div>
+            <div>{{review.review}}</div>
+            <ngb-rating 
+                [(rate)]="review.rating"
+                [readonly]="readonly"
+            ></ngb-rating>
+        </div>
+    </div>
+</div>
+
+

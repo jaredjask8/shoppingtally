@@ -23,6 +23,11 @@ export class ListService {
     return this.http.post<PreviousListsFromDB[]>("http://localhost:8080/api/v1/list/user", {token:token},{headers:headers})
   }
 
+  getAllDates(token:string):Observable<string[]>{
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this.http.post<string[]>("http://localhost:8080/api/v1/list/dates",null,{headers:headers})
+  }
+
 
   
 }

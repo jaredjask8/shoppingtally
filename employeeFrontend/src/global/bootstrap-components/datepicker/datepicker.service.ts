@@ -6,7 +6,7 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 })
 export class DatepickerService {
   private currentDate:NgbDateStruct;
-  private dateToString:string;
+  private currentHour:string;
   constructor() { }
 
   setDate(date:NgbDateStruct){
@@ -31,11 +31,15 @@ export class DatepickerService {
     }
 
 
-    return year+"-"+month+"-"+day;
+    return year+"-"+month+"-"+day+"T"+this.currentHour;
   }
 
   getDateToObject(){
     return this.currentDate;
+  }
+
+  setHour(hour:number){
+    this.currentHour = hour + ""
   }
 
 }

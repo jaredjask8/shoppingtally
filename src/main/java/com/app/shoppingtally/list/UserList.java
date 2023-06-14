@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.app.shoppingtally.user.Role;
 import com.app.shoppingtally.user.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class List {
+public class UserList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, updatable = false)
@@ -33,7 +34,7 @@ public class List {
 	
 	public String token;
 	public String list;
-	public Date date;
+	public String date;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")

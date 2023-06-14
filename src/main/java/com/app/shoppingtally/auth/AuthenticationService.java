@@ -1,6 +1,8 @@
 package com.app.shoppingtally.auth;
 
 
+import java.util.Optional;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -70,6 +72,11 @@ public class AuthenticationService {
 		
 		
 		
+	}
+	
+	
+	public User getUser(Token token) {
+		return repository.findByEmail(jwtService.extractUsername(token.getToken())).get();
 	}
 	
 }

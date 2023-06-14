@@ -2,13 +2,16 @@
 
 html, body { 
     height: 100%;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    font-family: 'MyFont';
 }
 body { 
     margin: 0; 
-    font-family: "Lobster", "Helvetica Neue", sans-serif; 
-    background: rgb(182,136,104);
-background: linear-gradient(90deg, rgba(182,136,104,1) 0%, rgba(177,135,105,1) 49%, rgba(186,135,100,1) 100%);
+    background: rgb(124, 139, 158);
+}
+
+@font-face {
+    font-family: 'MyFont';
+    src: url('assets/fonts/coolvetica.OTF');
 }
 
 

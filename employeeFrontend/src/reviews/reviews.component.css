@@ -1,0 +1,46 @@
+.body{
+    padding-top: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    margin-right: 20px;
+    margin-left: 20px;
+    height: 800px;
+}
+
+.createReviewContainer{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin-right: 30px;
+}
+
+.reviewsContainer{
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.reviewDataContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+ngb-rating{
+    font-size: 40px;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.reviewTitle{
+    font-size: 50px;
+}
+
+mat-divider{
+    height: 70%;
+    border-right-color: rgb(7, 34, 62);
+}
+

@@ -9,17 +9,17 @@
         
     </div>
     <div class="profileData">
-        <ng-container class="profileContainer"> 
-            <div style="color:blue;">First name: {{userData?.firstname}}</div>
-            <div style="color:blue;">Last name: {{userData?.lastname}}</div>
-            <div style="color:blue;">Email: {{userData?.email}}</div>
-        </ng-container>
-        <ng-container *ngIf="_showUpdate">
+        <div class="profileContainer"> 
+            <div>First name: {{userData?.firstname}}</div>
+            <div>Last name: {{userData?.lastname}}</div>
+            <div>Email: {{userData?.email}}</div>
+        </div>
+        <div *ngIf="_showUpdate">
             <app-profile-update></app-profile-update>
-        </ng-container>
-        <ng-container *ngIf="_showLists">
+        </div>
+        <div *ngIf="_showLists" class="listContainer">
             <app-profile-lists [dates]="getDates()" [lists]="clientList"></app-profile-lists>
-        </ng-container>
+        </div>
     </div>
     
 </div>

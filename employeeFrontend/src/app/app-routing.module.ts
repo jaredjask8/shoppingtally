@@ -11,6 +11,7 @@ const routes: Routes = [
 	{ path: 'employee', loadChildren: () => import('../employee/employee.module').then(m => m.EmployeeModule) },
 	{ path: 'about', loadChildren: () => import('../about/about.module').then(m => m.AboutModule) },
 	{ path: 'profile', loadChildren: () => import('../profile/profile.module').then(m => m.ProfileModule) },
+	{ path: 'reviews', loadChildren: () => import('../reviews/reviews.module').then(m => m.ReviewsModule) },
 	{ path: '**', redirectTo: 'home' }
 ];
 

@@ -1,11 +1,16 @@
 package com.app.shoppingtally.auth;
 
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.app.shoppingtally.token.Token;
+import com.app.shoppingtally.user.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,5 +29,10 @@ public class AuthenticationController {
 	@PostMapping("/authenticate")
 	public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
 		return ResponseEntity.ok(service.authenticate(request));
+	}
+	
+	@PostMapping("/user")
+	public User getUser(@RequestBody Token token){
+		return service.getUser(token);
 	}
 }

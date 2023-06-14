@@ -29,8 +29,7 @@
     position: relative;
     height:100%;
     width:10px;
-    background: rgb(182,136,104);
-background: linear-gradient(90deg, rgba(182,136,104,1) 0%, rgba(177,135,105,1) 49%, rgba(186,135,100,1) 100%);
+    background: rgb(200, 209, 214);
 border-radius: 2px;
 
 }
@@ -44,10 +43,12 @@ border-radius: 2px;
     width: 100%;
     margin: 0;
     padding: 0;
-    background-color: black;
+    background: rgb(7, 34, 62);
+    background: linear-gradient(180deg, rgba(32,65,98,1) 0%, rgba(46,79,117,1) 23%, rgba(78,105,140,1) 49%, rgba(101,122,149,1) 75%, rgba(124,139,158,1) 100%);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    height: 100px;
     
 }
 
@@ -111,7 +112,7 @@ a{
 }
 
 .mat-success{
-    background-color: rgb(182,136,104) !important;
+    background-color: rgb(200, 209, 214) !important;
 }
 
 @media all and (max-width: 600px) {

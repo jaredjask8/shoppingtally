@@ -1,10 +1,16 @@
-<div class="mt-5">Upcoming dates</div>
-<div class="datesContainer">
-    <div *ngFor="let date of dates; let i = index" (click)="showLists(i)">
-        {{date | date}}
+<div class="mt-5">Upcoming dates:</div>
+<div class="dataContainer">
+    <div class="datesContainer">
+        <div *ngFor="let date of dates; let i = index" (click)="showLists(i)">
+            {{date | date}}
+        </div>
     </div>
-    <div *ngFor="let list of currentSelectedList.item">
-        {{list.name}}
+
+    <div class="listContainer">
+        <div *ngFor="let list of currentSelectedList.item">
+            {{list.name}}
+        </div>
     </div>
 </div>
+
 

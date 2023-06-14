@@ -11,11 +11,13 @@ import {MatButtonModule} from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import { DatepickerComponent } from 'src/global/bootstrap-components/datepicker/datepicker.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import {MatDividerModule} from '@angular/material/divider';
 
 
 @NgModule({
   declarations: [
-    ListComponent,
+    ListComponent
     
   ],
   imports: [
@@ -29,8 +31,8 @@ import { DatepickerComponent } from 'src/global/bootstrap-components/datepicker/
     FormsModule,
     MatIconModule,
     DatepickerComponent,
-    
-
+    MatStepperModule,
+    MatDividerModule
     
   ],
   

@@ -2,6 +2,7 @@ package com.app.shoppingtally.date;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.shoppingtally.token.Token;
 import com.app.shoppingtally.user.User;
 
 @CrossOrigin(origins = "*")
@@ -29,7 +31,7 @@ public class DateController {
 	}
 	
 	@PostMapping("/all")
-	public List<DateDTO> getUserDates(@RequestBody User user){
-		return dateService.getUserDates(user);
+	public ResponseEntity<List<DateDTO>> getUserDates(@RequestBody Token token){
+		return ResponseEntity.ok(dateService.getUserDates(token));
 	}
 }

@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDatepickerModule, NgbDateStruct, NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { DatepickerService } from './datepicker.service';
@@ -11,26 +11,38 @@ import { DatepickerService } from './datepicker.service';
   templateUrl: './datepicker.component.html',
   styleUrls: ['./datepicker.component.css']
 })
-export class DatepickerComponent {
-  constructor(private calendar: NgbCalendar, private dateService:DatepickerService){}
+export class DatepickerComponent implements AfterViewInit{
+  @Output() newItemEvent = new EventEmitter<NgbDateStruct>();
+
+  constructor(private calendar: NgbCalendar, private dateService:DatepickerService, private elem: ElementRef){
+    
+  }
+
+
+  ngAfterViewInit(){
+    this.test=this.elem.nativeElement.querySelectorAll('.ngb-dp-day');
+    
+  }
 
 
   model: NgbDateStruct;
 	date: { year: number; month: number};
   displayMonths = 2;
-	navigation = 'select';
+	navigation = 'none';
 	showWeekNumbers = false;
 	outsideDays = 'visible';
+  test:NodeListOf<Element>;
 
   selectToday() {
 		this.model = this.calendar.getToday();
 	}
 
   setCurrentDate(){
-    this.dateService.setDate(this.model)
+    this.dateService.setDate(this.model);
+    this.newItemEvent.emit(this.model);
   }
 
-  isDisabled(date: NgbDateStruct) {
-    return date.day==13  && date.month == 1 || date.day==12 && date.month == 1;
-  }
+  
+
+
 }
