@@ -1,11 +1,197 @@
 video {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     z-index: -1;
     width: 100% ;
-  height: 100%;
+  height: 400px;
   overflow: hidden;
   object-fit: cover;
   }
+
+  #map {
+    height: 400px;
+    width: 400px;
+    z-index: 0;
+    box-shadow: 10px 10px 10px rgb(7, 34, 62,.5);
+  }
+
+  .storesContainer{
+    
+    width:70%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .body{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .storesTextContainer{
+    display: flex;
+    width: 50%;
+    background-color: rgb(95, 216, 217);
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 10px 10px 10px rgb(7, 34, 62,.5);
+  }
+
+  .storesHeader{
+    font-size: larger;
+    text-align: center;
+  }
+
+  .verticalTitle{
+    display: flex;
+    align-items: center;
+    writing-mode: vertical-lr;
+    font-size:x-large;
+  }
+
+  .whyContainer{
+    display: flex;
+    z-index: 0;
+  }
+
+
+
+  .whyTitle{
+    font-size:x-large;
+    width:300px;
+  }
+
+  
+  .whyDataContainer{
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+  }
+
+
+  .whyCardData{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: space-around;
+    align-items: center;
+    align-content: center;
+    
+  }
+
+  .whyText{
+    width:300px;
+    text-shadow: 2px 2px 3px rgb(0,0,0,.3);
+  }
+
+  .cardsWithHintContainer{
+    display: flex;
+    justify-content: center;
+    height: 400px;
+  }
+
+  .cardsContainer{
+    display: flex;
+    position: relative;
+    width: 300px;
+    height:250px;
+  }
+
+
+  .customCard{
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 250px;
+    width: 190px;
+    border-radius: 10px;
+    left:0px;
+    transition: left ease .5s;
+    position: absolute;
+    top:0px;
+    background-color: rgb(95, 216, 217);
+    pointer-events: none;
+    border-style: solid;
+    border-color: rgb(7, 34, 62);
+    box-shadow: 0px 20px 20px rgb(0,0,0,.5);
+  }
+
+
+  .cardHidden:hover > .customCard{
+    left:200px;
+    transform: rotate(10deg);
+  }
+
+  .cardHidden{
+    position: absolute;
+    height: 30px;
+    width: 190px;
+  }
+
+  .cardHidden.card1{
+    top:0px;
+  }
+
+  .cardHidden.card2{
+    top:30px;
+    left: 10px;
+  }
+
+  .cardHidden.card3{
+    top:60px;
+    left: 20px;
+  }
+
+  .cardHidden.card4{
+    top:90px;
+    left: 30px;
+  }
+
+  .cardHidden.card5{
+    top:120px;
+    left: 40px;
+  }
+
+  .cardHidden.card6{
+    top:150px;
+    left: 50px;
+  }
+
+  .cardHidden.card7{
+    top:180px;
+    left: 60px;
+  }
+
+  .cardHidden.card8{
+    top:210px;
+    left: 70px;
+  }
+
+
+  .hrPage{
+    width: 70%;
+    background-color: rgb(7, 34, 62);
+    height: 2px;
+  }
+
+  .hrCard{
+    width: 20%;
+    background-color: rgb(7, 34, 62);
+  }
+
+  .customSectionMargin{
+    margin-top: 120px;
+  }
+
+  #model{
+    background-color: rgb(124, 139, 158);
+  }
+
+  
+
+  
 

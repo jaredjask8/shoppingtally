@@ -1,3 +1,5 @@
+@import "@tomtom-international/web-sdk-maps";
+
 .body{
     padding-top: 100px;
     display: flex;
@@ -22,6 +24,8 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    overflow-y: auto;
+    width:50%;
 }
 
 .reviewDataContainer{
@@ -43,4 +47,8 @@ mat-divider{
     height: 70%;
     border-right-color: rgb(7, 34, 62);
 }
+
+#map {
+    height: 400px;
+  }
 

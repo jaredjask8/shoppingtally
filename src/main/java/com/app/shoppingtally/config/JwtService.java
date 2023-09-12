@@ -69,4 +69,7 @@ public class JwtService {
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 
+	public String extractFromBearer(String token) {
+		return token.substring(token.indexOf(" ")+1);
+	}
 }

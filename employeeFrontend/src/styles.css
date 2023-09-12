@@ -3,10 +3,13 @@
 html, body { 
     height: 100%;
     font-family: 'MyFont';
+    overflow: none;
+    scroll-behavior: smooth;
 }
 body { 
     margin: 0; 
     background: rgb(124, 139, 158);
+    user-select: none;
 }
 
 @font-face {

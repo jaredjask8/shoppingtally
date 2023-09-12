@@ -4,17 +4,19 @@
         <div class="reviewTitle">Leave a review!</div>
         <mat-form-field>
             <mat-label>Title</mat-label>
-            <input matInput>
+            <input [(ngModel)]="reviewTitle" matInput>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Review</mat-label>
-            <textarea matInput></textarea>
+            <textarea [(ngModel)]="review" matInput></textarea>
         </mat-form-field>
         <mat-label>Rating</mat-label>
         <ngb-rating 
         [(rate)]="currentRate"
         [max]="5"
         ></ngb-rating>
+        <button  mat-raised-button (click)="createReview()">Send</button>
+        
     </div>
     <mat-divider [vertical]="true"></mat-divider>
     <div class="reviewsContainer">
@@ -27,7 +29,10 @@
                 [readonly]="readonly"
             ></ngb-rating>
         </div>
+        
     </div>
+
+    
 </div>
 
 
