@@ -9,6 +9,7 @@
     flex-direction: column;
     justify-content: space-around;
     transition: all 1000ms ease-out;
+    margin-right: 10px;
 }
 
 .row{
@@ -29,9 +30,29 @@
     position: relative;
     height:100%;
     width:10px;
-    background: rgb(200, 209, 214);
+    background: #33FFFF;
 border-radius: 2px;
 
+}
+
+.line{
+    background-color: #33FFFF;
+    border-radius: 10px;
+}
+
+.l1{
+    height: 3px;
+    width: 20px;
+}
+
+.l2{
+    height: 3px;
+    width: 15px;
+}
+
+.l3{
+    height: 3px;
+    width: 10px;
 }
 
 .menuContainer:hover .square{
@@ -43,28 +64,28 @@ border-radius: 2px;
     width: 100%;
     margin: 0;
     padding: 0;
-    background: rgb(7, 34, 62);
-    background: linear-gradient(180deg, rgba(32,65,98,1) 0%, rgba(46,79,117,1) 23%, rgba(78,105,140,1) 49%, rgba(101,122,149,1) 75%, rgba(124,139,158,1) 100%);
+    background: #2A246A;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    height: 100px;
+    align-items: center;
+    height: 50px;
     z-index: 1;
+    box-shadow: 0 2px 2px -2px rgba(0,0,0,.2);
 }
+
+
 
 .left-nav{
-    margin-left: 20px;
-}
-
-.right-nav{
     display: flex;
     align-items: center;
-    margin-right: 20px;
+    align-content: center;
+    flex-grow: 1;
+    margin-left: 10px;
 }
 
 
 .margin-icons{
-    margin-right: 20px;
+    margin-right: 10px;
 }
 
 .side-nav-container{
@@ -79,6 +100,8 @@ border-radius: 2px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    align-content: center;
     border-top: 1px rgb(182,136,104,.2) solid;
 }
 .side-nav-body-user{
@@ -90,39 +113,134 @@ border-radius: 2px;
     border-bottom: 1px rgb(182,136,104,.2) solid;
 }
 
+.side-nav-body-contact{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px rgb(182,136,104,.2) solid;
+}
+
+.side-nav-body-payment{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px rgb(182,136,104,.2) solid;
+}
+
+.iconsContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-content: space-evenly;
+    align-items: center;
+    width: 100%;
+}
+
+.icons{
+    height:30px;
+    width: 30px;
+}
+
 .side-nav-footer{
     display: flex;
     width: 100%;
     justify-content: space-evenly;
     align-content: center;
     flex-direction: row;
-    
 }
 
 .option-container{
     display: flex;
-    width:120px;
+    width:300px;
     align-items: center;
     align-content: center;
+    padding-left: 20%;
 }
+
+.moneyIconContainer{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100px;
+    height:40px;
+}
+
+.contactContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
 
 a{
     color:black;
     text-decoration: none;
 }
 
+.contacts{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .mat-success{
-    background-color: rgb(200, 209, 214) !important;
+    background-color: #33FFFF !important;
+}
+
+button{
+    height: 30px !important;
+    padding: 5px;
+}
+
+.mdc-button{
+    min-width: 0px;
 }
 
 @media all and (max-width: 600px) {
-    .showLoginRegister {
+    button{
+        height: 15px !important;
+        font-size: x-small;
+        padding: 4px;
+        width: 40px;
+    }
+
+    .mdc-button{
+        min-width: 0px;
+    }
+    
+
+    svg{
         display: none;
+    }
+
+    .menuContainer{
+        height: 20px;
+    }
+
+    .nav-container{
+        height: 40px;
+    }
+
+}
+
+@media all and (max-width: 400px) {
+    .contactContainer{
+        display:flex;
+        flex-direction: column;
     }
 }
 
 .logo{
     -webkit-user-drag: none;
 }
+
+.showLoginRegister{
+    align-self: flex-start;
+}
+
 
 

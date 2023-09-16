@@ -25,20 +25,36 @@
 					</svg>
 					Reviews
 				</a>
-				<a class="mt-3 option-container" routerLink="/list">
+				<!-- <a class="mt-3 option-container" routerLink="/list">
 					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-card-checklist margin-icons" viewBox="0 0 16 16">
 						<path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
 						<path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
 					</svg>
-					List
-				</a>
-				
-				<a class="mt-3 option-container" routerLink="/payment">
+					Order
+				</a> -->
+
+				<a class="mt-3 option-container" routerLink="/deals">
 					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-credit-card margin-icons" viewBox="0 0 16 16">
 						<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
 						<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
 					</svg>	
-					Payment
+					 Weekly Deals
+				</a>
+				
+				<a class="mt-3 option-container" routerLink="/treats" *ngIf="showProfile()">
+					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-credit-card margin-icons" viewBox="0 0 16 16">
+						<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
+						<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
+					</svg>
+					Sweet Treats
+				</a>
+
+				<a class="mt-3 option-container" routerLink="/kit" *ngIf="showProfile()">
+					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-credit-card margin-icons" viewBox="0 0 16 16">
+						<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
+						<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
+					</svg>	
+					 Meal Delivery Kit
 				</a>
 			</div>
 			<div class="side-nav-body-user">
@@ -68,19 +84,35 @@
 				
 			</div>
 
-			<ngb-carousel class="mt-3"
-	*ngIf="images"
-	[showNavigationArrows]="showNavigationArrows"
-	[showNavigationIndicators]="showNavigationIndicators"
->
-	<ng-template ngbSlide *ngFor="let image of images">
-		<div class="picsum-img-wrapper">
-			<img [src]="image" alt="Random slide" />
-		</div>
-	</ng-template>
-</ngb-carousel>
+			<div class="side-nav-body-payment py-4">
+				<div>Payment</div>
+				<div class="iconsContainer mt-2">
+					<img style="height: 35px; width: 35px;" src="../../assets/img/payment_icons/venmoicon.png">
+					<img src="../../assets/img/payment_icons/applepayicon.png">
+					<img style="height: 35px; width: 35px;" src="../../assets/img/payment_icons/paypalicon.png">
+					<div class="moneyIconContainer">
+						<img style="height: 35px; width: 35px;" src="../../assets/img/payment_icons/moneyicon.png">
+						<div>or</div>
+						<img style="height: 35px; width: 35px;" src="../../assets/img/payment_icons/checkicon.png">
+					</div>
+				</div>
+			</div>
 
-<hr />
+				<div class="side-nav-body-contact py-4">
+					<div>Contact</div>
+					<div class="contactContainer mt-2">
+						<div class="contacts">
+							<div>Jay</div>
+							<div>(954)-464-1568</div>
+						</div>
+						<div class="contacts">
+							<div>Josh</div>
+							<div>(386)-365-6869</div>
+						</div>
+					</div>
+				</div>
+
+			
 		</div>
 		
 		<div class="side-nav-footer mb-5">
@@ -100,11 +132,18 @@
 
 <!-- <button class="btn btn-lg btn-outline-primary mb-2 mt-2 me-2" >Right position</button> -->
 <div class="nav-container">
+	
 	<div class="left-nav">
-		<img class="ml-3 logo" src="../../assets/img/drawing.png"/>
-	</div>
-	<div class="right-nav">
 		<div class="showLoginRegister">
+			
+			<a routerLink="/register">
+				<button mat-raised-button color="success" class="margin-icons">
+					Register
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+					  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+					</svg>
+				  </button>
+			</a>
 			<a routerLink="/login" *ngIf="showLogin" class="showLoginRegister">
 				<button mat-raised-button color="success" class="margin-icons">
 					Login
@@ -121,28 +160,17 @@
 					</svg>
 				</button>
 			</a>
-			<a routerLink="/register">
-				<button mat-raised-button color="success" class="margin-icons">
-					Register
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
-					  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-					</svg>
-				  </button>
-			</a>
+			
 		</div>
 		
-		<div class="menuContainer" (click)="openEnd(content)">
-			<div class="row">
-				<div class="square" id="topLeft"></div>
-				<div class="square" id="topRight"></div>
-			</div>
-			<div class="row">
-				<div class="square" id="bottomLeft"></div>
-				<div class="square" id="bottomRight"></div>
-			</div>
-		</div>
+		
 	</div>
-	
+	<div class="menuContainer" (click)="openEnd(content)">
+		<div class="line l1"></div>
+		<div class="line l2"></div>
+		<div class="line l3"></div>
+		
+	</div>
 	
 </div>
 
