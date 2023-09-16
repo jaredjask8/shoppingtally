@@ -5,6 +5,7 @@ html, body {
     font-family: 'MyFont';
     overflow: none;
     scroll-behavior: smooth;
+    
 }
 body { 
     margin: 0; 
