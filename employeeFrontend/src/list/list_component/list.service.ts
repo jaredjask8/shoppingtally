@@ -15,17 +15,17 @@ export class ListService {
 
   postList(list:ListToDB):Observable<ListToDB>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + list.token).set('Access-Control-Allow-Origin', '*');
-    return this.http.post<ListToDB>("http://shoppingtally.click/api/v1/list", list, {headers:headers})
+    return this.http.post<ListToDB>("https://shoppingtally.click/api/v1/list", list, {headers:headers})
   }
 
   getDates(token:string):Observable<PreviousListsFromDB[]>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token).set('Access-Control-Allow-Origin', '*');
-    return this.http.post<PreviousListsFromDB[]>("http://shoppingtally.click/api/v1/list/user", {token:token},{headers:headers})
+    return this.http.post<PreviousListsFromDB[]>("https://shoppingtally.click/api/v1/list/user", {token:token},{headers:headers})
   }
 
   getAllDates(token:string):Observable<string[]>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<string[]>("http://shoppingtally.click/api/v1/list/dates",null,{headers:headers})
+    return this.http.post<string[]>("https://shoppingtally.click/api/v1/list/dates",null,{headers:headers})
   }
 
 

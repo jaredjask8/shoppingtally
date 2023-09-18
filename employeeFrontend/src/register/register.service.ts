@@ -17,20 +17,20 @@ export class RegisterService {
 
 
   getUser(token:string):Observable<JwtUserResponse>{
-    return this.http.post<JwtUserResponse>("http://shoppingtally.click/api/v1/auth/user", {token:token});
+    return this.http.post<JwtUserResponse>("https://shoppingtally.click/api/v1/auth/user", {token:token});
   }
 
   authLogin(email:string, password:string):Observable<TokenResponse>{
-    return this.http.post<TokenResponse>("http://shoppingtally.click/api/v1/auth/authenticate", {email:email,password:password})
+    return this.http.post<TokenResponse>("https://shoppingtally.click/api/v1/auth/authenticate", {email:email,password:password})
   }
 
 
   getUsers():Observable<JwtUserResponse>{
-    return this.http.get<JwtUserResponse>("http://shoppingtally.click/api/user/all");
+    return this.http.get<JwtUserResponse>("https://shoppingtally.click/api/user/all");
   }
 
   registerUser(user: User){
-    return this.http.post("http://shoppingtally.click/api/v1/auth/register", user);
+    return this.http.post("https://shoppingtally.click/api/v1/auth/register", user);
   }
 
 
