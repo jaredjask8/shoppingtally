@@ -43,8 +43,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatTableModule,
     MatInputModule,
     NavComponent,
-    MatButtonModule,
-    
+    MatButtonModule
     
   ],
   providers: [EnvironmentService],

@@ -13,11 +13,11 @@ export class ReviewsService {
 
   sendReview(review:Review):Observable<Review[]>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.userService.getEnvironment().token).set('Access-Control-Allow-Origin', '*');
-    return this.http.post<Review[]>("http://localhost:8080/api/v1/reviews", review, {headers});
+    return this.http.post<Review[]>("http://shoppingtally.click/api/v1/reviews", review, {headers});
   }
 
   getReviews():Observable<Review[]>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.userService.getEnvironment().token).set('Access-Control-Allow-Origin', '*');
-    return this.http.post<Review[]>("http://localhost:8080/api/v1/reviews/all", null, {headers});
+    return this.http.post<Review[]>("http://shoppingtally.click/api/v1/reviews/all", null, {headers});
   }
 }

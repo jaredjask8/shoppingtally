@@ -1,4 +1,4 @@
-import { Component,OnInit } from '@angular/core';
+import { Component,HostBinding,OnInit } from '@angular/core';
 import { GroceryService } from 'src/global/grocery_items/grocery.service';
 import { EnvironmentService } from 'src/global/utility/environment.service';
 import { markers } from 'src/global/googleMapUtility/markers';
@@ -10,13 +10,16 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {gsap} from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { routeAnimationState } from 'src/global/routeAnimations';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  animations: [routeAnimationState]
 })
 export class HomeComponent implements OnInit{
+  @HostBinding('@routeAnimationTrigger') routeAnimation = true;
   showMessage:boolean = false;
 
   constructor(private userService:EnvironmentService){}
