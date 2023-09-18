@@ -17,20 +17,20 @@ export class RegisterService {
 
 
   getUser(token:string):Observable<JwtUserResponse>{
-    return this.http.post<JwtUserResponse>("https://192.168.0.209:8080/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/user", {token:token});
+    return this.http.post<JwtUserResponse>("https://shoppingtally.click/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/user", {token:token});
   }
 
   authLogin(email:string, password:string):Observable<TokenResponse>{
-    return this.http.post<TokenResponse>("https://192.168.0.209:8080/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/authenticate", {email:email,password:password})
+    return this.http.post<TokenResponse>("https://shoppingtally.click/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/authenticate", {email:email,password:password})
   }
 
 
   getUsers():Observable<JwtUserResponse>{
-    return this.http.get<JwtUserResponse>("https://192.168.0.209:8080/shoppingtally-0.0.2-SNAPSHOT/api/user/all");
+    return this.http.get<JwtUserResponse>("https://shoppingtally.click/shoppingtally-0.0.2-SNAPSHOT/api/user/all");
   }
 
   registerUser(user: User){
-    return this.http.post("https://192.168.0.209:8080/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/register", user);
+    return this.http.post("https://shoppingtally.click/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/register", user);
   }
 
 
