@@ -39,13 +39,16 @@ video {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-      
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
   }
 
 
 
   .whyTitle{
     font-size:50px;
+    color:#2A246A;
   }
 
   .homeImg{
@@ -53,6 +56,8 @@ video {
     height: auto;
     margin-top: 50px;
     padding: 0px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
   }
 
   @media (max-width: 1200px) {
@@ -69,10 +74,16 @@ video {
   @media (max-width: 600px) {
     .homeImg{
       margin-top: 40px;
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
     }
 
     .whyTitle{
       font-size: 40px;
+    }
+
+    .whyContainer{
+      border-radius: 0px;
     }
 
     h1{
@@ -108,10 +119,16 @@ video {
 .storeImg{
   height: auto;
   width: 100%;
+  border-radius: 20px;
 }
 
 .test{
   padding: 10px;
+}
+
+.testimonialsContainer{
+  width:100%;
+  background-color: #2A246A;
 }
 
 
