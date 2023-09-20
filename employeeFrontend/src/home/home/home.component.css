@@ -40,7 +40,8 @@ video {
     justify-content: center;
     align-items: center;
     background-color: white;
-    border-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
   }
 
 
@@ -54,8 +55,7 @@ video {
     height: auto;
     margin-top: 50px;
     padding: 0px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+
   }
 
   
@@ -90,18 +90,48 @@ video {
 .storeImg{
   height: auto;
   width: 100%;
-  border-radius: 20px;
+}
+
+.bottomBorder{
+  background: rgb(129,129,135);
+  background: linear-gradient(180deg, rgba(129,129,135,1) 0%, rgba(42,36,106,1) 100%);
+  height: 70px;
+  width: 100%;
 }
 
 .test{
   padding: 10px;
 }
 
-.testimonialsContainer{
-  width:100%;
-  background-color: #2A246A;
+.whatsNewSection{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+.whatsNewContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+  align-items: center;
+}
+
+.whatsNewDataContainer{
+  display: flex;
+  flex-direction: column;
+}
+
+
+.whatsNewData{
+  height: 100px;
+  width:auto;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 @media (max-width: 1200px) {
   .homeImg{
@@ -136,6 +166,8 @@ video {
   h1{
     font-size: 40px;
   }
+
+
 }
 
 
