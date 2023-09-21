@@ -2,6 +2,8 @@ package com.app.shoppingtally.auth;
 
 import java.util.Optional;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +35,8 @@ public class AuthenticationController {
 	
 	@PostMapping("/user")
 	public ResponseEntity<User> getUser(@RequestBody Token token){
-		return ResponseEntity.ok(service.getUser(token));
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.set("Access-Control-Allow-Origin", "*");
+		return new ResponseEntity<User>(service.getUser(token), responseHeaders, HttpStatus.CREATED);
 	}
 }
