@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin
 public class AuthenticationController {
 	private final AuthenticationService service;
 	
@@ -31,7 +31,6 @@ public class AuthenticationController {
 		return ResponseEntity.ok(service.authenticate(request));
 	}
 	
-	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/user")
 	public ResponseEntity<User> getUser(@RequestBody Token token){
 		return ResponseEntity.ok(service.getUser(token));
