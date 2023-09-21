@@ -2,8 +2,6 @@ package com.app.shoppingtally.auth;
 
 import java.util.Optional;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthenticationController {
 	private final AuthenticationService service;
 	
@@ -33,10 +31,9 @@ public class AuthenticationController {
 		return ResponseEntity.ok(service.authenticate(request));
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/user")
 	public ResponseEntity<User> getUser(@RequestBody Token token){
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.set("Access-Control-Allow-Origin", "*");
-		return new ResponseEntity<User>(service.getUser(token), responseHeaders, HttpStatus.CREATED);
+		return ResponseEntity.ok(service.getUser(token));
 	}
 }
