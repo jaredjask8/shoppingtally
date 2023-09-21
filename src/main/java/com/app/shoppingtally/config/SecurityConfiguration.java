@@ -29,7 +29,7 @@ public class SecurityConfiguration {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.csrf()
-			.and()
+			.disable()
 			.cors(Customizer.withDefaults())
 			.authorizeHttpRequests()
 			.requestMatchers("/api/v1/auth/**")
