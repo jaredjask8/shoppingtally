@@ -20,14 +20,5 @@ public class ServletInitializer extends SpringBootServletInitializer {
 		return application.sources(ShoppingtallyApplication.class);
 	}
 	
-	@Bean
-	CorsConfigurationSource corsFilter() {
-	    CorsConfiguration configuration = new CorsConfiguration();
-	    configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
-	    configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	    source.registerCorsConfiguration("/**", configuration);
-	    return source;
-	}
 
 }
