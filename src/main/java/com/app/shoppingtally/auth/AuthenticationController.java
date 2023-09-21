@@ -32,7 +32,7 @@ public class AuthenticationController {
 	}
 	
 	@PostMapping("/user")
-	public ResponseEntity<User> getUser(@RequestBody Token token){
-		return ResponseEntity.ok(service.getUser(token));
+	public User getUser(@RequestBody Token token){
+		return service.getUser(token);
 	}
 }
