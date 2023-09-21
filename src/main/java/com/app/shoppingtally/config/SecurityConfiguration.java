@@ -30,7 +30,8 @@ public class SecurityConfiguration {
 		http
 			.csrf()
 			.disable()
-			.cors(Customizer.withDefaults())
+			.cors()
+			.and()
 			.authorizeHttpRequests()
 			.requestMatchers("/api/v1/auth/**")
 			.permitAll()
@@ -46,13 +47,4 @@ public class SecurityConfiguration {
 		return http.build();
 	}
 	
-	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("*"));
-		configuration.setAllowedMethods(Arrays.asList("GET","POST","OPTIONS"));
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
-	}
 }

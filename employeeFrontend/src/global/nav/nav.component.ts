@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { EnvironmentService } from '../utility/environment.service';
 import { ListService } from 'src/list/list_component/list.service';
 import { ProfileService } from 'src/profile/profile.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-nav',
@@ -16,9 +17,10 @@ import { ProfileService } from 'src/profile/profile.service';
   styleUrls: ['./nav.component.css'],
   providers:[NgbCarouselConfig]
 })
-export class NavComponent{
+export class NavComponent implements OnInit{
   closeResult: string;
   showLogin:boolean=true;
+  showAdmin:boolean;
   showNavigationArrows = false;
 	showNavigationIndicators = false;
 	images = [1055, 194, 368].map((n) => `https://picsum.photos/id/${n}/350/300`);
@@ -26,6 +28,21 @@ export class NavComponent{
 	constructor(private offcanvasService: NgbOffcanvas, config: NgbCarouselConfig, private registerService:RegisterService, private userService:EnvironmentService, private listService:ListService, private profileService:ProfileService) {
     config.showNavigationArrows = true;
 		config.showNavigationIndicators = true;
+
+    this.registerService.checkAdmin$.subscribe(d => {
+      if(d == true){
+        this.showAdmin = true;
+        console.log("in true")
+      }else{
+        this.showAdmin = false;
+        console.log("in false");
+      }
+    });
+    
+  }
+  ngOnInit(): void {
+    console.log(this.showLogin)
+    
   }
   
   
@@ -39,11 +56,20 @@ export class NavComponent{
 
   showProfile(){
     if(this.userService.getEnvironment().log === "1"){
-      this.showLogin = false;
+      this.profileService.signOut$.subscribe(d => this.showLogin = d);
+      this.profileService.setSignOut(false);
       return true;
     }else{
       return false;
     }
+  }
+
+  showData(){
+    //get data from subject
+    //if data returns true, user is admin else false
+    
+
+    console.log("in false");
   }
 
   loadUser(){

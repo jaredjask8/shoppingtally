@@ -11,9 +11,25 @@ import { User } from 'src/models/User';
 export class RegisterService {
  
   showBadCredentials: boolean=false;
+  userCredentials$:BehaviorSubject<boolean> = new BehaviorSubject(false);
+  checkAdmin$: Observable<any>;
 
-  constructor(private http:HttpClient) { }
+
+  constructor(private http:HttpClient) { 
+    this.checkAdmin$ = this.userCredentials$.asObservable();
+
+  }
   //const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token).set('Access-Control-Allow-Origin', '*');
+  
+  setAdmin(user:JwtUserResponse){
+    console.log(user.role)
+    if(user.role === "ADMIN"){
+      this.userCredentials$.next(true);
+    }else{
+      this.userCredentials$.next(false);
+    }
+    
+  }
 
 
   getUser(token:string):Observable<JwtUserResponse>{

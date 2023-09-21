@@ -31,11 +31,16 @@ import { JwtUserResponse } from "src/models/JwtUserResponse";
         }
       }
 
-      setUser(response:JwtUserResponse){
-        this.user = response;
-      }
+    setUser(response:JwtUserResponse){
+      this.user = response;
+    }
 
-      getUser(){
-        return this.user;
-      }
+    getUser(){
+      return this.user;
+    }
+
+    removeUser(){
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("log");
+    }
   }

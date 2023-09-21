@@ -7,6 +7,8 @@ import { ListItem } from 'src/list/models/ListItem';
 import { PreviousListsToClient } from './models/PreviousListsToClient';
 import { JwtUserResponse } from 'src/models/JwtUserResponse';
 import { RegisterService } from 'src/register/register.service';
+import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -20,11 +22,27 @@ export class ProfileComponent implements OnInit{
   userData:JwtUserResponse;
   _showUpdate: boolean=false;
   _showLists: boolean=false;
+
   
-  constructor(private listService:ListService, private userService:EnvironmentService, private registerService:RegisterService){}
+  
+  constructor(private listService:ListService, private userService:EnvironmentService, private registerService:RegisterService, private profileService:ProfileService, private router:Router){}
   ngOnInit(): void {
+    //retrieves list appointments and the user on page load
     this.listService.getDates(this.userService.getEnvironment().token).subscribe(d => {this.profile = d; this.sortPreviousList(d);});
-    this.registerService.getUser(this.userService.getEnvironment().token).subscribe(d=>this.userData = d)
+    this.registerService.getUser(this.userService.getEnvironment().token).subscribe((d)=> {
+      this.userData = d;
+    
+    });
+  }
+
+  //signout is clicked on profile component 
+  // sets profile service subject to true / user is signed out
+  // removes all session storage 
+  // navigates user to home page 
+  signOut(){
+    this.profileService.setSignOut(true);
+    this.userService.removeUser();
+    this.router.navigate(['/','home']);
   }
 
   sortPreviousList(data:PreviousListsFromDB[]){
@@ -63,4 +81,5 @@ export class ProfileComponent implements OnInit{
   getDates():string[]{
     return this.clientList.map(d => d.date);
   }
+
 }
