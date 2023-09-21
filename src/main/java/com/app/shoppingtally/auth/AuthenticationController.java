@@ -31,6 +31,7 @@ public class AuthenticationController {
 		return ResponseEntity.ok(service.authenticate(request));
 	}
 	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/user")
 	public User getUser(@RequestBody Token token){
 		return service.getUser(token);
