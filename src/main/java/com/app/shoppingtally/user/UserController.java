@@ -19,7 +19,7 @@ import com.app.shoppingtally.user.User;
 
 import jakarta.persistence.Tuple;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RestController
 @RequestMapping("/login")
 public class UserController {

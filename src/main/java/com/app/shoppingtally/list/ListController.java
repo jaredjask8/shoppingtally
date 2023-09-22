@@ -13,7 +13,7 @@ import java.util.List;
 import com.app.shoppingtally.date.DateService;
 import com.app.shoppingtally.token.Token;
 
-@CrossOrigin(origins="*")
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/list")
 public class ListController {

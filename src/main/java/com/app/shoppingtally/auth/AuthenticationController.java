@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:4200", "https://www.shoppingtally.click"})
+@CrossOrigin
 public class AuthenticationController {
 	private final AuthenticationService service;
 	

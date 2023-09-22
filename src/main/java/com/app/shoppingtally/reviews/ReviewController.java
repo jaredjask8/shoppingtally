@@ -14,7 +14,7 @@ import java.util.List;
 
 import org.springframework.http.HttpHeaders;
 
-@CrossOrigin(origins="*")
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/reviews")
 public class ReviewController {
