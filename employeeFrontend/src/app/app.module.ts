@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { LoginComponent } from 'src/login/login.component';
 import { EnvironmentService } from 'src/global/utility/environment.service';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatTableModule,
     MatInputModule,
     NavComponent,
-    MatButtonModule
+    MatButtonModule,
+    RouterModule
     
   ],
   providers: [EnvironmentService],

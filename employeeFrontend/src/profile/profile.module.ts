@@ -4,6 +4,7 @@ import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile-routing.module';
 import { ProfileUpdateComponent } from './profile-update/profile-update.component';
 import { ProfileListsComponent } from './profile-lists/profile-lists.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -15,7 +16,8 @@ import { ProfileListsComponent } from './profile-lists/profile-lists.component';
   ],
   imports: [
     CommonModule,
-    ProfileRoutingModule
+    ProfileRoutingModule,
+    RouterModule
   ]
 })
 export class ProfileModule { }

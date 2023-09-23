@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StepperComponent } from './stepper.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('StepperComponent', () => {
   let component: StepperComponent;
@@ -8,7 +9,8 @@ describe('StepperComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [StepperComponent]
+      declarations: [],
+      imports:[StepperComponent, BrowserAnimationsModule]
     });
     fixture = TestBed.createComponent(StepperComponent);
     component = fixture.componentInstance;
