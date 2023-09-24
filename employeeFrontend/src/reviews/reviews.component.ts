@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Review } from './models/Review';
-import { FormControl, Validators } from '@angular/forms';
 import { NgbRatingConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ReviewsService } from './reviews.service';
-import { EnvironmentService } from 'src/global/utility/environment.service';
 
 
 
@@ -14,7 +12,7 @@ import { EnvironmentService } from 'src/global/utility/environment.service';
 })
 export class ReviewsComponent implements OnInit{
   
-  constructor(config: NgbRatingConfig, private reviewsService:ReviewsService, private userService:EnvironmentService){
+  constructor(config: NgbRatingConfig, private reviewsService:ReviewsService){
     config.max = 5;
   }
   ngOnInit(): void {

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
+import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { EnvironmentService } from 'src/global/utility/environment.service';
 import { JwtUserResponse } from 'src/models/JwtUserResponse';
@@ -13,7 +14,7 @@ import { RegisterService } from 'src/register/register.service';
 })
 export class LoginComponent {
   showBadCred: boolean;
-  constructor(private service: EnvironmentService, private registerService:RegisterService){}
+  constructor(private service: EnvironmentService, private registerService:RegisterService, private router:Router){}
   email = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl()
   token:string;
@@ -36,14 +37,12 @@ export class LoginComponent {
         this.service.setUser(d);
         this.registerService.setAdmin(d);
       });
+      this.router.navigateByUrl("/home")
     }
 
   }
 
   setEnvironment(email:string,password:string){
-    
     this.registerService.authLogin(email,password).subscribe(d => this.checkToken(d.token));
-    
-    
   }
 }

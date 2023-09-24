@@ -3,11 +3,10 @@ import { NgbDatepickerModule, NgbOffcanvas, OffcanvasDismissReasons, NgbCarousel
 import { NgIf, NgFor } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { RegisterService } from 'src/register/register.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { EnvironmentService } from '../utility/environment.service';
 import { ListService } from 'src/list/list_component/list.service';
 import { ProfileService } from 'src/profile/profile.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-nav',
@@ -19,58 +18,55 @@ import { Observable } from 'rxjs';
 })
 export class NavComponent implements OnInit{
   closeResult: string;
+
+  //control nav components on login and logout
   showLogin:boolean=true;
   showAdmin:boolean;
-  showNavigationArrows = false;
-	showNavigationIndicators = false;
-	images = [1055, 194, 368].map((n) => `https://picsum.photos/id/${n}/350/300`);
+  username:string="Guest"
+ 
 
-	constructor(private offcanvasService: NgbOffcanvas, config: NgbCarouselConfig, private registerService:RegisterService, private userService:EnvironmentService, private listService:ListService, private profileService:ProfileService) {
-    config.showNavigationArrows = true;
-		config.showNavigationIndicators = true;
+	constructor(private offcanvasService: NgbOffcanvas, config: NgbCarouselConfig, private registerService:RegisterService, private userService:EnvironmentService, private listService:ListService, private profileService:ProfileService, private router:Router) {
 
+
+    // call register service to check if user is admin
     this.registerService.checkAdmin$.subscribe(d => {
       if(d == true){
         this.showAdmin = true;
-        console.log("in true")
       }else{
         this.showAdmin = false;
-        console.log("in false");
       }
     });
     
   }
   ngOnInit(): void {
-    console.log(this.showLogin)
     
   }
   
   
   
-
+  // mat nav bar functionality
 	openEnd(content: TemplateRef<any>) {
 		this.offcanvasService.open(content, { position: 'end' });
 	}
 
 
-
+  // if user logs in successfully browser session sets log to 1
+  // if log is 1 check signout observable / will return boolean to display login or profile buttons
+  // also change the username in navbar
+  // else reset to guest 
   showProfile(){
     if(this.userService.getEnvironment().log === "1"){
       this.profileService.signOut$.subscribe(d => this.showLogin = d);
       this.profileService.setSignOut(false);
+      //this.username = this.userService.getUser().firstname;
       return true;
     }else{
+      this.username = "Guest";
+      this.showAdmin = false;
       return false;
     }
   }
 
-  showData(){
-    //get data from subject
-    //if data returns true, user is admin else false
-    
-
-    console.log("in false");
-  }
 
   loadUser(){
     this.profileService.setUserListData();

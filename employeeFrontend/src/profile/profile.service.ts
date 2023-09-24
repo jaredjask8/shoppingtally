@@ -26,7 +26,6 @@ export class ProfileService {
 
 
   setUserListData(){
-    this.registerService.getUser(this.userService.getEnvironment().token).subscribe(d => console.log(d));
     this.listService.getDates(this.userService.getEnvironment().token).subscribe(d=>this.profile = d);
   }
 
