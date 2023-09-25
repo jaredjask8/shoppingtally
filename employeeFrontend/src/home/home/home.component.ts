@@ -52,12 +52,19 @@ export class HomeComponent implements OnInit{
 
     // initMap();
 
-    // gsap.registerPlugin(ScrollTrigger);
-    //   gsap.to(".whyContainer", {backgroundColor:"black",duration:3, scrollTrigger:{
-    //     trigger: ".whyContaine r",
-    //     scrub:.1,
-    //     markers:false
-    //   }});
+    gsap.registerPlugin(ScrollTrigger);
+      gsap.to(".whatsNew1", {opacity:"1", scrollTrigger:{
+        trigger: ".whatsNew1",
+        scrub:.1,
+        markers:true,
+        end:"+=500"
+      }});
+      gsap.to(".whatsNew2", {opacity:"1", scrollTrigger:{
+        trigger: ".whatsNew2",
+        scrub:.1,
+        markers:true,
+        end:"+=500"
+      }});
   }
 
 }

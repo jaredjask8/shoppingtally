@@ -126,11 +126,18 @@ video {
 
 .whatsNewData{
   height: 100px;
-  width:auto;
   background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.whatsNew1{
+  opacity: 0;
+}
+
+.whatsNew2{
+  opacity: 0;
 }
 
 @media (max-width: 1200px) {
