@@ -132,12 +132,87 @@ video {
   align-items: center;
 }
 
+<<<<<<< Updated upstream
 .whatsNew1{
   opacity: 0;
 }
 
 .whatsNew2{
   opacity: 0;
+=======
+.testimonialsSection{
+  background: rgb(54,49,110);
+background: linear-gradient(180deg, rgba(54,49,110,1) 0%, rgba(50,156,185,1) 59%, rgba(51,255,255,1) 100%);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.testTitle_mid{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+
+.testMidTopRow{
+  background-color: white;
+  width: 30%;
+  align-self: flex-start;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+.testMidBotRow{
+  background-color: white;
+  width: 30%;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+}
+
+.testTopRow{
+  background-color: white;
+  width: 50%;
+  align-self: flex-start;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+.testTopRow2{
+  background-color: white;
+  width: 40%;
+  align-self: flex-start;
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+.testBotRow{
+  background-color: white;
+  width: 40%;
+  align-self: flex-end;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+}
+
+.testBotRow2{
+  background-color: white;
+  width: 50%;
+  align-self: flex-end;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+}
+
+.testRows{
+  opacity: .8;
+  padding:20px;
+
+}
+
+
+
+footer{
+  background-color: black;
+>>>>>>> Stashed changes
 }
 
 @media (max-width: 1200px) {
@@ -173,6 +248,7 @@ video {
   h1{
     font-size: 40px;
   }
+
 
 
 }
