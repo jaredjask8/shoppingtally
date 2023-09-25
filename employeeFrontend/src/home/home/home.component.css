@@ -1,14 +1,3 @@
-video {
-    position: relative;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    width: 100% ;
-  height: 400px;
-  overflow: hidden;
-  object-fit: cover;
-  }
- 
 
   #map {
     height: 400px;
@@ -21,6 +10,7 @@ video {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
   }
 
   .body{
@@ -30,11 +20,13 @@ video {
     align-items: center;
   }
 
+  
+
 
   .whyContainer{
     display: flex;
     z-index: 0;
-    width: 80%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -51,7 +43,7 @@ video {
   }
 
   .homeImg{
-    width: 80%;
+    width: 100%;
     height: auto;
     margin-top: 50px;
     padding: 0px;
@@ -88,7 +80,6 @@ video {
   }
 
 .storeImg{
-  height: auto;
   width: 100%;
 }
 
@@ -132,87 +123,61 @@ video {
   align-items: center;
 }
 
-<<<<<<< Updated upstream
 .whatsNew1{
   opacity: 0;
 }
 
 .whatsNew2{
   opacity: 0;
-=======
+} 
+
 .testimonialsSection{
-  background: rgb(54,49,110);
-background: linear-gradient(180deg, rgba(54,49,110,1) 0%, rgba(50,156,185,1) 59%, rgba(51,255,255,1) 100%);
+  position: relative;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  scale: 1;
+}
+
+.testDataContainer{
+  scale: 0;
+}
+
+video{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.testContainer{
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.testTitle_mid{
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  align-content: center;
+.testIcon{
+  background-color: #33FFFF;
+  border-radius: 50px;
+  padding: 15px;
+  font-size: 30px;
+  color: #2A246A;
+  letter-spacing: 2px;
 }
 
-.testMidTopRow{
-  background-color: white;
-  width: 30%;
-  align-self: flex-start;
-  border-top-right-radius: 30px;
-  border-bottom-right-radius: 30px;
-}
-.testMidBotRow{
-  background-color: white;
-  width: 30%;
-  border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px;
+.testTitle{
+  z-index: 1;
 }
 
-.testTopRow{
-  background-color: white;
-  width: 50%;
-  align-self: flex-start;
-  border-top-right-radius: 30px;
-  border-bottom-right-radius: 30px;
-}
-.testTopRow2{
-  background-color: white;
-  width: 40%;
-  align-self: flex-start;
-  border-top-right-radius: 30px;
-  border-bottom-right-radius: 30px;
-}
-
-.testBotRow{
-  background-color: white;
-  width: 40%;
-  align-self: flex-end;
-  border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px;
-}
-
-.testBotRow2{
-  background-color: white;
-  width: 50%;
-  align-self: flex-end;
-  border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px;
-}
-
-.testRows{
-  opacity: .8;
-  padding:20px;
-
-}
 
 
 
 footer{
   background-color: black;
->>>>>>> Stashed changes
 }
 
 @media (max-width: 1200px) {

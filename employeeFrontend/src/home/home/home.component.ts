@@ -21,9 +21,14 @@ import { routeAnimationState } from 'src/global/routeAnimations';
 export class HomeComponent implements OnInit{
   @HostBinding('@routeAnimationTrigger') routeAnimation = true;
   showMessage:boolean = false;
+  mobile:boolean;
 
   constructor(private userService:EnvironmentService){}
   ngOnInit(): void {
+
+    if (window.screen.width === 360) { // 768px portrait
+      this.mobile = true;
+    }
     // let map: google.maps.Map;
     // async function initMap(): Promise<void> {
     //   const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
@@ -53,18 +58,32 @@ export class HomeComponent implements OnInit{
     // initMap();
 
     gsap.registerPlugin(ScrollTrigger);
-      gsap.to(".whatsNew1", {opacity:"1", scrollTrigger:{
-        trigger: ".whatsNew1",
-        scrub:.1,
-        markers:true,
-        end:"+=500"
-      }});
-      gsap.to(".whatsNew2", {opacity:"1", scrollTrigger:{
-        trigger: ".whatsNew2",
-        scrub:.1,
-        markers:true,
-        end:"+=500"
-      }});
+    gsap.to(".whatsNew1", {opacity:"1", scrollTrigger:{
+      trigger: ".whatsNew1",
+      scrub:.5,
+      //markers:true,
+      end:"+=500"
+    }});
+    gsap.to(".whatsNew2", {opacity:"1", scrollTrigger:{
+      trigger: ".whatsNew2",
+      scrub:.5,
+      //markers:true,
+      end:"+=500"
+    }});
+
+    gsap.to(".testDataContainer", {scale:1, scrollTrigger:{
+      trigger: ".testTitle",
+      scrub:.1,
+      //markers:true,
+      end:"+=800"
+    }});
+
+    
+    
+  }
+
+  onResize(event) {
+    event.target.innerWidth <= 500 ? this.mobile = true : this.mobile = false;
   }
 
 }

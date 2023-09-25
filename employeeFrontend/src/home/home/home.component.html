@@ -1,5 +1,6 @@
-
+<div (window:resize)="onResize($event)"></div>
 <div class="body">
+    
     <img class="homeImg" src="../../assets/img/family2-min.png">
     
     <div class="whyContainer py-3">
@@ -36,6 +37,10 @@
         
     </div>
 
+    <!-- <video autoplay muted loop>
+        <source src="../../assets/videos/test.mp4" type="video/mp4">
+    </video> -->
+
     <div class="storesContainer mt-5">
         <h1>Available Stores</h1>
         <img class="storeImg" src="../../assets/img/revisedstore-min.png">
@@ -64,15 +69,44 @@
     </div>
     
     <div class="testimonialsSection">
-        <div class="testTopRow testRows mt-5">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time."</div>
-        <div class="testTopRow2 testRows mt-4">"I've been using Jay as my personal shopper for about 2 months! He is fantastic! He pays attention to details! He picks quality items. He communicates if they are out of a requested item & he's always on time! Jay is amazing!"</div>
-        <div class="testTitle_mid mt-4">
-            <div class="testMidTopRow testRows">"Jay is the best! He always gets exactly what we ask for and even remembers our favorite items and makes sure we get what we need and what we want! We would not know what to do without Jay and would recommend him to everyone to make their life better and easier. Our dogs even get excited when Jay comes to the door because he is so friendly and has become a great friend."</div>
-            <h1>Testimonials</h1>
-            <div class="testMidBotRow testRows">"Had a fabulous experience with Jay today. I've been out of town for several months and had to reorient myself to the process. Jay was extremely helpful and even squeezed me in on his busy Saturday. Thank you Jay for all you do."</div>
+        <video autoplay loop width="1920px" height="300px">
+            <source src="../../assets/videos/testBack.mp4" type="video/mp4">
+        </video>
+        <h1 class="testTitle mt-5">Testimonials</h1>
+        <div class="container testDataContainer mt-3">
+            <div class="row gx-5 gy-3">
+                <div class="testContainer col-xl-6">
+                    <div class="testIcon">J.J.</div>
+                    <div class="mt-2" *ngIf="mobile">"Jay has been shopping</div>
+                    <div class="mt-2" *ngIf="!mobile">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time."</div>
+                </div>
+                <div class="testContainer col-xl-6">
+                    <div class="testIcon">J.J.</div>
+                    <div class="mt-2" *ngIf="mobile">"Jay has been shopping</div>
+                    <div class="mt-2" *ngIf="!mobile">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time."</div>
+                </div>
+                <div class="testContainer col-xl-6">
+                    <div class="testIcon">J.J.</div>
+                    <div class="mt-2" *ngIf="mobile">"Jay has been shopping</div>
+                    <div class="mt-2" *ngIf="!mobile">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time."</div>
+                </div>
+                <div class="testContainer col-xl-6">
+                    <div class="testIcon">J.J.</div>
+                    <div class="mt-2" *ngIf="mobile">"Jay has been shopping</div>
+                    <div class="mt-2" *ngIf="!mobile">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time."</div>
+                </div>
+                <div class="testContainer col-xl-6">
+                    <div class="testIcon">J.J.</div>
+                    <div class="mt-2" *ngIf="mobile">"Jay has been shopping</div>
+                    <div class="mt-2" *ngIf="!mobile">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time."</div>
+                </div>
+                <div class="testContainer col-xl-6">
+                    <div class="testIcon">J.J.</div>
+                    <div class="mt-2" *ngIf="mobile">"Jay has been shopping</div>
+                    <div class="mt-2" *ngIf="!mobile">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time."</div>
+                </div>
+            </div>
         </div>
-        <div class="testBotRow mt-4 testRows">"Jay took so much time going over Any List and making sure I understood his services. I have used Jay for over a year and I won't deal with anyone else. Jay you are the best!"</div>
-        <div class="testBotRow2 mt-4 testRows">"Shopping in-store with two young kids is not ideal. We've been working with Jay for quite a while now, and he has taken all the stress of shopping away. He's thorough, timely, trustworthy, and quickly learns preferences/dislikes. Makes my life so much easier!"</div>
 
     </div>
 
@@ -80,6 +114,14 @@
     <!-- <canvas id="model"></canvas> -->
 </div>
 
-
+<!-- <div class="testTopRow testRows mt-5">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time."</div>
+        <div class="testTopRow2 testRows mt-4">"I've been using Jay as my personal shopper for about 2 months! He is fantastic! He pays attention to details! He picks quality items. He communicates if they are out of a requested item & he's always on time! Jay is amazing!"</div>
+        <div class="testTitle_mid mt-4">
+            <div class="testMidTopRow testRows">"Jay is the best! He always gets exactly what we ask for and even remembers our favorite items and makes sure we get what we need and what we want! We would not know what to do without Jay and would recommend him to everyone to make their life better and easier. Our dogs even get excited when Jay comes to the door because he is so friendly and has become a great friend."</div>
+            <h1 class="testTitle">Testimonials</h1>
+            <div class="testMidBotRow testRows">"Had a fabulous experience with Jay today. I've been out of town for several months and had to reorient myself to the process. Jay was extremely helpful and even squeezed me in on his busy Saturday. Thank you Jay for all you do."</div>
+        </div>
+        <div class="testBotRow mt-4 testRows">"Jay took so much time going over Any List and making sure I understood his services. I have used Jay for over a year and I won't deal with anyone else. Jay you are the best!"</div>
+        <div class="testBotRow2 mt-4 testRows">"Shopping in-store with two young kids is not ideal. We've been working with Jay for quite a while now, and he has taken all the stress of shopping away. He's thorough, timely, trustworthy, and quickly learns preferences/dislikes. Makes my life so much easier!"</div> -->
 
 
