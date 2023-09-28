@@ -123,32 +123,27 @@
   align-items: center;
 }
 
-.whatsNew1{
+/* .whatsNew1{
   opacity: 0;
 }
 
 .whatsNew2{
   opacity: 0;
-} 
+}  */
 
 .testimonialsSection{
-  position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: white;
-  scale: 1;
 }
 
-.testDataContainer{
-  scale: 0;
-}
+
 
 video{
   position: absolute;
   width: 100%;
-  height: 100%;
   object-fit: cover;
   z-index: 0;
 }
@@ -158,15 +153,21 @@ video{
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  justify-content: center;
 }
 
 .testIcon{
-  background-color: #33FFFF;
+  position: absolute;
+  background-color: #2A246A;
   border-radius: 50px;
-  padding: 15px;
-  font-size: 30px;
-  color: #2A246A;
+  padding: 10px;
+  font-size: 20px;
+  color: white;
   letter-spacing: 2px;
+  left:42%;
+  top:-25px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
 .testTitle{
@@ -174,10 +175,162 @@ video{
 }
 
 
+.testText{
+  background-color: white;
+  padding:20px;
+  color:#2A246A;
+  border-radius: 20px;
+}
+
+
+
+
+.testContainerGlobalHorizontal{
+  width: 300px;
+}
+
+.animationContainer{
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 530px;
+  z-index: 1;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.test1Horizontal{
+  position: absolute;
+  text-align: center;
+  opacity: 0;
+  left:-200px;
+}
+
+.test2Horizontal{
+  position: absolute;
+  left:-200px;
+  text-align: center;
+  opacity: 0;
+}
+
+.test3Horizontal{
+  position: absolute;
+  text-align: center;
+  left: 7%;
+  margin-right: 10px;
+}
+
+.test4Horizontal{
+  position: absolute;
+  text-align: center;
+  left: 40%;
+  margin-right: 10px;
+}
+.test5Horizontal{
+  position: absolute;
+  text-align: center;
+  left: 73%;
+  margin-right: 10px;
+}
+
+.test6Horizontal{
+  position: absolute;
+  text-align: center;
+  opacity: 0;
+  left:-200px;
+}
+
+.test7Horizontal{
+  position: absolute;
+  text-align: center;
+  opacity: 0;
+  left:-200px;
+}
+
+
+
+/* ////////////// MOBILE ANIMATION STYLES ////////// */
+/* ////////////////////////////////////////// */
+
+.test1Vertical{
+  position: absolute;
+  text-align: center;
+  opacity: 0;
+  top:-100px;
+}
+
+.test2Vertical{
+  position: absolute;
+  top:-100px;
+  text-align: center;
+  opacity: 0;
+}
+
+.test3Vertical{
+  position: absolute;
+  text-align: center;
+  top: 7%;
+}
+
+.test4Vertical{
+  position: absolute;
+  text-align: center;
+  top: 40%;
+}
+.test5Vertical{
+  position: absolute;
+  text-align: center;
+  top: 73%;
+}
+
+.test6Vertical{
+  position: absolute;
+  text-align: center;
+  opacity: 0;
+  top:-100px;
+}
+
+.test7Vertical{
+  position: absolute;
+  text-align: center;
+  opacity: 0;
+  top:-100px;
+}
+
+.testContainerGlobal{
+  width: 100%;
+}
 
 
 footer{
   background-color: black;
+}
+
+@media (max-width: 1350px) {
+
+  .testContainerGlobalHorizontal{
+    width: 200px;
+  }
+
+  video{
+    height: 600px;
+  }
+
+  .animationContainer{
+    height:530px;
+  }
+
+  
+}
+
+@media (max-width: 900px) {
+  video{
+    height: 700px;
+  }
+
+  .animationContainer{
+    height:630px;
+  }
 }
 
 @media (max-width: 1200px) {
@@ -214,6 +367,14 @@ footer{
     font-size: 40px;
   }
 
+  video{
+    height: 900px;
+  }
+
+  .animationContainer{
+    height: 830px;
+  }
+
 
 
 }
@@ -224,6 +385,8 @@ footer{
     padding-left: 60px;
     font-size: 18px;
   }
+
+  
 }
 
 @media (min-width: 500px) { 

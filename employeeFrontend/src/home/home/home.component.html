@@ -67,48 +67,111 @@
             </div>
         </div>
     </div>
+
     
-    <div class="testimonialsSection">
-        <video autoplay loop width="1920px" height="300px">
+    <div class="testimonialsSection" >
+        <video autoplay loop width="1920px" height="600px">
             <source src="../../assets/videos/testBack.mp4" type="video/mp4">
         </video>
-        <h1 class="testTitle mt-5">Testimonials</h1>
-        <div class="container testDataContainer mt-3">
-            <div class="row gx-5 gy-3">
-                <div class="testContainer col-xl-6">
-                    <div class="testIcon">J.J.</div>
-                    <div class="mt-2" *ngIf="mobile">"Jay has been shopping</div>
-                    <div class="mt-2" *ngIf="!mobile">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time."</div>
+        <h1 class="testTitle">Testimonials</h1>
+        <div class="animationContainer">
+            <div *ngIf="mobileResolution$ | async">
+                <div #test class="test1Vertical testContainerGlobal">
+                    <div class="testIcon">
+                        <div>JJ</div>
+                    </div>
+                    <div class="mt-2 testText">"Jay has been shopping for us for three years. </div>
                 </div>
-                <div class="testContainer col-xl-6">
-                    <div class="testIcon">J.J.</div>
-                    <div class="mt-2" *ngIf="mobile">"Jay has been shopping</div>
-                    <div class="mt-2" *ngIf="!mobile">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time."</div>
+                <div #test class="test2Vertical testContainerGlobal">
+                    <div class="testIcon">
+                        <div>BF</div>
+                    </div>
+                    <div class="mt-2 testText">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me."</div>
                 </div>
-                <div class="testContainer col-xl-6">
-                    <div class="testIcon">J.J.</div>
-                    <div class="mt-2" *ngIf="mobile">"Jay has been shopping</div>
-                    <div class="mt-2" *ngIf="!mobile">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time."</div>
+                <div #test class="test3Vertical testContainerGlobal">
+                    <div class="testIcon">
+                        <div>JS</div>
+                    </div>
+                    <div class="mt-2 testText">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me."</div>
                 </div>
-                <div class="testContainer col-xl-6">
-                    <div class="testIcon">J.J.</div>
-                    <div class="mt-2" *ngIf="mobile">"Jay has been shopping</div>
-                    <div class="mt-2" *ngIf="!mobile">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time."</div>
+                <div #test class="test4Vertical testContainerGlobal">
+                    <div class="testIcon">
+                        <div>TP</div>
+                    </div>
+                    <div class="mt-2 testText">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me."</div>
                 </div>
-                <div class="testContainer col-xl-6">
-                    <div class="testIcon">J.J.</div>
-                    <div class="mt-2" *ngIf="mobile">"Jay has been shopping</div>
-                    <div class="mt-2" *ngIf="!mobile">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time."</div>
+                <div #test class="test5Vertical testContainerGlobal">
+                    <div class="testIcon">
+                        <div>BG</div>
+                    </div>
+                    <div class="mt-2 testText">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me."</div>
                 </div>
-                <div class="testContainer col-xl-6">
-                    <div class="testIcon">J.J.</div>
-                    <div class="mt-2" *ngIf="mobile">"Jay has been shopping</div>
-                    <div class="mt-2" *ngIf="!mobile">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time."</div>
+                <div #test class="test6Vertical testContainerGlobal">
+                    <div class="testIcon">
+                        <div>LH</div>
+                    </div>
+                    <div class="mt-2 testText">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me."</div>
+                </div>
+                <div #test class="test7Vertical testContainerGlobal">
+                    <div class="testIcon">
+                        <div>TB</div>
+                    </div>
+                    <div class="mt-2 testText">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me."</div>
                 </div>
             </div>
+
+            
+            <ng-container *ngIf="!(mobileResolution$ | async)">
+                <div #test class="test1Horizontal testContainerGlobalHorizontal">
+                    <div class="testIcon">
+                        <div>BF</div>
+                    </div>
+                    <div class="mt-2 testText">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me."</div>
+                </div>
+                <div #test class="test2Horizontal testContainerGlobalHorizontal">
+                    <div class="testIcon">
+                        <div>BF</div>
+                    </div>
+                    <div class="mt-2 testText">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me."</div>
+                </div>
+                <div #test class="test3Horizontal testContainerGlobalHorizontal">
+                    <div class="testIcon">
+                        <div>BF</div>
+                    </div>
+                    <div class="mt-2 testText">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me."</div>
+                </div>
+                <div #test class="test4Horizontal testContainerGlobalHorizontal">
+                    <div class="testIcon">
+                        <div>BF</div>
+                    </div>
+                    <div class="mt-2 testText">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me."</div>
+                </div>
+                <div #test class="test5Horizontal testContainerGlobalHorizontal">
+                    <div class="testIcon">
+                        <div>BF</div>
+                    </div>
+                    <div class="mt-2 testText">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me."</div>
+                </div>
+                <div #test class="test6Horizontal testContainerGlobalHorizontal">
+                    <div class="testIcon">
+                        <div>BF</div>
+                    </div>
+                    <div class="mt-2 testText">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me."</div>
+                </div>
+                <div #test class="test7Horizontal testContainerGlobalHorizontal">
+                    <div class="testIcon">
+                        <div>BF</div>
+                    </div>
+                    <div class="mt-2 testText">"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me."</div>
+                </div>
+            </ng-container>
+            
         </div>
 
+
     </div>
+
+    
 
     <footer></footer>
     <!-- <canvas id="model"></canvas> -->
