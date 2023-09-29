@@ -77,6 +77,7 @@ export class HomeComponent implements OnInit,AfterViewInit{
   desktopResolution:BehaviorSubject<boolean> = new BehaviorSubject(true);
   mobileResolution$:Observable<boolean>
   mobileInterval:any
+  desktopInterval:any
   initialDesktopInterval:any
   initialMobileInterval:any
   initialMobileBool:boolean
@@ -132,7 +133,7 @@ export class HomeComponent implements OnInit,AfterViewInit{
         
       }
   
-      ,5000)
+      ,10000)
     }else if(window.innerWidth <= 900){
       this.mobileResolution.next(true)
       this.cdr.detectChanges()
@@ -176,7 +177,7 @@ export class HomeComponent implements OnInit,AfterViewInit{
         
       }
   
-      ,5000)
+      ,10000)
     }
     
   }
@@ -196,10 +197,11 @@ export class HomeComponent implements OnInit,AfterViewInit{
     clearInterval(this.initialMobileInterval)
     event.target.innerWidth <= 900 ? this.mobileResolution.next(true) : this.mobileResolution.next(false);
     clearInterval(this.mobileInterval)
+    clearInterval(this.desktopInterval)
     
     if(!this.mobileResolution.value){
 
-      this.mobileInterval = setInterval(() => {
+      this.desktopInterval = setInterval(() => {
       
         for(let i = 0; i < 7; i++){
           if(i == 0 || i == 6){
@@ -238,7 +240,7 @@ export class HomeComponent implements OnInit,AfterViewInit{
         
       }
   
-      ,5000)
+      ,10000)
     }else{
       //mobile vertical animation
       this.mobileInterval = setInterval(() => {
@@ -280,7 +282,7 @@ export class HomeComponent implements OnInit,AfterViewInit{
         
       }
   
-      ,5000)
+      ,10000)
     }
   }
 
