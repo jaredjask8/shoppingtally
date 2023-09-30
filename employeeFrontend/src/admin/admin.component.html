@@ -1,7 +1,11 @@
 <p>f</p>
 <p>f</p>
 <p>f</p>
-<form (submit)="onSubmit()">
+
+
+<form [formGroup]="myForm" class="formContainer">
+    <input placeholder="Title" formControlName="title" #title>
+    <input placeholder="Description" formControlName="description" #description>
     <input type="file" (change)="onFileSelected($event)">
-    <button type="submit">Upload</button>
-  </form>
+    <button type="submit" (click)="submit(title.value, description.value)">Go</button>
+</form>
