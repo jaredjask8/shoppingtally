@@ -1,5 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { RegisterService } from 'src/register/register.service';
 
 @Component({
   selector: 'app-root',
@@ -9,8 +10,9 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 export class AppComponent implements OnInit{
   title:string = '';
   displayLoadingIndicator=false;
+  
 
-  constructor(private router:Router){
+  constructor(private router:Router, private registerService: RegisterService){
     
   }
   ngOnInit(): void {
@@ -24,10 +26,9 @@ export class AppComponent implements OnInit{
         console.log("ended")
       }
     })
+
+    console.log(this.registerService.checkAdmin$)
   }
 
-  test(){
-    
-  }
   
 }

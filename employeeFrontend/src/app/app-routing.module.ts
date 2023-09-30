@@ -1,5 +1,6 @@
-import { ApplicationConfig, NgModule } from '@angular/core';
+import { ApplicationConfig, NgModule, inject } from '@angular/core';
 import { RouterModule, Routes, provideRouter } from '@angular/router';
+import { adminGuard } from 'src/global/utility/admin.guard';
 import { HomeComponent } from 'src/home/home/home.component';
 import { RegisterComponent } from 'src/register/register.component';
 
@@ -12,6 +13,7 @@ const routes: Routes = [
 	{ path: 'about', loadChildren: () => import('../about/about.module').then(m => m.AboutModule) },
 	{ path: 'profile', loadChildren: () => import('../profile/profile.module').then(m => m.ProfileModule) },
 	{ path: 'reviews', loadChildren: () => import('../reviews/reviews.module').then(m => m.ReviewsModule) },
+	{ path: 'admin', loadChildren: () => import('../admin/admin.module').then(m => m.AdminModule)}, //, canActivate:[adminGuard]
 	{ path: '**', redirectTo: 'home' }
 ];
 

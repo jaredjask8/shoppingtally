@@ -14,6 +14,9 @@ import { routeAnimationState } from 'src/global/routeAnimations';
 import { Testimonial } from 'src/models/testimonials/Testimonial';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
+import { WhatsNew } from 'src/models/WhatsNew';
+import { AdminService } from 'src/admin/admin.service';
 
 const testimonials:Testimonial[] = [
   {
@@ -82,12 +85,24 @@ export class HomeComponent implements OnInit,AfterViewInit{
   initialMobileInterval:any
   initialMobileBool:boolean
 
+  //WHATS NEW PROPERTIES
+  selectedFile: any;
+  imgUrl:any;
+  file:File;
+  image:any;
+  image1;
+  title1;
+  description1;
+  image2;
+  title2;
+  description2;
+
 
 
   
     
 
-  constructor(private userService:EnvironmentService, private renderer:Renderer2, private cdr: ChangeDetectorRef){
+  constructor(private userService:EnvironmentService, private renderer:Renderer2, private cdr: ChangeDetectorRef, private sanitizer: DomSanitizer, private adminService:AdminService){
     
   }
 
@@ -125,10 +140,8 @@ export class HomeComponent implements OnInit,AfterViewInit{
         }
         tempArray[0] = this.tempIndex;
   
-        //console.log(tempArray)
         this.testimonials.reset(tempArray)
-        
-        console.log(this.testimonials)
+      
   
         
       }
@@ -169,10 +182,8 @@ export class HomeComponent implements OnInit,AfterViewInit{
         }
         tempArray[0] = this.tempIndex;
   
-        //console.log(tempArray)
         this.testimonials.reset(tempArray)
-        
-        console.log(this.testimonials)
+      
   
         
       }
@@ -188,6 +199,17 @@ export class HomeComponent implements OnInit,AfterViewInit{
     if(window.innerWidth >= 900){
       this.mobileResolution.next(false)
     }
+
+    this.adminService.getWhatsNew().subscribe(d => {
+      this.image1 = d[0].imageData;
+      this.title1 = d[0].title;
+      this.description1 = d[0].description;
+
+      this.image2 = d[1].imageData;
+      this.title2 = d[1].title;
+      this.description2 = d[1].description;
+
+    })
   }
 
 
@@ -231,11 +253,8 @@ export class HomeComponent implements OnInit,AfterViewInit{
           tempArray[j] = tempArray[j-1];
         }
         tempArray[0] = this.tempIndex;
-  
-        //console.log(tempArray)
         this.testimonials.reset(tempArray)
-        
-        console.log(this.testimonials)
+      
   
         
       }
@@ -274,10 +293,8 @@ export class HomeComponent implements OnInit,AfterViewInit{
         }
         tempArray[0] = this.tempIndex;
   
-        //console.log(tempArray)
         this.testimonials.reset(tempArray)
-        
-        console.log(this.testimonials)
+      
   
         
       }
@@ -285,5 +302,7 @@ export class HomeComponent implements OnInit,AfterViewInit{
       ,10000)
     }
   }
+
+  
 
 }

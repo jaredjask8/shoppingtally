@@ -12,7 +12,8 @@ export class RegisterService {
  
   showBadCredentials: boolean=false;
   userCredentials$:BehaviorSubject<boolean> = new BehaviorSubject(false);
-  checkAdmin$: Observable<any>;
+  checkAdmin$: Observable<boolean>;
+  isAdmin:boolean=false;
 
 
   constructor(private http:HttpClient) { 
@@ -24,8 +25,10 @@ export class RegisterService {
   setAdmin(user:JwtUserResponse){
     console.log(user.role)
     if(user.role === "ADMIN"){
+      this.isAdmin = true;
       this.userCredentials$.next(true);
     }else{
+      this.isAdmin = false;
       this.userCredentials$.next(false);
     }
     
