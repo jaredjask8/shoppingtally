@@ -23,14 +23,14 @@ public class WhatsNewController {
 		
 	}
 	
-	
+	@CrossOrigin
 	@PostMapping("/push")
 	public WhatsNew setWhatsNew(@RequestBody WhatsNew whatsNew) {
 		whatsNewService.upload(whatsNew);
 		return whatsNew;
 	}
 	
-	@CrossOrigin("http://localhost:4200")
+	@CrossOrigin
 	@GetMapping("/list")
 	public List<WhatsNew> getWhatsNew() {
 		return whatsNewService.download();
