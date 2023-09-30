@@ -6,6 +6,6 @@
 <form [formGroup]="myForm" class="formContainer">
     <input placeholder="Title" formControlName="title" #title>
     <input placeholder="Description" formControlName="description" #description>
-    <input type="file" (change)="onFileSelected($event)">
+    <input type="file" (change)="onFileSelected($event)" #image>
     <button type="submit" (click)="submit(title.value, description.value)">Go</button>
 </form>

@@ -17,7 +17,8 @@ export class AdminComponent implements OnInit{
   ngOnInit(): void {
     this.myForm = this.fb.group({
       title:'',
-      description:''
+      description:'',
+      image:''
     })
   }
 
