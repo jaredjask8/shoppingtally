@@ -1,11 +1,11 @@
 <p>f</p>
 <p>f</p>
 <p>f</p>
-
-
-<form [formGroup]="myForm" class="formContainer">
-    <input placeholder="Title" formControlName="title" #title>
-    <input placeholder="Description" formControlName="description" #description>
-    <input type="file" (change)="onFileSelected($event)" #image>
-    <button type="submit" (click)="submit(title.value, description.value)">Go</button>
+<form (submit)="onSubmit()">
+    <input type="file" (change)="onFileSelected($event)">
+    <input type="text" [(ngModel)]="title1" name="title1">
+    <input type="text" [(ngModel)]="description1" name="description1">
+    <button type="submit">Upload</button>
 </form>
+
+

@@ -12,19 +12,15 @@ export class AdminComponent implements OnInit{
   selectedFile:any;
   imgUrl:any;
   myForm: FormGroup; 
+  title1:string='';
+  description1:string='';
 
-  constructor(private adminService:AdminService, private fb:FormBuilder){}
+  constructor(private adminService:AdminService){}
   ngOnInit(): void {
-    this.myForm = this.fb.group({
-      title:'',
-      description:'',
-      image:''
-    })
+    
   }
 
-  submit(title:string,description:string){
-    this.adminService.submitWhatsNew(new WhatsNew(1,title,description,this.imgUrl)).subscribe(d => console.log(d))
-  }
+
   
   onFileSelected(e){
     this.selectedFile = e.target.files[0];
@@ -40,7 +36,7 @@ export class AdminComponent implements OnInit{
    }
 
   onSubmit(){
-
+    this.adminService.submitWhatsNew(new WhatsNew(1,this.title1,this.description1,this.imgUrl)).subscribe(d => console.log(d))
     
   }
 }
