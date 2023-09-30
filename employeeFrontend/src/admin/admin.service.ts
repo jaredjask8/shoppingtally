@@ -8,12 +8,12 @@ import { WhatsNew } from 'src/models/WhatsNew';
 })
 export class AdminService {
   getWhatsNew() {
-    return this.http.get<WhatsNew[]>("http://localhost:8080/api/v1/admin/whatsNew/list")
+    return this.http.get<WhatsNew[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/whatsNew/list")
   }
 
   constructor(private http:HttpClient) { }
 
   submitWhatsNew(whatsNew:WhatsNew):Observable<WhatsNew>{
-   return this.http.post<WhatsNew>("http://localhost:8080/api/v1/admin/whatsNew/push", whatsNew)
+   return this.http.post<WhatsNew>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/whatsNew/push", whatsNew)
   }
 }
