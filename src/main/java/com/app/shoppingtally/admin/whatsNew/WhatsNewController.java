@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app.shoppingtally.list.UserList;
 
 @RestController
-@CrossOrigin("https://www.shoppingtally.click")
+@CrossOrigin
 @RequestMapping("/api/v1/admin/whatsNew")
 public class WhatsNewController {
 	
@@ -23,14 +23,14 @@ public class WhatsNewController {
 		
 	}
 	
-	@CrossOrigin("https://www.shoppingtally.click")
+	@CrossOrigin
 	@PostMapping("/push")
 	public WhatsNew setWhatsNew(@RequestBody WhatsNew whatsNew) {
 		whatsNewService.upload(whatsNew);
 		return whatsNew;
 	}
 	
-	@CrossOrigin("https://www.shoppingtally.click")
+	@CrossOrigin
 	@GetMapping("/list")
 	public List<WhatsNew> getWhatsNew() {
 		return whatsNewService.download();
