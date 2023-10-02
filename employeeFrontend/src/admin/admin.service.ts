@@ -7,6 +7,7 @@ import { WhatsNew } from 'src/models/WhatsNew';
   providedIn: 'root'
 })
 export class AdminService {
+  //http://localhost:8080
   getWhatsNew() {
     return this.http.get<WhatsNew[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/admin/whatsNew/list")
   }

@@ -1,11 +1,55 @@
 <p>f</p>
 <p>f</p>
 <p>f</p>
-<form (submit)="onSubmit()">
+<!-- <form (submit)="onSubmit()">
     <input type="file" (change)="onFileSelected($event)">
     <input type="text" [(ngModel)]="title1" name="title1">
     <input type="text" [(ngModel)]="description1" name="description1">
     <button type="submit">Upload</button>
-</form>
+</form> -->
+<h1 class="whatsNewTitle">Whats New</h1>
+<div class="whatsNewContainer mt-3 mb-5 py-3" *ngFor="let item of whatsNewArray; let i = index">
+    <h2 *ngIf="i == 0">Top</h2>
+    <h2 *ngIf="i == 1">Bottom</h2>
+    <div class="whatsNewCurrent my-5">
+        <h2>Current data</h2>
+        <img [src]=item.imageData height="auto" width="200">
+        <div class="textContainer">
+            <div>Title: {{item.title}}</div>
+            <div>Description: {{item.description}}</div>
+        </div>
+    </div>
+    <div class="whatsNewUploadContainer">
+        <div class="whatsNewUpload">
+            <div class="whatsNewUploadImage">
+                <img [src]=imgUrl height="auto" width="100px" *ngIf="i == 0">
+                <img [src]=imgUrl2 height="auto" width="100px" *ngIf="i == 1">
+                <button class="mt-2 fileButton" type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+                <input hidden (change)="onFileSelected($event, i)" #fileInput type="file" id="file">
+            </div>
+            
+            <div class="whatsNewUploadForm">
+                <mat-form-field class="mt-3">
+                    <mat-label>Title</mat-label>
+                    <input matInput [(ngModel)]="title1" name="title1" *ngIf="i == 0">
+                    <input matInput [(ngModel)]="title2" name="title2" *ngIf="i == 1">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Description</mat-label>
+                    <textarea matInput [(ngModel)]="description1" name="description1" *ngIf="i == 0"></textarea>
+                    <textarea matInput [(ngModel)]="description2" name="description2" *ngIf="i == 1"></textarea>
+                </mat-form-field>
+            </div>
+            
+        </div>
+        
+        <button class="uploadButton" mat-raised-button (click)="onSubmit(i)">Upload</button>
+    </div>
+</div>
+
+<div class="whatsNewForm1" >
+    
+</div>
+
 
 

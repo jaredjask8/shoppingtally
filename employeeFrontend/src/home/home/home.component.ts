@@ -55,18 +55,7 @@ const testimonials:Testimonial[] = [
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  animations: [
-    trigger('fade', [
-  transition(':enter', [
-    style({ opacity: 0 }),
-    animate('100ms', style({ opacity: 1 })),
-  ]),
-  transition(':leave', [
-    animate('100ms', style({ opacity: 0 }))
-  ])
-]),
-  
-  ]
+  animations: [ routeAnimationState ]
 })
 export class HomeComponent implements OnInit,AfterViewInit{
   @HostBinding('@routeAnimationTrigger') routeAnimation = true;
@@ -96,6 +85,8 @@ export class HomeComponent implements OnInit,AfterViewInit{
   image2;
   title2;
   description2;
+  array:WhatsNew[]
+  whatsNewList:Observable<WhatsNew[]>
 
 
 
@@ -201,15 +192,20 @@ export class HomeComponent implements OnInit,AfterViewInit{
     }
 
     this.adminService.getWhatsNew().subscribe(d => {
-      this.image1 = d[0].imageData;
-      this.title1 = d[0].title;
-      this.description1 = d[0].description;
+      this.array = d;
+      
+      
+      // this.image1 = d[0].imageData;
+      // this.title1 = d[0].title;
+      // this.description1 = d[0].description;
 
-      this.image2 = d[1].imageData;
-      this.title2 = d[1].title;
-      this.description2 = d[1].description;
+      // this.image2 = d[1].imageData;
+      // this.title2 = d[1].title;
+      // this.description2 = d[1].description;
 
     })
+
+    //this.whatsNewList = this.adminService.getWhatsNew()
   }
 
 

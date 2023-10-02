@@ -2,7 +2,7 @@ export class WhatsNew{
     id:number;
     title:string;
     description:string;
-    imageData:Blob;
+    imageData:string;
 
     constructor(id,title,description,imageData){
         this.id = id;
