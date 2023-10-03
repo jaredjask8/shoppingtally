@@ -1,5 +1,8 @@
 import { Component, OnInit} from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
+import { NavService } from 'src/global/nav/nav.service';
 import { RegisterService } from 'src/register/register.service';
 
 @Component({
@@ -10,9 +13,12 @@ import { RegisterService } from 'src/register/register.service';
 export class AppComponent implements OnInit{
   title:string = '';
   displayLoadingIndicator=false;
+  showModal:Observable<boolean>
+  closeResult: string;
+
   
 
-  constructor(private router:Router, private registerService: RegisterService){
+  constructor(private router:Router, private registerService: RegisterService, private navService:NavService, private modalService: NgbModal){
     
   }
   ngOnInit(): void {
@@ -27,8 +33,12 @@ export class AppComponent implements OnInit{
       }
     })
 
-    console.log(this.registerService.checkAdmin$)
+    this.showModal = this.navService.loginClicked$;
   }
+
+  openBackDropCustomClass(content) {
+		this.modalService.open(content, { backdropClass: 'light-blue-backdrop' });
+	}
 
   
 }

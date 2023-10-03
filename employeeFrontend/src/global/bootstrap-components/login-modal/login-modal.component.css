@@ -1,0 +1,15 @@
+.body{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.light-blue-backdrop {
+    background-color: #5cb3fd;
+}

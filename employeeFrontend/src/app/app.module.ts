@@ -21,14 +21,17 @@ import { LoginComponent } from 'src/login/login.component';
 import { EnvironmentService } from 'src/global/utility/environment.service';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import { LoginModalComponent } from 'src/global/bootstrap-components/login-modal/login-modal.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
     AppComponent,
     RegisterComponent,
     HomeComponent,
-    LoginComponent
-    
+    LoginComponent,
+
+
   ],
   imports: [
     BrowserModule,
@@ -45,7 +48,8 @@ import { RouterModule } from '@angular/router';
     MatInputModule,
     NavComponent,
     MatButtonModule,
-    RouterModule
+    RouterModule,
+    LoginModalComponent
     
   ],
   providers: [EnvironmentService],

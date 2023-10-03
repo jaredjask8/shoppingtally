@@ -4,6 +4,7 @@ import {MatInputModule} from '@angular/material/input';
 import { LoginRoutingModule } from './login-routing.module';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { LoginModalComponent } from 'src/global/bootstrap-components/login-modal/login-modal.component';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     LoginRoutingModule,
     MatInputModule,
     MatButtonModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    LoginModalComponent
   ]
 })
 export class LoginModule { }
