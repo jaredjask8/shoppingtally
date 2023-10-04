@@ -17,20 +17,18 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HomeComponent } from 'src/home/home/home.component';
 import {MatTableModule} from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
-import { LoginComponent } from 'src/login/login.component';
 import { EnvironmentService } from 'src/global/utility/environment.service';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { LoginModalComponent } from 'src/global/bootstrap-components/login-modal/login-modal.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { RegisterModalComponent } from 'src/global/bootstrap-components/register-modal/register-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RegisterComponent,
-    HomeComponent,
-    LoginComponent,
-
+    HomeComponent
 
   ],
   imports: [
@@ -49,7 +47,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     NavComponent,
     MatButtonModule,
     RouterModule,
-    LoginModalComponent
+    LoginModalComponent,
+    RegisterModalComponent
     
   ],
   providers: [EnvironmentService],

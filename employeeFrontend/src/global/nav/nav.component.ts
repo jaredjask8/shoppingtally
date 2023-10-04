@@ -76,6 +76,10 @@ export class NavComponent implements OnInit{
     this.navService.loginClicked.next(true);
   }
 
+  registerClicked(){
+    this.navService.registerClicked.next(true);
+  }
+
 
 
 

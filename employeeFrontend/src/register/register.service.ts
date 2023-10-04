@@ -48,8 +48,8 @@ export class RegisterService {
     return this.http.get<JwtUserResponse>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/user/all");
   }
 
-  registerUser(user: User){
-    return this.http.post("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/register", user);
+  registerUser(user: User):Observable<User>{
+    return this.http.post<User>("http://localhost:8080/api/v1/auth/register", user);
   }
 
 

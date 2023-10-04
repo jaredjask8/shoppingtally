@@ -7,7 +7,6 @@ import { RegisterComponent } from 'src/register/register.component';
 const routes: Routes = [
 	{path: 'home', component:HomeComponent, data: {animation:'homePage'}},
 	{path: 'register', component:RegisterComponent, data:{animation:'registerPage'}},
-	{path: 'login', loadChildren: () => import('../login/login.module').then(m => m.LoginModule)},
 	{ path: 'list', loadChildren: () => import('../list/list_component/list.module').then(m => m.ListModule) },
 	{ path: 'employee', loadChildren: () => import('../employee/employee.module').then(m => m.EmployeeModule) },
 	{ path: 'about', loadChildren: () => import('../about/about.module').then(m => m.AboutModule) },

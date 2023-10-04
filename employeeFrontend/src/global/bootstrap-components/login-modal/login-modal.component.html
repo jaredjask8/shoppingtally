@@ -21,9 +21,11 @@
           </div>
           
 	</div>
-	<div class="modal-footer">
-		<p *ngIf="showBadCred">This account wasn't found, try again</p>
-        <p *ngIf="showLoginSuccess">Login successful</p>
+	<div class="modal-footer failure" *ngIf="showBadCred">
+		<div>This account wasn't found, try again</div>
+	</div>
+  <div class="modal-footer success" *ngIf="showLoginSuccess">
+        <div>Login successful</div>
 	</div>
 
     

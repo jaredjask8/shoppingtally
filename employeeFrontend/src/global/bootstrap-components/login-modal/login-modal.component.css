@@ -13,3 +13,28 @@
 .light-blue-backdrop {
     background-color: #5cb3fd;
 }
+
+.modal-footer{
+    color: white;
+}
+
+.success{
+    background-color: green;
+}
+
+.failure{
+    background-color: red;
+}
+
+.modal-content {
+    background: #33FFFF !important;
+    color:#2A246A !important;
+}
+
+.mat-mdc-raised-button{
+    color:#2A246A !important;
+}
+
+.btn-close{
+    color:#2A246A !important;
+}
