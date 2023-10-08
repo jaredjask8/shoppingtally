@@ -25,12 +25,14 @@ public class ListController {
 
 	}
 	
+	@CrossOrigin
 	@PostMapping
 	public String sendList(@RequestBody UserList list) {
 		listService.addList(list);
 		return "list sent";
 	}
 	
+	@CrossOrigin
 	@PostMapping("/user")
 	public List<ListDTO> getUserDates(@RequestBody Token token) {
 		return listService.getUserListData(token);

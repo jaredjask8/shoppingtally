@@ -23,6 +23,7 @@ import { RouterModule } from '@angular/router';
 import { LoginModalComponent } from 'src/global/bootstrap-components/login-modal/login-modal.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { RegisterModalComponent } from 'src/global/bootstrap-components/register-modal/register-modal.component';
+import { OrderModalComponent } from 'src/global/bootstrap-components/order-modal/order-modal.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { RegisterModalComponent } from 'src/global/bootstrap-components/register
     MatButtonModule,
     RouterModule,
     LoginModalComponent,
-    RegisterModalComponent
+    RegisterModalComponent,
+    OrderModalComponent
     
   ],
   providers: [EnvironmentService],

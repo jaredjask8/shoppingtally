@@ -1,3 +1,108 @@
-.padding{
-    padding-top: 50px;
+@import 'material-icons/iconfont/material-icons.css';
+
+.table{
+    height: 400px;
+    overflow-y: scroll;
 }
+
+mat-cell.mat-column-quantity {
+    display:flex;
+    justify-content:center;
+}
+
+mat-header-cell.mat-column-quantity {
+    display:flex;
+    justify-content:center;
+}
+
+
+mat-cell.mat-column-delete {
+    display:flex;
+    justify-content:center;
+}
+
+mat-header-cell.mat-column-delete {
+    display:flex;
+    justify-content:center;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-selected {
+    background-color: #2A246A; 
+ }
+
+::ng-deep .mat-step-header:focus, ::ng-deep .mat-step-header:hover{
+    background-color: white !important;
+}
+
+::ng-deep .mat-horizontal-stepper-header{
+    pointer-events: none !important;
+}
+
+
+.body{
+    width: 100%;
+    height: 100%;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    /* background-color: black; */
+  }
+
+  .stepperBtnsContainer{
+    display: flex;
+    align-content: center;
+    height: 40px;
+    font-size: 20px;
+    width: 100%;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .appointmentContainer{
+    display: flex;
+    flex-direction: column;
+  }
+
+  
+
+.timeSlotContainer{
+    background-color: white;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin: 20px;
+  }
+
+  .hours:hover{
+    cursor: pointer;
+    opacity: .5;
+  }
+
+
+  .hours{
+    text-align: center;
+    background-color: #33ffff;
+    border-radius: 10px;
+    padding: 5px;
+    width: 50px;
+    pointer-events: none;
+  }
+
+  .noItemsText{
+    position: absolute;
+    left: 0; 
+    right: 0;
+    top:300px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .confettiContainer{
+    display: flex;
+    align-items: center;
+  }

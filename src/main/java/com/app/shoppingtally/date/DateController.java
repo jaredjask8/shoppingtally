@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app.shoppingtally.token.Token;
 import com.app.shoppingtally.user.User;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RestController
 @RequestMapping("/api/dates")
 public class DateController {
@@ -24,12 +24,15 @@ public class DateController {
 		this.dateService = dateService;
 
 	}
+	
+	@CrossOrigin
 	@PostMapping("/add")
 	public String addDates(@RequestBody Date date) {
 		dateService.addDate(date);
 		return "success";
 	}
 	
+	@CrossOrigin
 	@PostMapping("/all")
 	public ResponseEntity<List<DateDTO>> getUserDates(@RequestBody Token token){
 		return ResponseEntity.ok(dateService.getUserDates(token));

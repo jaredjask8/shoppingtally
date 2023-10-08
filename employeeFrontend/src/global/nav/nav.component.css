@@ -26,6 +26,10 @@
     }
 }
 
+.cartIcon{
+    margin-right: 20px;
+}
+
 .row{
     position: relative;
     width: 100%;

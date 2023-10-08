@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { Component, AfterViewInit, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDatepickerModule, NgbDateStruct, NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { DatepickerService } from './datepicker.service';
@@ -11,11 +11,26 @@ import { DatepickerService } from './datepicker.service';
   templateUrl: './datepicker.component.html',
   styleUrls: ['./datepicker.component.css']
 })
-export class DatepickerComponent implements AfterViewInit{
+export class DatepickerComponent implements AfterViewInit, OnInit{
   @Output() newItemEvent = new EventEmitter<NgbDateStruct>();
+  model: NgbDateStruct;
+	date: { year: number; month: number};
+  displayMonths;
+	navigation = 'true';
+	showWeekNumbers = false;
+	outsideDays = 'visible';
+  test:NodeListOf<Element>;
+  mobileResolution:boolean;
 
   constructor(private calendar: NgbCalendar, private dateService:DatepickerService, private elem: ElementRef){
     
+  }
+  ngOnInit(): void {
+    if(window.innerWidth <= 500){
+      this.displayMonths = 1;
+    }else{
+      this.displayMonths = 2;
+    }
   }
 
 
@@ -23,15 +38,6 @@ export class DatepickerComponent implements AfterViewInit{
     this.test=this.elem.nativeElement.querySelectorAll('.ngb-dp-day');
     
   }
-
-
-  model: NgbDateStruct;
-	date: { year: number; month: number};
-  displayMonths = 2;
-	navigation = 'none';
-	showWeekNumbers = false;
-	outsideDays = 'visible';
-  test:NodeListOf<Element>;
 
   selectToday() {
 		this.model = this.calendar.getToday();
@@ -42,7 +48,13 @@ export class DatepickerComponent implements AfterViewInit{
     this.newItemEvent.emit(this.model);
   }
 
-  
+  onResize(event){
+    if(event.target.innerWidth <= 500){
+      this.displayMonths = 1;
+    }else{
+      this.displayMonths = 2;
+    }
+  }
 
 
 }

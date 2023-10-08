@@ -9,6 +9,7 @@ import { DatepickerService } from 'src/global/bootstrap-components/datepicker/da
 import { ListToDB } from '../models/ListToDB';
 import { addItem} from '../state/list/list.actions';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Common } from '../models/Common';
 
 
 
@@ -26,6 +27,7 @@ export class ListComponent implements OnInit{
   onList:boolean=true;
   onConfirm:boolean=false;
   brandedArray:Branded[]=[];
+  commonArray:Common[]=[];
   currentItem:string;
   currentQuantity:string;
   currentDate:string="";
@@ -39,6 +41,7 @@ export class ListComponent implements OnInit{
   dateSelected:boolean=false;
   selectedHour:string="";
   customItem="";
+  editClicked:boolean=false;
   
 
   constructor(private service:GroceryService, private userService:EnvironmentService, private listService:ListService, private dateService:DatepickerService, private elem:ElementRef, private elemBtn:ElementRef){}
@@ -53,7 +56,10 @@ export class ListComponent implements OnInit{
 
 
   getItems(event){
-    this.service.getItems(event.target.value).subscribe(d => this.brandedArray = d.branded);
+    this.service.getItems(event.target.value).subscribe(d => {
+      this.brandedArray = d.branded
+      this.commonArray = d.common
+    });
   }
 
   setItemName(item){
@@ -109,7 +115,7 @@ export class ListComponent implements OnInit{
     //get all hour elements and set them to init
     let hourArray:NodeList = this.elem.nativeElement.querySelectorAll('.hours');
     let unavailableHours:string[]=[];
-
+    console.log(hourArray)
     for(let i = 0; i < hourArray.length;i++){
       hourArray[i].firstChild.parentElement.style.opacity="1"
       hourArray[i].firstChild.parentElement.style.pointerEvents="auto"
@@ -160,17 +166,10 @@ export class ListComponent implements OnInit{
   }
 
 
-
-
-
-
-
-
-
   addToList(){
-    var item = new ListItem(this.currentItem,this.currentQuantity)
-    this.list.push(item)
-    this.table.renderRows();
+    this.listService.addListItem(new ListItem(this.currentItem,this.currentQuantity))
+    //this.list.push(item)
+    //this.table.renderRows();
   }
 
   removeItem(name){
@@ -181,5 +180,13 @@ export class ListComponent implements OnInit{
    this.table.renderRows();
   }
 
+
+  isEditClicked(){
+    if(this.editClicked == false){
+      this.editClicked = true;
+    }else{
+      this.editClicked = false;
+    }
+  }
 
 }

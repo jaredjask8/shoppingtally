@@ -8,14 +8,15 @@ import { EnvironmentService } from '../utility/environment.service';
 import { ListService } from 'src/list/list_component/list.service';
 import { ProfileService } from 'src/profile/profile.service';
 import { NavService } from './nav.service';
+import { OrderModalComponent } from "../bootstrap-components/order-modal/order-modal.component";
 
 @Component({
-  selector: 'app-nav',
-  templateUrl: './nav.component.html',
-  standalone: true,
-  imports: [NgbDatepickerModule, NgbCarouselModule, NgIf, NgFor,MatButtonModule, RouterModule],
-  styleUrls: ['./nav.component.css'],
-  providers:[NgbCarouselConfig]
+    selector: 'app-nav',
+    templateUrl: './nav.component.html',
+    standalone: true,
+    styleUrls: ['./nav.component.css'],
+    providers: [NgbCarouselConfig],
+    imports: [NgbDatepickerModule, NgbCarouselModule, NgIf, NgFor, MatButtonModule, RouterModule]
 })
 export class NavComponent implements OnInit{
   closeResult: string;
@@ -80,7 +81,9 @@ export class NavComponent implements OnInit{
     this.navService.registerClicked.next(true);
   }
 
-
+  cartClicked(){
+    this.navService.cartClicked.next(true);
+  }
 
 
 

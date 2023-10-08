@@ -41,7 +41,7 @@
 
 .tableContainer{
   background-color: rgb(7, 34, 62);
-  width: 30%;
+  width: 80%;
   height: 570px;
   overflow-y: auto;
   border-radius: 10px;
@@ -64,7 +64,12 @@
     flex-direction: row;
     width: 100%;
     justify-content: space-evenly;
+    height: 100%;
   }
+
+.selectedItemContainer{
+  display: flex;
+}
 
   .body{
     width: 100%;
@@ -90,23 +95,43 @@
   .data-container{
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 80%;
     justify-content: flex-start;
     align-items: center;
     align-content: center;
     height: 100%;
     background-color: rgb(7, 34, 62);
-    margin-left: 20px;
     border-radius: 10px;
   }
+
+  
 
   .api-container{
     position: relative;
     width:100%;
     display: flex;
     flex-direction: column;
+    
+    
+  }
+
+  .branded{
+    height: 300px;
+
+  }
+
+  .custom{
+    height: 150px;
     overflow: auto;
-    height: 200px;
+  }
+
+  .common-container{
+    overflow: auto;
+  }
+
+  h3{
+    text-align: center;
+    color: white;
   }
 
   .item-container{
@@ -123,45 +148,6 @@
     width: auto;
   }
 
-  .timeSlotContainer{
-    background-color: white;
-    max-width: 500px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    margin: 20px;
-  }
-
-  .appointmentContainer{
-    display: flex;
-    flex-direction: column;
-  }
-
-  .hours:hover{
-    cursor: pointer;
-    opacity: .5;
-  }
-
-  .hours{
-    text-align: center;
-    background-color: beige;
-    border-radius: 10px;
-    padding: 5px;
-    width: 50px;
-  }
-
-  .customItemContainer{
-    display: flex;
-    align-items: center;
-    align-content: center;
-  }
-
-  .container{
-    margin:5px;
-  }
-
 
   .finalizedItemContainer{
     background-color: white;
@@ -174,19 +160,10 @@
     width:50%;
   }
 
-  .stepperContainer{
-    padding-top: 100px;
-    background-color: rgb(124, 139, 158);
-  }
-
-  .stepperBtnsContainer{
-    display: flex;
-    align-content: center;
-    height: 40px;
-    font-size: 30px;
-    width: 100%;
-    justify-content: center;
-    margin-top: 20px;
+  @media (max-width:600px){
+    .data-container{
+      width: 100%;
+    }
   }
 
 

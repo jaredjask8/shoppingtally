@@ -18,38 +18,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { WhatsNew } from 'src/models/WhatsNew';
 import { AdminService } from 'src/admin/admin.service';
 
-const testimonials:Testimonial[] = [
-  {
-    initials:"BF",
-    body:"Jay has been shopping for us for three years. He is a true professional and takes pride in knowing your likes/dislikes so you don't have to compromise on what you would choose if you were shopping. The ease of using his service allows me time for other things which is a huge value for me. On top of it all, Jay is just so awesome, we didn't only get groceries, we got an amazing friend we look forward to seeing all the time.",
-  },
-  {
-    initials:"TD",
-    body:"I've been using Jay as my personal shopper for about 2 months! He is fantastic! He pays attention to details! He picks quality items. He communicates if they are out of a requested item & he's always on time! Jay is amazing!"
-  },
-  {
-    initials:"KK",
-    body:"Had a fabulous experience with Jay today. I've been out of town for several months and had to reorient myself to the process. Jay was extremely helpful and even squeezed me in on his busy Saturday. Thank you Jay for all you do."
-  },
-  {
-    initials:"SB",
-    body:"Jay is the best! He always gets exactly what we ask for and even remembers our favorite items and makes sure we get what we need and what we want! We would not know what to do without Jay and would recommend him to everyone to make their life better and easier. Our dogs even get excited when Jay comes to the door because he is so friendly and has become a great friend."
-  },
-  {
-    initials:"RL",
-    body:"Jay is amazing! He has been our personal shopper for years and we have never had an issue. He goes out of his way to assure he gets exactly what we like. I recommend this business with no reservations."
-  },
-  {
-    initials:"AG",
-    body:"Shopping in-store with two young kids is not ideal. We've been working with Jay for quite a while now, and he has taken all the stress of shopping away. He's thorough, timely, trustworthy, and quickly learns preferences/dislikes. Makes my life so much easier!"
-  },
-  {
-    initials:"SR",
-    body:"Jay took so much time going over Any List and making sure I understood his services. I have used Jay for over a year and I won't deal with anyone else. Jay you are the best!"
-  }
-  
-]
-
 
 @Component({
   selector: 'app-home',
