@@ -29,17 +29,17 @@ export class ListService {
 
   postList(list:ListToDB):Observable<ListToDB>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + list.token);
-    return this.http.post<ListToDB>("http://localhost:8080/api/v1/list", list, {headers:headers})
+    return this.http.post<ListToDB>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list", list, {headers:headers})
   }
 
   getDates(token:string):Observable<PreviousListsFromDB[]>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<PreviousListsFromDB[]>("http://localhost:8080/api/v1/list/user", {token:token},{headers:headers})
+    return this.http.post<PreviousListsFromDB[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/user", {token:token},{headers:headers})
   }
 
   getAllDates(token:string):Observable<string[]>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<string[]>("http://localhost:8080/api/v1/list/dates",null,{headers:headers})
+    return this.http.post<string[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/dates",null,{headers:headers})
   }
 
 
