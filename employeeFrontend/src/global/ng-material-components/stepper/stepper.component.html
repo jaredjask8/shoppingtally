@@ -7,6 +7,11 @@
       <div class="tableContainer">
           
           <mat-table [dataSource]="list" class="table">
+            <ng-container matColumnDef="image">
+              <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
+              <mat-cell *matCellDef="let row"> <img [src]="row.image" height="100px" width="100px"></mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="name">
               <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
@@ -30,8 +35,8 @@
             </ng-container>
           
             
-            <mat-header-row *matHeaderRowDef="['name','quantity','delete']"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: ['name', 'quantity','delete']"></mat-row>
+            <mat-header-row *matHeaderRowDef="['image','name','quantity','delete']"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: ['image','name', 'quantity','delete']"></mat-row>
           </mat-table>
 
           <h3 class="noItemsText" *ngIf="!(cartHasItems | async)">No items in your cart</h3>

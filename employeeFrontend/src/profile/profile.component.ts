@@ -61,11 +61,13 @@ export class ProfileComponent implements OnInit{
   setItem(data:string, index:number){
     let name:string;
     let quantity:string;
+    let image:string
 
     quantity = data.substring(data.length-1)
     name = data.substring(0, data.indexOf("+"))
+    image = ''
 
-    return new ListItem(name, quantity);
+    return new ListItem(name, quantity, image);
   }
 
   showUpdate(){

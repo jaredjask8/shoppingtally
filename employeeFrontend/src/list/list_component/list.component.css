@@ -35,6 +35,7 @@
   margin-top: 50px;
 }
 
+
 .mat-mdc-form-field.mat-mdc-form-field-type-mat-input {
   width: 50%;
 }
@@ -50,12 +51,9 @@
   display: flex;
 }
 
-:host {
-  display:block;
-  background-color: #2A246A; 
-}
 
-  body{
+
+  .listBody{
     width: 100%;
     display:flex;
     flex-direction: column;
@@ -63,8 +61,13 @@
     align-items: center;
     padding: 0;
     margin: 0;
-   background-color: black;
-   height: 100%;
+    background-color: #2A246A;
+
+  }
+
+  .mdc-button.imageSearchBtn{
+    height: 50px;
+    width: 200px;
   }
 
   .mdc-button{
@@ -76,6 +79,31 @@
 
   .mat-mdc-form-field-type-mat-select{
     margin-top: 10px;
+  }
+
+  .images{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    height: 200px;
+    overflow-x: auto;
+  }
+
+  .image-container:hover{
+    background-color:#2A246A;
+  }
+
+  .imageBtnContainer{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image-container{
+    padding: 20px;
   }
   
   .data-container{
@@ -117,9 +145,12 @@
     overflow: auto;
   }
 
+
   .custom{
     height: 120px;
   }
+
+
 
   .customItem{
     width: fit-content;

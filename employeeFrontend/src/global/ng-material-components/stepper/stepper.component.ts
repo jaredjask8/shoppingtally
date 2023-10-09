@@ -88,6 +88,9 @@ export class StepperComponent implements OnInit, AfterViewInit{
   ngOnInit(): void {
     this.cartHasItems = this.listService.cartHasItems$;
     this.list = this.listService.list$;
+    this.list.subscribe(d => {
+      console.log(d)
+    })
     
   }
 
