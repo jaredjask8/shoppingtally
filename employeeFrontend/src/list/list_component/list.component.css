@@ -1,7 +1,3 @@
-.mat-mdc-table {
-  width: 100%;
-  
-}
 
 /* width */
 ::-webkit-scrollbar {
@@ -26,37 +22,21 @@
   background: #555;
 }
 
-
-.mat-column-name{
-  width:20%;
+::ng-deep .mat-input-wrapper{
+  width:400px !important;
 }
-
-.mat-column-quantity{
-  width:20%
-}
-
-.mat-column-delete{
-  width: 20%;
-}
-
-.tableContainer{
-  background-color: rgb(7, 34, 62);
-  width: 80%;
-  height: 570px;
-  overflow-y: auto;
-  border-radius: 10px;
-}
-
-
 
 .input-container{
   display: flex;
-  width:70%;
-  /*background-color: blue;*/ 
+  width:100%;
   justify-content: center;
   align-items: center;
   align-content: center;
-  height: 100px;
+  margin-top: 50px;
+}
+
+.mat-mdc-form-field.mat-mdc-form-field-type-mat-input {
+  width: 50%;
 }
 
   .list-container{
@@ -64,28 +44,34 @@
     flex-direction: row;
     width: 100%;
     justify-content: space-evenly;
-    height: 100%;
   }
 
 .selectedItemContainer{
   display: flex;
 }
 
-  .body{
+:host {
+  display:block;
+  background-color: #2A246A; 
+}
+
+  body{
     width: 100%;
-    height: 100%;
     display:flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-top: 60px;
-    /* background-color: black; */
+    padding: 0;
+    margin: 0;
+   background-color: black;
+   height: 100%;
   }
 
   .mdc-button{
     margin-left: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding: 10px;
+    height: auto;
   }
 
   .mat-mdc-form-field-type-mat-select{
@@ -99,35 +85,22 @@
     justify-content: flex-start;
     align-items: center;
     align-content: center;
-    height: 100%;
-    background-color: rgb(7, 34, 62);
-    border-radius: 10px;
+    /* background-color: rgb(7, 34, 62); */
   }
 
   
 
   .api-container{
     position: relative;
-    width:100%;
+    width:50%;
     display: flex;
     flex-direction: column;
     
     
   }
 
-  .branded{
-    height: 300px;
+  
 
-  }
-
-  .custom{
-    height: 150px;
-    overflow: auto;
-  }
-
-  .common-container{
-    overflow: auto;
-  }
 
   h3{
     text-align: center;
@@ -137,6 +110,15 @@
   .item-container{
     display: flex;
     width: fit-content;
+  }
+
+  .common-container{
+    height: 300px;
+    overflow: auto;
+  }
+
+  .custom{
+    height: 120px;
   }
 
   .customItem{
@@ -151,7 +133,7 @@
 
   .finalizedItemContainer{
     background-color: white;
-    padding:20px;
+    padding:10px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -160,9 +142,27 @@
     width:50%;
   }
 
-  @media (max-width:600px){
-    .data-container{
+  @media (max-width:1000px){
+
+    .finalizedItemContainer{
+      width: 70%;
+    }
+
+    
+  }
+
+  @media (max-width:700px){
+
+    .finalizedItemContainer{
       width: 100%;
+    }
+
+    .mat-mdc-form-field.mat-mdc-form-field-type-mat-input {
+      width: 95%;
+    }
+    
+    .api-container{
+      width: 95%;
     }
   }
 

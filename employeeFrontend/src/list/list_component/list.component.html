@@ -2,9 +2,9 @@
 
     <div class="body">
       <div class="list-container">
-        <div class="data-container mr-3">
+        <div class="data-container">
           <div class="input-container">
-            <mat-form-field appearance="fill" >
+            <mat-form-field class="itemInput" appearance="fill" >
               <mat-label>Enter item</mat-label>
               <input matInput #input placeholder="Ex. Nougat" [(ngModel)]="customItem" (keyup)="getItems($event)">
             </mat-form-field>

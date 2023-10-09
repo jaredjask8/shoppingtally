@@ -22,6 +22,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 import * as confetti from 'canvas-confetti';
+import { MatRippleModule } from '@angular/material/core';
 
 /**
  * @title Stepper overview
@@ -42,7 +43,8 @@ import * as confetti from 'canvas-confetti';
     MatDividerModule,
     DatepickerComponent,
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    MatRippleModule
   ],
   providers: [{
     provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }
@@ -69,23 +71,24 @@ export class StepperComponent implements OnInit, AfterViewInit{
   takenUserDates:string[]=[];
   dateSelected:boolean=false;
   selectedHour:string="";
+  previousHourSelected:any;
 
   @ViewChild('we')we:ElementRef
 
 
-  constructor(private listService:ListService, private elem:ElementRef, private dateService:DatepickerService, private userService:EnvironmentService, private renderer2: Renderer2,
-    private elementRef: ElementRef){
+  constructor(private listService:ListService, private elem:ElementRef, private dateService:DatepickerService, private userService:EnvironmentService, private renderer2: Renderer2){
     
   }
   ngAfterViewInit(): void {
     console.log(this.we)
+    this.previousHourSelected = this.we.nativeElement;
   }
   
   
   ngOnInit(): void {
     this.cartHasItems = this.listService.cartHasItems$;
     this.list = this.listService.list$;
-   
+    
   }
 
   //STEPPER 1
@@ -162,11 +165,18 @@ export class StepperComponent implements OnInit, AfterViewInit{
     }
   }
 
-  setHour(hour:number){
+  setHour(hour:number,hourInstance:any){
+    this.renderer2.setStyle(hourInstance,'opacity','.5')
+    this.renderer2.setStyle(this.previousHourSelected,'opacity','1')
+    this.previousHourSelected = hourInstance
+    
+    
+    
     
     this.dateSelected = true;
     this.selectedHour = hour >= 10 && hour <= 11 ? hour + "am" : hour + "pm";
     this.dateService.setHour(hour);
+    
   }
 
   addDate(){

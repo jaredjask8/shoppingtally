@@ -93,6 +93,8 @@ mat-header-cell.mat-column-delete {
     pointer-events: none;
   }
 
+  
+
   .noItemsText{
     position: absolute;
     left: 0; 
