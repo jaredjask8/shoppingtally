@@ -5,9 +5,44 @@
 <mat-stepper *ngIf="showStepper" class="stepperContainer" labelPosition="bottom">
   <mat-step label="Review">
       <div class="tableContainer">
-          
-          <mat-table [dataSource]="list" class="table">
-            <ng-container matColumnDef="image">
+          <div class="rowContainer pt-2 pb-3" *ngFor="let item of listArray">
+            <div *ngIf="item.image == null">
+              <img src='../../../assets/img/bag.png' height="70px" width="70px">
+            </div>
+            <div *ngIf="item.image != null">
+              <img [src]='item.image' height="70px" width="70px">
+            </div>
+            <div style="width: 150px; text-align: center;">
+              {{item.name}}
+            </div>
+            <div class="quantityContainer">
+              <div class="upArrow" (click)="increaseQuantity(item.name)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
+                  <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
+                </svg>
+              </div>
+              
+              <div style="padding: 0; margin: 0;text-align: center;">
+                {{item.quantity}}
+              </div>
+              <div class="downArrow" (click)="decreaseQuantity(item.name, item.quantity)"> 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                  <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
+                </svg>
+              </div>
+              
+              
+            </div>
+            <div class="delete" (click)="removeItem(item.name)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+              </svg>
+            </div>
+              
+          </div>
+          <!-- <mat-table [dataSource]="list" class="table">
+            <ng-container matColumnDef="image" >
               <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
               <mat-cell *matCellDef="let row"> <img [src]="row.image" height="100px" width="100px"></mat-cell>
             </ng-container>
@@ -19,9 +54,13 @@
           
             <ng-container matColumnDef="quantity">
               <mat-header-cell *matHeaderCellDef> Quantity</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.quantity}} </mat-cell>
+              <mat-cell *matCellDef="let row"> 
+                {{row.quantity}} 
+                <div ></div>
+              </mat-cell>
+              
             </ng-container>
-      
+            
             <ng-container matColumnDef="delete">
               <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
               <mat-cell *matCellDef="let row">  
@@ -35,9 +74,11 @@
             </ng-container>
           
             
-            <mat-header-row *matHeaderRowDef="['image','name','quantity','delete']"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: ['image','name', 'quantity','delete']"></mat-row>
-          </mat-table>
+            <mat-header-row *matHeaderRowDef="['image','name','quantity']"></mat-header-row>
+            <mat-row (click)="itemIsClicked(row.image,row.name,row.quantity)" *matRowDef="let row; columns: ['image','name', 'quantity']">
+              
+            </mat-row>
+          </mat-table> -->
 
           <h3 class="noItemsText" *ngIf="!(cartHasItems | async)">No items in your cart</h3>
         </div>
@@ -96,7 +137,7 @@
   </mat-step>
   <mat-step label="Finalize">
     <div class="body">
-      <mat-table [dataSource]="list" class="table">
+      <!-- <mat-table [dataSource]="list" class="table">
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
@@ -112,7 +153,7 @@
           
           <mat-header-row *matHeaderRowDef="['name','quantity']"></mat-header-row>
           <mat-row *matRowDef="let row; columns: ['name', 'quantity']"></mat-row>
-        </mat-table>
+        </mat-table> -->
       
       <div class="finalAppointmentContainer">
         Appointment: {{currentDate | date}} at {{selectedHour}}
@@ -136,3 +177,5 @@
   </mat-step>
 
 </mat-stepper>
+
+

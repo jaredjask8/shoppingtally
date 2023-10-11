@@ -19,6 +19,7 @@ import { DatepickerService } from '../datepicker/datepicker.service';
 import { EnvironmentService } from 'src/global/utility/environment.service';
 import { ViewEncapsulation } from '@angular/compiler';
 import { StepperComponent } from 'src/global/ng-material-components/stepper/stepper.component';
+import { EditListComponent } from '../edit-list/edit-list.component';
 
 @Component({
   selector: 'app-order-modal',
@@ -37,7 +38,8 @@ import { StepperComponent } from 'src/global/ng-material-components/stepper/step
     MatPaginatorModule,
     DatepickerComponent,
     MatDividerModule,
-    StepperComponent
+    StepperComponent,
+    EditListComponent
   ]
 })
 export class OrderModalComponent implements OnInit{

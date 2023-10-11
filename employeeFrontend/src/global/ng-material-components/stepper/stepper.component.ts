@@ -20,9 +20,15 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import {
+  MatBottomSheet,
+  MatBottomSheetModule,
+  MatBottomSheetRef,
+} from '@angular/material/bottom-sheet';
 
 import * as confetti from 'canvas-confetti';
-import { MatRippleModule } from '@angular/material/core';
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
+import { EditListComponent } from 'src/global/bootstrap-components/edit-list/edit-list.component';
 
 /**
  * @title Stepper overview
@@ -44,7 +50,9 @@ import { MatRippleModule } from '@angular/material/core';
     DatepickerComponent,
     CommonModule,
     MatIconModule,
-    MatRippleModule
+    MatRippleModule,
+    MatBottomSheetModule,
+    EditListComponent
   ],
   providers: [{
     provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }
@@ -53,9 +61,10 @@ import { MatRippleModule } from '@angular/material/core';
 export class StepperComponent implements OnInit, AfterViewInit{
 
   @ViewChild("content") content;
-  list:Observable<ListItem[]>;
+  list$:Observable<ListItem[]>;
   dataSource = new MatTableDataSource<ListItem>(this.listService.list.value);
   listToDb:ListToDB = new ListToDB;
+  listArray:ListItem[];
   
 
 
@@ -63,6 +72,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
   cartHasItems:Observable<boolean>
   showStepper:boolean=true
   canvas = this.renderer2.createElement('canvas');
+  _itemIsClicked=false;
   
 
 
@@ -76,7 +86,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
   @ViewChild('we')we:ElementRef
 
 
-  constructor(private listService:ListService, private elem:ElementRef, private dateService:DatepickerService, private userService:EnvironmentService, private renderer2: Renderer2){
+  constructor(private listService:ListService, private elem:ElementRef, private dateService:DatepickerService, private userService:EnvironmentService, private renderer2: Renderer2, private _bottomSheet: MatBottomSheet){
     
   }
   ngAfterViewInit(): void {
@@ -87,9 +97,9 @@ export class StepperComponent implements OnInit, AfterViewInit{
   
   ngOnInit(): void {
     this.cartHasItems = this.listService.cartHasItems$;
-    this.list = this.listService.list$;
-    this.list.subscribe(d => {
-      console.log(d)
+    this.list$ = this.listService.list$;
+    this.list$.subscribe(d => {
+      this.listArray = d
     })
     
   }
@@ -97,7 +107,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
   //STEPPER 1
   addList(){
     //let length = this.list.length-1;
-    this.list.subscribe((d) => {
+    this.list$.subscribe((d) => {
       let length = d.length - 1
 
       d.forEach((item,index) => {
@@ -111,8 +121,19 @@ export class StepperComponent implements OnInit, AfterViewInit{
     
   }
 
-  removeItem(name){
-    this.listService.removeListItem(name);
+  removeItem(itemName){
+    this.listService.removeListItem(itemName);
+  }
+
+  decreaseQuantity(itemName, itemQuantity){
+    if(itemQuantity != 1){
+      this.listService.decreaseQuantity(itemName)
+    }
+    
+  }
+
+  increaseQuantity(itemName){
+    this.listService.increaseQuantity(itemName)
   }
 
 
@@ -238,5 +259,16 @@ export class StepperComponent implements OnInit, AfterViewInit{
     
  
   }
+
+  itemIsClicked(image,name,quantity){
+    if(this._itemIsClicked == false){
+      this._itemIsClicked = true;
+    }else{
+      this._itemIsClicked = false;
+    }
+
+    console.log(image)
+  }
+
  
 }

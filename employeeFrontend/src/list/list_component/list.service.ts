@@ -71,6 +71,42 @@ export class ListService {
     this.cartHasItems.next(false)
   }
 
+  decreaseQuantity(itemName){
+    let tempList = this.list.getValue()
+    let originalQuantity:number=0
+    let newQuantity:number=0
+    console.log("in decrease")
+
+    tempList.forEach((item,index) => {
+      if(item.name == itemName){
+       originalQuantity = parseInt(tempList[index].quantity)
+       newQuantity = --originalQuantity;
+       tempList[index].quantity = newQuantity.toString()
+       console.log(tempList[index].quantity)
+      }
+    })
+
+    this.list.next(tempList)
+  }
+
+  increaseQuantity(itemName){
+    let tempList = this.list.getValue()
+    let originalQuantity:number=0
+    let newQuantity:number=0
+    console.log("in decrease")
+
+    tempList.forEach((item,index) => {
+      if(item.name == itemName){
+       originalQuantity = parseInt(tempList[index].quantity)
+       newQuantity = ++originalQuantity;
+       tempList[index].quantity = newQuantity.toString()
+       console.log(tempList[index].quantity)
+      }
+    })
+
+    this.list.next(tempList)
+  }
+
 
   
 }
