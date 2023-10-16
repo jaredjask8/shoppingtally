@@ -36,11 +36,11 @@ export class RegisterService {
 
 
   getUser(token:string):Observable<JwtUserResponse>{
-    return this.http.post<JwtUserResponse>("http://localhost:8080/api/v1/auth/user", {token:token});
+    return this.http.post<JwtUserResponse>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/user", {token:token});
   }
 
   authLogin(email:string, password:string):Observable<TokenResponse>{
-    return this.http.post<TokenResponse>("http://localhost:8080/api/v1/auth/authenticate", {email:email,password:password})
+    return this.http.post<TokenResponse>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/authenticate", {email:email,password:password})
   }
 
 
@@ -49,7 +49,7 @@ export class RegisterService {
   }
 
   registerUser(user: User):Observable<User>{
-    return this.http.post<User>("http://localhost:8080/api/v1/auth/register", user);
+    return this.http.post<User>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/register", user);
   }
 
   
