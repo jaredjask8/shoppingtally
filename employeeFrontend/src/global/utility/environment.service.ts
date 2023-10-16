@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Environment } from "./Environment";
 import { JwtUserResponse } from "src/models/JwtUserResponse";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
     providedIn: 'root'
@@ -9,6 +10,11 @@ import { JwtUserResponse } from "src/models/JwtUserResponse";
   export class EnvironmentService{
     email:string;
     user:JwtUserResponse;
+
+    constructor(private http:HttpClient){
+
+    }
+
     setLogin(){
       sessionStorage.setItem("log", "1");
     }
@@ -43,4 +49,6 @@ import { JwtUserResponse } from "src/models/JwtUserResponse";
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("log");
     }
+
+    
   }

@@ -11,6 +11,7 @@ import { addItem} from '../state/list/list.actions';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Common } from '../models/Common';
 import { GoogleImage } from '../models/GoogleImage';
+import { Observable, of } from 'rxjs';
 
 
 
@@ -27,14 +28,15 @@ export class ListComponent implements OnInit{
   onScheduler:boolean=false;
   onList:boolean=true;
   onConfirm:boolean=false;
-  brandedArray:Branded[]=[];
+  brandedArray:Observable<Branded[]>;
   commonArray:Common[]=[];
   googleImageArray:any;
   previousImage:any;
   currentItem:string='';
-  currentQuantity:string;
+  currentQuantity:string='';
   currentImage:string;
   currentDate:string="";
+  isSearchClicked:boolean=false
   //public fullList$ = this.store.select()
   @ViewChild(MatTable) table: MatTable<ListItem>;
   quantityArray:[
@@ -58,7 +60,7 @@ export class ListComponent implements OnInit{
 
   getItems(){
     this.service.getItems(this.customItem).subscribe(d => {
-      this.brandedArray = d.branded
+      this.brandedArray = of(d.branded)
     });
 
     
@@ -66,7 +68,7 @@ export class ListComponent implements OnInit{
 
   getImages(){
     this.service.getImages(this.currentItem).subscribe(d => {
-      this.googleImageArray = d.items
+      this.googleImageArray = of(d.items)
       
     })
   }
@@ -81,7 +83,7 @@ export class ListComponent implements OnInit{
 
 
   addToList(){
-    this.listService.addListItem(new ListItem(this.currentItem,this.currentQuantity,this.currentImage))
+    this.listService.addListItem(new ListItem(this.currentItem,this.currentQuantity,this.currentImage)).subscribe(d=>console.log(d))
     //this.list.push(item)
     //this.table.renderRows();
   }
@@ -109,5 +111,16 @@ export class ListComponent implements OnInit{
     this.previousImage = image;
     this.currentImage = image.getAttribute("src")
     console.log(this.currentImage)
+  }
+
+  searchClick(){
+    if(this.isSearchClicked == false){
+      this.isSearchClicked = true
+    }
+  }
+
+  emptyGoogleImageArray(){
+    this.googleImageArray = null;
+    this.currentImage = null
   }
 }

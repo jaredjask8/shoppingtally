@@ -5,6 +5,7 @@ export interface JwtUserResponse{
     firstname:string;
     lastname:string;
     role:string;
+    currentCart:string;
     accountNonLocked:boolean;
     authorities:[{authority:string}],
     username:string;

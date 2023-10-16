@@ -6,6 +6,9 @@ import { PreviousListsFromDB } from 'src/profile/models/PreviousListsFromDB';
 import { PreviousListsToClient } from 'src/profile/models/PreviousListsToClient';
 import { Behavior } from 'popper.js';
 import { ListItem } from '../models/ListItem';
+import { EnvironmentService } from 'src/global/utility/environment.service';
+import { List } from '../models/List';
+import { ListItemToDb } from '../models/ListItemToDb';
 
 
 @Injectable({
@@ -18,9 +21,11 @@ export class ListService {
   cartHasItems:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
   cartHasItems$:Observable<boolean>
 
+  currentList:string='';
 
 
-  constructor(private http:HttpClient) { 
+
+  constructor(private http:HttpClient,private userService:EnvironmentService) { 
     this.list$ = this.list.asObservable();
     this.cartHasItems$ = this.cartHasItems.asObservable();
   }
@@ -44,26 +49,43 @@ export class ListService {
 
 
   addListItem(item:ListItem){
-    const currentValue = this.list.value;
-    const updatedValue = [...currentValue, item]
-    this.list.next(updatedValue);
-    this.cartHasItems.next(true);
+    
+    // const currentValue = this.list.value;
+    // const updatedValue = [...currentValue, item]
+    // this.list.next(updatedValue);
+
+    //update list and send to server everytime
+    let currentItem = item.image+"+"+item.name+"+"+item.quantity+"~";
+    //update currentCart with observable
+    let token = this.userService.getEnvironment().token
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this.http.post<string>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/addToList",{token:token, currentItem:currentItem},{headers:headers})
   }
 
-  removeListItem(deleteName:string){
-    let tempList = this.list.getValue()
+  getCurrentList():Observable<List>{
+    let token = this.userService.getEnvironment().token
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this.http.post<List>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/getUserList",token,{headers:headers})
+  }
 
-    tempList.forEach((item,index) => {
-      if(item.name == deleteName){
-        tempList.splice(index,1)
-      }
-    })
+  removeListItem(list:string):Observable<List>{
+    // let tempList = this.list.getValue()
 
-    if(tempList.length == 0){
-      this.cartHasItems.next(false)
-    }
+    // tempList.forEach((item,index) => {
+    //   if(item.name == deleteName){
+    //     tempList.splice(index,1)
+    //   }
+    // })
 
-    this.list.next(tempList)
+    // if(tempList.length == 0){
+    //   this.cartHasItems.next(false)
+    // }
+
+    // this.list.next(tempList)
+
+    let token = this.userService.getEnvironment().token
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this.http.post<List>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/deleteListItem",new ListItemToDb(token,list),{headers:headers})
   }
 
   resetStepper(){

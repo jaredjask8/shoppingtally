@@ -8,48 +8,93 @@
               <mat-label>Enter item</mat-label>
               <input matInput #input placeholder="Ex. Nougat" [(ngModel)]="customItem" >  <!-- (keyup)="getItems($event)" -->
             </mat-form-field>
-            <button mat-raised-button (click)="getItems()">Search</button>
+            <button mat-raised-button (click)="getItems(); searchClick()">Search</button>
           </div>
     
 
           <div class="api-container custom">
             <h3>Custom Item</h3>
-            <div class="customItemContainer" *ngIf="input.value != ''">
+            <div class="customItemContainer" *ngIf="input.value != '';else test">
               <svg xmlns="http://www.w3.org/2000/svg" width="35px" height="35px" fill="white" class="bi bi-basket" viewBox="0 0 16 16">
                 <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z"/>
               </svg>
               <button  mat-raised-button (click)="setItemName(customItem)" class="mt-3 customItem"><b>{{customItem}}</b></button>
             </div>
+            <ng-template #test>
+              <div class="customItemContainer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="35px" height="35px" fill="white" class="bi bi-basket" viewBox="0 0 16 16">
+                  <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z"/>
+                </svg>
+                <button  mat-raised-button class="mt-3 customItem customItemTemplate"></button>
+              </div>
+            </ng-template>
           </div>
           <div class="api-container branded">
             <h3>Items</h3>
-            <div class="common-container">
-              <div *ngFor="let value of brandedArray" class="item-container">
+            <div class="common-container" *ngIf="brandedArray;else itemsTemplate">
+              <div *ngFor="let value of brandedArray | async" class="item-container">
                 <!-- <img src={{value.photo.thumb}} height="40px" width="40px"> -->
                 <button class="itemBtns" mat-raised-button (click)="setItemName(value.brand_name_item_name)"><b>{{value.brand_name_item_name}}</b></button>
               </div>
             </div>
+            <ng-template #itemsTemplate>
+              <div class="common-container">
+                <div class="item-container">
+                  <button mat-raised-button class="itemBtnsTemplate" mat-raised-button></button>
+                </div>
+                <div class="item-container">
+                  <button mat-raised-button class="itemBtnsTemplate" mat-raised-button></button>
+                </div>
+                <div class="item-container">
+                  <button mat-raised-button class="itemBtnsTemplate" mat-raised-button></button>
+                </div>
+                <div class="item-container">
+                  <button mat-raised-button class="itemBtnsTemplate" mat-raised-button></button>
+                </div>
+                <div class="item-container">
+                  <button mat-raised-button class="itemBtnsTemplate" mat-raised-button></button>
+                </div>
+                
+                
+              </div>
+              
+              
+              
+            </ng-template>
           </div>
           
           
     
           <div class="finalizedItemContainer mt-5 mb-3">
+            <div *ngIf="isItemClicked()">
+              <div class="imageBtnContainer mt-2">
+                <button (click)="getImages()" class="imageSearchBtn" mat-raised-button>Image Search</button>
+              </div>
+              <div class="images" *ngIf="googleImageArray;else imageArrayTemplate">
+                <div (click)="isImageClicked(image)" *ngFor="let value of googleImageArray | async" class="image-container">
+                  <img #image src={{value.image.thumbnailLink}} >
+                </div>
+              </div>
+              <ng-template #imageArrayTemplate>
+                <div class="images">
+                  <div class="image-container-template">
+                    <button mat-raised-button class="imageBtnTemplate"></button>
+                  </div>
+                  <div class="image-container-template">
+                    <button mat-raised-button class="imageBtnTemplate"></button>
+                  </div>
+                  <div class="image-container-template">
+                    <button mat-raised-button class="imageBtnTemplate"></button>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
             <div class="selectedItemContainer">
               <div>Selected item: {{currentItem}}</div>
               <div *ngIf="currentItem == '' ? false : true" (click)="isEditClicked()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                   <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
                 </svg>
-              </div>
-            </div>
-            <div *ngIf="isItemClicked()">
-              <div class="imageBtnContainer mt-2">
-                <button (click)="getImages()" class="imageSearchBtn" mat-raised-button>Image Search</button>
-              </div>
-              <div class="images">
-                <div (click)="isImageClicked(image)" *ngFor="let value of googleImageArray" class="image-container">
-                  <img #image src={{value.image.thumbnailLink}} >
-                </div>
               </div>
             </div>
             <input *ngIf="editClicked" [(ngModel)]="currentItem" value={{currentItem}}>
@@ -66,7 +111,7 @@
     
           
     
-          <button mat-raised-button (click)="addToList()">Add</button>
+          <button mat-raised-button [disabled]="currentItem == '' || currentQuantity == ''"  (click)="addToList(); emptyGoogleImageArray()">Add</button>
           
         </div>
       

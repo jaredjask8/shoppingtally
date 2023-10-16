@@ -5,12 +5,12 @@
 <mat-stepper *ngIf="showStepper" class="stepperContainer" labelPosition="bottom">
   <mat-step label="Review">
       <div class="tableContainer">
-          <div class="rowContainer pt-2 pb-3" *ngFor="let item of listArray">
-            <div *ngIf="item.image == null">
+          <div class="rowContainer pt-2 pb-3" *ngFor="let item of yes">
+            <div *ngIf="item.image == 'null'">
               <img src='../../../assets/img/bag.png' height="70px" width="70px">
             </div>
-            <div *ngIf="item.image != null">
-              <img [src]='item.image' height="70px" width="70px">
+            <div *ngIf="item.image != 'null'">
+              <img [src]='item.image' height="auto" width="70px">
             </div>
             <div style="width: 150px; text-align: center;">
               {{item.name}}
@@ -137,8 +137,13 @@
   </mat-step>
   <mat-step label="Finalize">
     <div class="body">
-      <!-- <mat-table [dataSource]="list" class="table">
-          <ng-container matColumnDef="name">
+      <mat-table [dataSource]="yes" class="table">
+        <ng-container matColumnDef="image">
+          <mat-header-cell *matHeaderCellDef> Image</mat-header-cell>
+          <mat-cell *matCellDef="let row"> <img [src]=row.image> </mat-cell>
+        </ng-container>  
+        
+        <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
           </ng-container>
@@ -151,9 +156,10 @@
           
         
           
-          <mat-header-row *matHeaderRowDef="['name','quantity']"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: ['name', 'quantity']"></mat-row>
-        </mat-table> -->
+          <mat-header-row *matHeaderRowDef="['image','name','quantity']"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: ['image','name', 'quantity']"></mat-row>
+        </mat-table>
+
       
       <div class="finalAppointmentContainer">
         Appointment: {{currentDate | date}} at {{selectedHour}}

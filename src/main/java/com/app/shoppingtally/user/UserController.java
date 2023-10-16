@@ -24,6 +24,12 @@ import jakarta.persistence.Tuple;
 @RequestMapping("/login")
 public class UserController {
 	
+	private final UserRepo userRepo;
+	
+	public UserController(UserRepo userRepo) {
+		this.userRepo = userRepo;
+	}
+	
 	
 	@GetMapping("/all")
 	public ResponseEntity<List<User>> getUsers(){
@@ -59,4 +65,6 @@ public class UserController {
 	public ResponseEntity<User> registerUser(@RequestBody User user) {
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
+	
+	
 }

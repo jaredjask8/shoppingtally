@@ -20,6 +20,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -47,6 +48,9 @@ public class User implements UserDetails{
 	private String email;
 	private String firstname;
 	private String lastname;
+	@Lob
+	@Column(columnDefinition="LONGTEXT")
+	private String currentList="";
 	
 	@Enumerated(EnumType.STRING)
 	private Role role;

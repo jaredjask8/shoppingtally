@@ -29,6 +29,7 @@ import {
 import * as confetti from 'canvas-confetti';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { EditListComponent } from 'src/global/bootstrap-components/edit-list/edit-list.component';
+import { List } from 'src/list/models/List';
 
 /**
  * @title Stepper overview
@@ -62,9 +63,11 @@ export class StepperComponent implements OnInit, AfterViewInit{
 
   @ViewChild("content") content;
   list$:Observable<ListItem[]>;
+  yes:ListItem[];
   dataSource = new MatTableDataSource<ListItem>(this.listService.list.value);
   listToDb:ListToDB = new ListToDB;
   listArray:ListItem[];
+  newList:string='';
   
 
 
@@ -83,6 +86,8 @@ export class StepperComponent implements OnInit, AfterViewInit{
   selectedHour:string="";
   previousHourSelected:any;
 
+
+
   @ViewChild('we')we:ElementRef
 
 
@@ -97,11 +102,22 @@ export class StepperComponent implements OnInit, AfterViewInit{
   
   ngOnInit(): void {
     this.cartHasItems = this.listService.cartHasItems$;
-    this.list$ = this.listService.list$;
-    this.list$.subscribe(d => {
-      this.listArray = d
-    })
+    // this.list$ = this.listService.list$;
+    // this.list$.subscribe(d => {
+    //   this.listArray = d
+    // })
+
+    this.listService.getCurrentList().subscribe(d => {
+      this.yes = d.list
+      this.doesListHaveItems(d.itemCount);
+      
+    });
     
+    
+  }
+
+  doesListHaveItems(itemCount:number){
+    itemCount == 0 ? this.listService.cartHasItems.next(false) : this.listService.cartHasItems.next(true);
   }
 
   //STEPPER 1
@@ -121,8 +137,19 @@ export class StepperComponent implements OnInit, AfterViewInit{
     
   }
 
-  removeItem(itemName){
-    this.listService.removeListItem(itemName);
+  removeItem(itemName:string){
+    var tempArray = this.yes.filter(d=>d.name != itemName);
+    var tempList:string='';
+    for(var i = 0; i<tempArray.length;i++){
+      tempList+=tempArray[i].image+"+"+tempArray[i].name+"+"+tempArray[i].quantity+"~";
+    }
+
+
+    
+    this.listService.removeListItem(tempList).subscribe(d=>{
+      this.yes = d.list
+      this.doesListHaveItems(d.itemCount);
+    });
   }
 
   decreaseQuantity(itemName, itemQuantity){
