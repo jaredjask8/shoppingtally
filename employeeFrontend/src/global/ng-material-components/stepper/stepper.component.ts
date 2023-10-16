@@ -68,7 +68,6 @@ export class StepperComponent implements OnInit, AfterViewInit{
   listToDb:ListToDB = new ListToDB;
   listArray:ListItem[];
   newList:string='';
-  
 
 
   //STEPPER STATE
@@ -263,9 +262,22 @@ export class StepperComponent implements OnInit, AfterViewInit{
     this.renderer2.setStyle(this.we.nativeElement,'display','initial')
     this.renderer2.setStyle(this.canvas,'width','100%')
     this.renderer2.setStyle(this.canvas,'height','500px')
+    let container = this.renderer2.createElement('div')
+    let title = this.renderer2.createElement('h1')
+    let statement = this.renderer2.createElement('h3')
+
+    this.renderer2.setProperty(title,'innerHTML', 'Woo-hoo!')
+    this.renderer2.setProperty(statement,'innerHTML','Your order has been placed!')
+    
+    this.renderer2.addClass(title, 'confettiTitle')
+    this.renderer2.addClass(container,'confettiTextContainer')
+
+    this.renderer2.appendChild(container,title)
+    this.renderer2.appendChild(container,statement)
 
     this.renderer2.appendChild(this.we.nativeElement, this.canvas);
- 
+    this.renderer2.appendChild(this.we.nativeElement, container)
+    
     const myConfetti = confetti.create(this.canvas, {
       resize: true // will fit all screen sizes
     });

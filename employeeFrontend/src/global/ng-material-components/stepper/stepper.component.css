@@ -151,7 +151,9 @@ mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-
 
   .confettiContainer{
     display: flex;
+    position: relative;
     align-items: center;
+    width: 100%;
   }
 
   .tableContainer{
@@ -193,6 +195,19 @@ mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-
 
   .delete{
     cursor: pointer;
+  }
+
+  .confettiTextContainer{
+    position: absolute;
+    top: -300px;
+    width: 100%;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .confettiTitle{
+    font-size: 60px;
   }
 
   
