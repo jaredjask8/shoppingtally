@@ -34,17 +34,17 @@ export class ListService {
 
   postList(list:ListToDB):Observable<List>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + list.token);
-    return this.http.post<List>("http://localhost:8080/api/v1/list", list, {headers:headers})
+    return this.http.post<List>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list", list, {headers:headers})
   }
 
   getDates(token:string):Observable<PreviousListsFromDB[]>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<PreviousListsFromDB[]>("http://localhost:8080/api/v1/list/user", {token:token},{headers:headers})
+    return this.http.post<PreviousListsFromDB[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/user", {token:token},{headers:headers})
   }
 
   getAllDates(token:string):Observable<string[]>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<string[]>("http://localhost:8080/api/v1/list/dates",null,{headers:headers})
+    return this.http.post<string[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/dates",null,{headers:headers})
   }
 
 
@@ -59,13 +59,13 @@ export class ListService {
     //update currentCart with observable
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<string>("http://localhost:8080/api/v1/auth/addToList",{token:token, currentItem:currentItem},{headers:headers})
+    return this.http.post<string>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/addToList",{token:token, currentItem:currentItem},{headers:headers})
   }
 
   addFullList(list:ListItem[]):Observable<string>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<string>("http://localhost:8080/api/v1/auth/addFullList",{token:token, list:list},{headers:headers})
+    return this.http.post<string>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/addFullList",{token:token, list:list},{headers:headers})
   }
 
   getCurrentList():Observable<List>{
@@ -118,7 +118,7 @@ export class ListService {
         d.quantity = updatedQuantity
       }
     })
-    return this.http.post<List>("http://localhost:8080/api/v1/auth/updateQuantity",{token:token, list:tempList},{headers:headers})
+    return this.http.post<List>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/updateQuantity",{token:token, list:tempList},{headers:headers})
   }
 
   increaseQuantity(currentList:ListItem[],itemName:string):Observable<List>{
@@ -140,7 +140,7 @@ export class ListService {
         d.quantity = updatedQuantity
       }
     })
-    return this.http.post<List>("http://localhost:8080/api/v1/auth/updateQuantity",{token:token, list:tempList},{headers:headers})
+    return this.http.post<List>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/updateQuantity",{token:token, list:tempList},{headers:headers})
   }
 
 
