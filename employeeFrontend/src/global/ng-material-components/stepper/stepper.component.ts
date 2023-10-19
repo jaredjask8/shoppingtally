@@ -30,6 +30,7 @@ import * as confetti from 'canvas-confetti';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { EditListComponent } from 'src/global/bootstrap-components/edit-list/edit-list.component';
 import { List } from 'src/list/models/List';
+import { Router } from '@angular/router';
 
 /**
  * @title Stepper overview
@@ -90,7 +91,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
   @ViewChild('we')we:ElementRef
 
 
-  constructor(private listService:ListService, private elem:ElementRef, private dateService:DatepickerService, private userService:EnvironmentService, private renderer2: Renderer2, private _bottomSheet: MatBottomSheet){
+  constructor(private listService:ListService, private elem:ElementRef, private dateService:DatepickerService, private userService:EnvironmentService, private renderer2: Renderer2, private router:Router){
     
   }
   ngAfterViewInit(): void {
@@ -296,6 +297,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
       this.showStepper = true
       this.renderer2.setStyle(this.we.nativeElement,'display','none')
       this.listService.resetStepper()
+      this.router.navigateByUrl("/home")
     },4000)
 
 

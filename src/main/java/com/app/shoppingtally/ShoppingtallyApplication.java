@@ -22,16 +22,6 @@ public class ShoppingtallyApplication {
 		SpringApplication.run(ShoppingtallyApplication.class, args);
 	}
 	
-	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200","https://www.shoppingtally.click", "https://shoppingtally.click"));
-		configuration.setAllowedMethods(Arrays.asList("GET","POST"));
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
-	}
-	
 	@PostConstruct
     public void init(){
       // Setting Spring Boot SetTimeZone
