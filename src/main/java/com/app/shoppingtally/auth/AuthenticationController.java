@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.shoppingtally.auth.models.CurrentList;
+import com.app.shoppingtally.auth.models.FullListRequest;
 import com.app.shoppingtally.auth.models.ListFromFrontend;
-import com.app.shoppingtally.auth.models.ListItem;
-import com.app.shoppingtally.auth.models.ListToFrontend;
+import com.app.shoppingtally.auth.models.ListItemRequest;
+import com.app.shoppingtally.auth.models.ListItemResponse;
 import com.app.shoppingtally.auth.models.ListToFrontendWithCount;
 import com.app.shoppingtally.token.Token;
 import com.app.shoppingtally.user.User;
@@ -45,9 +46,16 @@ public class AuthenticationController {
 	
 	@CrossOrigin
 	@PostMapping("/addToList")
-	public ListItem addToList(@RequestBody ListItem item) {
+	public ListItemRequest addToList(@RequestBody ListItemRequest item) {
 		service.updateCurrentList(item);
 		return item;
+	}
+	
+	@CrossOrigin
+	@PostMapping("/addFullList")
+	public String addToList(@RequestBody FullListRequest list) {
+		return service.updateCurrentListWithFullList(list);
+		
 	}
 	
 	@CrossOrigin
@@ -61,5 +69,11 @@ public class AuthenticationController {
 	@PostMapping("/getUserList")
 	public ResponseEntity<ListToFrontendWithCount> getCurrentList(@RequestBody String token) {
 		return new ResponseEntity<ListToFrontendWithCount>(service.getCurrentList(token), HttpStatus.OK);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/updateQuantity")
+	public ListToFrontendWithCount increaseQuantity(@RequestBody FullListRequest list){
+		return service.updateQuantity(list);
 	}
 }

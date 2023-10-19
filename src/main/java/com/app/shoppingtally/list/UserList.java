@@ -33,6 +33,7 @@ public class UserList {
 	public Long id;
 	
 	public String token;
+	@Column(columnDefinition="LONGTEXT")
 	public String list;
 	public String date;
 	

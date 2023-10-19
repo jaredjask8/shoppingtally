@@ -2,8 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ListToDB } from '../models/ListToDB';
-import { PreviousListsFromDB } from 'src/profile/models/PreviousListsFromDB';
-import { PreviousListsToClient } from 'src/profile/models/PreviousListsToClient';
+import { PreviousListsFromDB } from 'src/previousLists/models/PreviousListsFromDB';
+import { PreviousListsToClient } from 'src/previousLists/models/PreviousListsToClient';
 import { Behavior } from 'popper.js';
 import { ListItem } from '../models/ListItem';
 import { EnvironmentService } from 'src/global/utility/environment.service';
@@ -32,19 +32,19 @@ export class ListService {
 
   //http://localhost:8080
 
-  postList(list:ListToDB):Observable<ListToDB>{
+  postList(list:ListToDB):Observable<List>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + list.token);
-    return this.http.post<ListToDB>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list", list, {headers:headers})
+    return this.http.post<List>("http://localhost:8080/api/v1/list", list, {headers:headers})
   }
 
   getDates(token:string):Observable<PreviousListsFromDB[]>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<PreviousListsFromDB[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/user", {token:token},{headers:headers})
+    return this.http.post<PreviousListsFromDB[]>("http://localhost:8080/api/v1/list/user", {token:token},{headers:headers})
   }
 
   getAllDates(token:string):Observable<string[]>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<string[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/dates",null,{headers:headers})
+    return this.http.post<string[]>("http://localhost:8080/api/v1/list/dates",null,{headers:headers})
   }
 
 
@@ -59,7 +59,13 @@ export class ListService {
     //update currentCart with observable
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<string>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/addToList",{token:token, currentItem:currentItem},{headers:headers})
+    return this.http.post<string>("http://localhost:8080/api/v1/auth/addToList",{token:token, currentItem:currentItem},{headers:headers})
+  }
+
+  addFullList(list:ListItem[]):Observable<string>{
+    let token = this.userService.getEnvironment().token
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this.http.post<string>("http://localhost:8080/api/v1/auth/addFullList",{token:token, list:list},{headers:headers})
   }
 
   getCurrentList():Observable<List>{
@@ -93,40 +99,48 @@ export class ListService {
     this.cartHasItems.next(false)
   }
 
-  decreaseQuantity(itemName){
-    let tempList = this.list.getValue()
-    let originalQuantity:number=0
-    let newQuantity:number=0
-    console.log("in decrease")
+  decreaseQuantity(currentList:ListItem[],itemName:string):Observable<List>{
+    let token = this.userService.getEnvironment().token
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
 
-    tempList.forEach((item,index) => {
-      if(item.name == itemName){
-       originalQuantity = parseInt(tempList[index].quantity)
-       newQuantity = --originalQuantity;
-       tempList[index].quantity = newQuantity.toString()
-       console.log(tempList[index].quantity)
+    console.log(token)
+    
+    //take current list 
+    //find item we are changing 
+    //change string to update quantity
+    //post updated string to api
+    let tempList = currentList;
+
+    tempList.forEach(d => {
+      if(d.name == itemName){
+        let currentQuantity:number = Number(d.quantity);
+        let updatedQuantity:string = --currentQuantity+"";
+        d.quantity = updatedQuantity
       }
     })
-
-    this.list.next(tempList)
+    return this.http.post<List>("http://localhost:8080/api/v1/auth/updateQuantity",{token:token, list:tempList},{headers:headers})
   }
 
-  increaseQuantity(itemName){
-    let tempList = this.list.getValue()
-    let originalQuantity:number=0
-    let newQuantity:number=0
-    console.log("in decrease")
+  increaseQuantity(currentList:ListItem[],itemName:string):Observable<List>{
+    let token = this.userService.getEnvironment().token
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
 
-    tempList.forEach((item,index) => {
-      if(item.name == itemName){
-       originalQuantity = parseInt(tempList[index].quantity)
-       newQuantity = ++originalQuantity;
-       tempList[index].quantity = newQuantity.toString()
-       console.log(tempList[index].quantity)
+    console.log(token)
+    
+    //take current list 
+    //find item we are changing 
+    //change string to update quantity
+    //post updated string to api
+    let tempList = currentList;
+
+    tempList.forEach(d => {
+      if(d.name == itemName){
+        let currentQuantity:number = Number(d.quantity);
+        let updatedQuantity:string = ++currentQuantity+"";
+        d.quantity = updatedQuantity
       }
     })
-
-    this.list.next(tempList)
+    return this.http.post<List>("http://localhost:8080/api/v1/auth/updateQuantity",{token:token, list:tempList},{headers:headers})
   }
 
 

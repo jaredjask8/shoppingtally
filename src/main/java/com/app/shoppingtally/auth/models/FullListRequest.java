@@ -1,6 +1,6 @@
 package com.app.shoppingtally.auth.models;
 
-import com.app.shoppingtally.token.Token;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ListItem {
-	
-	
-	private String token;
-	private String currentItem;
-	
+public class FullListRequest {
+	String token;
+	List<ListItemResponse> list;
 }

@@ -8,6 +8,7 @@ const routes: Routes = [
 	{path: 'home', component:HomeComponent, data: {animation:'homePage'}},
 	{path: 'register', component:RegisterComponent, data:{animation:'registerPage'}},
 	{ path: 'list', loadChildren: () => import('../list/list_component/list.module').then(m => m.ListModule) },
+	{ path: 'previousLists', loadChildren: () => import('../previousLists/previous-lists.module').then(m => m.PreviousListsModule) },
 	{ path: 'employee', loadChildren: () => import('../employee/employee.module').then(m => m.EmployeeModule) },
 	{ path: 'about', loadChildren: () => import('../about/about.module').then(m => m.AboutModule) },
 	{ path: 'profile', loadChildren: () => import('../profile/profile.module').then(m => m.ProfileModule) },

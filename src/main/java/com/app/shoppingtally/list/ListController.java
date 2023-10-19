@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 import java.util.List;
 
+import com.app.shoppingtally.auth.models.FullListRequest;
+import com.app.shoppingtally.auth.models.ListItemResponse;
+import com.app.shoppingtally.auth.models.ListToFrontendWithCount;
 import com.app.shoppingtally.date.DateService;
 import com.app.shoppingtally.token.Token;
 
-@CrossOrigin
+@CrossOrigin("http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/list")
 public class ListController {
@@ -27,9 +30,8 @@ public class ListController {
 	
 	@CrossOrigin
 	@PostMapping
-	public String sendList(@RequestBody UserList list) {
-		listService.addList(list);
-		return "list sent";
+	public ListToFrontendWithCount sendList(@RequestBody UserList list) {
+		return listService.addList(list);
 	}
 	
 	@CrossOrigin
@@ -42,4 +44,6 @@ public class ListController {
 	public List<String> getAllDates(){
 		return listService.getAllUserDates();
 	}
+	
+	
 }

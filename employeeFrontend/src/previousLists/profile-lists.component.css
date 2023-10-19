@@ -1,0 +1,113 @@
+/* width */
+::-webkit-scrollbar {
+    width: 4px;
+    border-radius: 10px;
+    margin-right: 20px;
+    
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: none;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(124, 139, 158);
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+.dataContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    /* background-color: blue; */
+    justify-content: space-evenly;
+    align-items: center;
+    
+    
+}
+
+.datesContainer{
+    display:  flex;
+    flex-direction: column;
+    width: 50%;
+    background-color: white;
+    
+}
+
+.listContainer{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-between;
+    align-content: center;
+    
+}
+
+.itemContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nameContainer{
+    width: 200px;
+}
+
+.test{
+    display: flex;
+    flex-direction: row;
+}
+
+.listContainer{
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-radius: 20px;
+    margin: 5px;
+}
+
+.yes{
+    height: 50vh;
+    width: 60%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 20px;
+}
+
+h1{
+    color: white;
+    text-align: center;
+}
+
+.masterListContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #2a246a;
+    padding-top: 100px;
+}
+
+input{
+    border-radius: 20px;
+}
+
+@media (max-width:800px){
+    .yes{
+        width: 100%;
+    }
+
+    .nameContainer{
+        width: 100px;
+    }
+}

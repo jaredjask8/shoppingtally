@@ -71,7 +71,7 @@ export class NavComponent implements OnInit{
 
 
   loadUser(){
-    this.profileService.setUserListData();
+    //this.profileService.setUserListData();
   }
 
   loginClicked(){

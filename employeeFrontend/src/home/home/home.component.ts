@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component,ElementRef,HostBinding,OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component,ElementRef,HostBinding,OnInit, QueryList, Renderer2, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { GroceryService } from 'src/global/grocery_items/grocery.service';
 import { EnvironmentService } from 'src/global/utility/environment.service';
 import { markers } from 'src/global/googleMapUtility/markers';
@@ -23,7 +23,7 @@ import { AdminService } from 'src/admin/admin.service';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  animations: [ routeAnimationState ]
+  animations: [ routeAnimationState ],
 })
 export class HomeComponent implements OnInit,AfterViewInit{
   @HostBinding('@routeAnimationTrigger') routeAnimation = true;

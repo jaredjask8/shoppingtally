@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild, ViewEncapsulation} from '@angular/core';
 import { GroceryService } from 'src/global/grocery_items/grocery.service';
 import { Branded } from '../models/Branded';
 import { ListItem } from '../models/ListItem';
@@ -18,7 +18,7 @@ import { Observable, of } from 'rxjs';
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
-  styleUrls: ['./list.component.css']
+  styleUrls: ['./list.component.css'],
 })
 export class ListComponent implements OnInit{
   list:ListItem[] = [];

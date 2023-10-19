@@ -1,4 +1,8 @@
 
+  body{
+    background: #33FFFF;
+  }
+  
   #map {
     height: 400px;
     width: 400px;

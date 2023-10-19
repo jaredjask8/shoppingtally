@@ -14,10 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.app.shoppingtally.auth.models.CurrentList;
+import com.app.shoppingtally.auth.models.FullListRequest;
 import com.app.shoppingtally.auth.models.ListFromFrontend;
-import com.app.shoppingtally.auth.models.ListToFrontend;
+import com.app.shoppingtally.auth.models.ListItemResponse;
 import com.app.shoppingtally.auth.models.ListToFrontendWithCount;
-import com.app.shoppingtally.auth.models.ListItem;
+import com.app.shoppingtally.auth.models.ListItemRequest;
 import com.app.shoppingtally.config.JwtService;
 import com.app.shoppingtally.token.Token;
 import com.app.shoppingtally.token.TokenRepository;
@@ -90,11 +91,28 @@ public class AuthenticationService {
 		return repository.findByEmail(jwtService.extractUsername(token.getToken())).get();
 	}
 	
-	public void updateCurrentList(ListItem item) {
+	public void updateCurrentList(ListItemRequest item) {
 		User user = repository.findByEmail(jwtService.extractUsername(item.getToken())).get();
-		String test = user.getCurrentList();
-		user.setCurrentList(test+=item.getCurrentItem());
+		String currentList = user.getCurrentList();
+		user.setCurrentList(currentList+=item.getCurrentItem());
 		repository.save(user);
+	}
+	
+	public String updateCurrentListWithFullList(FullListRequest list) {
+		//log.info(list.toString());
+		User user = repository.findByEmail(jwtService.extractUsername(list.getToken())).get();
+		String currentList = user.getCurrentList();
+		String tempList="";
+		
+		for(ListItemResponse d:list.getList()) {
+			tempList+=d.getImage()+"+"+d.getName()+"+"+d.getQuantity()+"~";
+		}
+		
+		user.setCurrentList(currentList+=tempList);
+		repository.save(user);
+		
+		
+		return tempList;
 	}
 	
 	public ListToFrontendWithCount deleteListItem(ListFromFrontend list) {
@@ -105,7 +123,7 @@ public class AuthenticationService {
 	}
 	
 	public ListToFrontendWithCount getCurrentList(String token) {
-		List<ListToFrontend> listArray = new ArrayList();
+		List<ListItemResponse> listArray = new ArrayList();
 		Integer itemCount=0;
 		
 		User user = repository.findByEmail(jwtService.extractUsername(token)).get();
@@ -122,12 +140,32 @@ public class AuthenticationService {
 				var image = splitByCategory[0];
 				var name = splitByCategory[1];
 				var quantity = splitByCategory[2];
-				listArray.add(new ListToFrontend(image,name,quantity));
+				listArray.add(new ListItemResponse(image,name,quantity));
 			}
 			
 			
 		});
+		
+		//return ListToFrontendWithCount.builder().list(listArray).itemCount(itemCount).build();
 		return new ListToFrontendWithCount(listArray,itemCount);
+	}
+	
+	public ListToFrontendWithCount updateQuantity(FullListRequest list) {
+		log.info(list.getToken());
+		User user = repository.findByEmail(jwtService.extractUsername(list.getToken())).get();
+		String tempList = "";
+		//passing new array with new quantity
+		//get new array parse into currentlist string
+		//set currentlist to new string
+		//return new list
+		for(ListItemResponse d : list.getList()) {
+			tempList+=d.getImage()+"+"+d.getName()+"+"+d.getQuantity()+"~";
+		}
+		
+		user.setCurrentList(tempList);
+		repository.save(user);
+		
+		return getCurrentList(list.getToken());
 	}
 	
 }

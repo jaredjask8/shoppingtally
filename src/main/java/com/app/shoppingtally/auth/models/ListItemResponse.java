@@ -1,7 +1,5 @@
 package com.app.shoppingtally.auth.models;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ListToFrontendWithCount {
-	List<ListItemResponse> list;
-	int itemCount;
-	
-	
+public class ListItemResponse {
+	String image;
+	String name;
+	String quantity;
 }

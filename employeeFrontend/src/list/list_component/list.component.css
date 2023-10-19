@@ -1,4 +1,6 @@
 
+
+
 /* width */
 ::-webkit-scrollbar {
   width: 4px;
@@ -63,11 +65,11 @@
     display:flex;
     flex-direction: column;
     justify-content: center;
+    flex-grow: 1;
     align-items: center;
     padding: 0;
     margin: 0;
-    background-color: #2A246A;
-
+    background: #2A246A;
   }
 
   .mdc-button.imageSearchBtn{

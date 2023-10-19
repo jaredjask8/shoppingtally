@@ -1,0 +1,56 @@
+<div class="dataContainer">
+    <!-- <div class="datesContainer">
+        <mat-form-field>
+            <mat-label>Previous Dates</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let date of dateArray; let i = index" [value]="date" (click)="showLists(i)">
+                {{date}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="listContainer">
+            
+              <div class="itemContainer" *ngFor="let list of currentSelectedList; let i = index" >
+                  <img [src]="list.image" height="40px" width="auto">
+                  <div class="nameContainer">{{list.name}}</div>
+                  <div>{{list.quantity}}</div>
+                  <button (click)="addItemToCurrentList(i)">Add to current list</button>
+                
+            </div>
+            <button (click)="addFullList()" style="width: 100px; align-self: center;">Add full list</button>
+            
+        </div>
+    </div> -->
+    
+    <div class="masterListContainer">
+      <h1 class="mb-3">Master List</h1>
+      <div class="yes mt-3" *ngIf="!inputUsed else filteredFullList">
+        <div class="listContainer" *ngFor="let item of fullList; let i = index">
+          <img [src]="item.image" height="40px" width="auto">
+          <div class="nameContainer">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <button mat-raised-button (click)="addItemFromMasterList(i)">Add to cart</button>
+        </div>
+      </div>
+      <ng-template #filteredFullList>
+        <div class="yes">
+          <div class="listContainer" *ngFor="let item of filteredList; let i = index">
+            <img [src]="item.image" height="40px" width="auto">
+            <div class="nameContainer">{{item.name}}</div>
+            <div>{{item.quantity}}</div>
+            <button mat-raised-button (click)="addItemFromMasterList(i)">Add to cart</button>
+          </div>
+        </div>
+      </ng-template>
+      <form class="example-form mt-3">
+        <mat-form-field class="example-full-width">
+          <mat-label>Search item</mat-label>
+          <input (keyup)="keyPress($event)" matInput>
+        </mat-form-field>
+      </form>
+    </div>
+    
+    
+</div>
+
+

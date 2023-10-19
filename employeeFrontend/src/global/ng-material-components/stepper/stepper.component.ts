@@ -94,7 +94,6 @@ export class StepperComponent implements OnInit, AfterViewInit{
     
   }
   ngAfterViewInit(): void {
-    console.log(this.we)
     this.previousHourSelected = this.we.nativeElement;
   }
   
@@ -121,19 +120,10 @@ export class StepperComponent implements OnInit, AfterViewInit{
 
   //STEPPER 1
   addList(){
-    //let length = this.list.length-1;
-    this.list$.subscribe((d) => {
-      let length = d.length - 1
+    this.yes.forEach((item)=>{
+      this.listToDb.list+=item.image+"+"+item.name+"+"+item.quantity+"~";
 
-      d.forEach((item,index) => {
-        if(length == index){
-          this.listToDb.list+=item.name+"+"+item.quantity;
-        }else{
-          this.listToDb.list+=item.name+"+"+item.quantity+"~";
-        }
-      })
     }) 
-    
   }
 
   removeItem(itemName:string){
@@ -151,15 +141,30 @@ export class StepperComponent implements OnInit, AfterViewInit{
     });
   }
 
-  decreaseQuantity(itemName, itemQuantity){
+  decreaseQuantity(itemName,itemQuantity){
     if(itemQuantity != 1){
-      this.listService.decreaseQuantity(itemName)
+      this.listService.decreaseQuantity(this.yes,itemName).subscribe(d=>{
+        this.yes = d.list
+        console.log(this.yes)   
+      })
     }
+
     
   }
 
   increaseQuantity(itemName){
-    this.listService.increaseQuantity(itemName)
+    //take current list 
+    //find item we are changing 
+    //change string to update quantity
+    //post updated string to api
+    console.log(this.yes)
+    this.listService.increaseQuantity(this.yes,itemName).subscribe(d=>{
+      this.yes = d.list
+      console.log(this.yes)   
+  })
+
+
+    //this.listService.increaseQuantity(itemName)
   }
 
 
@@ -254,7 +259,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
   //STEPPER 3
   sendList(){
     this.listToDb.token = this.userService.getEnvironment().token;
-    this.listService.postList(this.listToDb).subscribe(d=>console.log(d));
+    this.listService.postList(this.listToDb).subscribe(d=>this.yes = d.list);
   }
 
 

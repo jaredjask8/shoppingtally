@@ -3,21 +3,25 @@ import { CommonModule } from '@angular/common';
 import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile-routing.module';
 import { ProfileUpdateComponent } from './profile-update/profile-update.component';
-import { ProfileListsComponent } from './profile-lists/profile-lists.component';
 import { RouterModule } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 
 
 @NgModule({
   declarations: [
     ProfileComponent,
-    ProfileUpdateComponent,
-    ProfileListsComponent
+    ProfileUpdateComponent
   ],
   imports: [
     CommonModule,
     ProfileRoutingModule,
-    RouterModule
+    RouterModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatOptionModule
   ]
 })
 export class ProfileModule { }

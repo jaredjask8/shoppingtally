@@ -3,7 +3,6 @@
         <div>Welcome, {{userData?.firstname}}</div>
         <div class="nav">
             <p (click)="showUpdate()">Update profile</p>
-            <p (click)="showLists()">Previous lists</p>
             <button (click)="signOut()" mat-raised-button color="primary">Sign out</button>
         </div>
         
@@ -17,9 +16,7 @@
         <div *ngIf="_showUpdate">
             <app-profile-update></app-profile-update>
         </div>
-        <div *ngIf="_showLists" class="listContainer">
-            <app-profile-lists [dates]="getDates()" [lists]="clientList"></app-profile-lists>
-        </div>
+        
     </div>
     
 </div>
