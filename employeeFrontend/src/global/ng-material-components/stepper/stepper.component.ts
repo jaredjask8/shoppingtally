@@ -178,7 +178,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
     //get all hour elements and set them to init
     let hourArray:NodeList = this.elem.nativeElement.querySelectorAll('.hours');
     let unavailableHours:string[]=[];
-    console.log(hourArray)
+    //console.log(hourArray)
     for(let i = 0; i < hourArray.length;i++){
       hourArray[i].firstChild.parentElement.style.opacity="1"
       hourArray[i].firstChild.parentElement.style.pointerEvents="auto"
@@ -197,14 +197,20 @@ export class StepperComponent implements OnInit, AfterViewInit{
     })
     //console.log(unavailableHours)
     //console.log(hourArray)
-    console.log(unavailableHours)
+    //console.log(unavailableHours)
+    
+
     //loop through the elements and the unavailable hours
     //if the elements text matches to an unavailable hour disable the element and set low opacity
     for(let i = 0; i < hourArray.length;i++){
       for(let k = 0; k < unavailableHours.length;k++){
-        if(hourArray[i].firstChild.textContent.includes(unavailableHours[k])){
+        if(hourArray[i].firstChild.textContent.substring(0,hourArray[i].firstChild.textContent.indexOf('p')) == unavailableHours[k]){
+          console.log("in")
           //hourArray[i].parentElement.setAttribute("disabled","true");
           //hourArray[i].parentElement.style.opacity=".3"
+          hourArray[i].firstChild.parentElement.style.opacity=".3"
+          hourArray[i].firstChild.parentElement.style.pointerEvents="none"
+        }else if((hourArray[i].firstChild.textContent.substring(0,hourArray[i].firstChild.textContent.indexOf('a')) == unavailableHours[k])){
           hourArray[i].firstChild.parentElement.style.opacity=".3"
           hourArray[i].firstChild.parentElement.style.pointerEvents="none"
         }

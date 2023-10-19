@@ -44,7 +44,7 @@ export class ListService {
 
   getAllDates(token:string):Observable<string[]>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<string[]>("http://localhost:8080/api/v1/list/dates",null,{headers:headers})
+    return this.http.post<string[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/dates",null,{headers:headers})
   }
 
 
