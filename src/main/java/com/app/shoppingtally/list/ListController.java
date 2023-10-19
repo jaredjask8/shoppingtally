@@ -16,7 +16,7 @@ import com.app.shoppingtally.auth.models.ListToFrontendWithCount;
 import com.app.shoppingtally.date.DateService;
 import com.app.shoppingtally.token.Token;
 
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/list")
 public class ListController {
