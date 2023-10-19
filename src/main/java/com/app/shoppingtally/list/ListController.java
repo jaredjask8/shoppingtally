@@ -40,6 +40,7 @@ public class ListController {
 		return listService.getUserListData(token);
 	}
 	
+	@CrossOrigin
 	@PostMapping("/dates")
 	public List<String> getAllDates(){
 		return listService.getAllUserDates();

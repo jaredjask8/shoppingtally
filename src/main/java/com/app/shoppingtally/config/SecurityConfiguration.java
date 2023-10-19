@@ -30,8 +30,7 @@ public class SecurityConfiguration {
 		http
 			.csrf()
 			.disable()
-			.cors()
-			.and()
+			.cors(cors -> cors.disable())
 			.authorizeHttpRequests()
 			.requestMatchers("/api/v1/admin/**")
 			.permitAll()
