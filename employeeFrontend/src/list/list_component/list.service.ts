@@ -12,6 +12,7 @@ import { ListItemToDb } from '../models/ListItemToDb';
 import { ShopperOrder } from '../models/ShopperOrder';
 import { ActiveShopperOrder } from '../models/ActiveShopperOrder';
 import { CurrentOrder } from '../models/CurrentOrder';
+import { ListItemInterface } from '../models/ListItemInterface';
 
 
 @Injectable({
@@ -72,6 +73,10 @@ export class ListService {
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
     return this.http.post("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/endCurrentOrder",{email:email,date:date},{headers:headers})
+  }
+
+  updateCategory(category:string,list:ListItemInterface[]){
+    console.log(list + "     " + category)
   }
 
 

@@ -56,7 +56,7 @@ export class CurrentOrderComponent implements OnInit{
   frozen:ListItemInterface[] = [];
   dairy:ListItemInterface[] = [];
 
-  drop(event: CdkDragDrop<ListItemInterface[]>) {
+  drop(event: CdkDragDrop<ListItemInterface[]>,category:string) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -67,6 +67,94 @@ export class CurrentOrderComponent implements OnInit{
         event.currentIndex,
       );
     }
+
+    switch(category){
+      case "deli":{
+        this.listService.updateCategory(category,this.deli);
+        break;
+      }
+
+      case "bakery":{
+        this.listService.updateCategory(category,this.bakery);
+        break;
+      }
+
+      case "meat":{
+        this.listService.updateCategory(category,this.meat);
+        break;
+      }
+
+      case "produce":{
+        this.listService.updateCategory(category,this.produce);
+        break;
+      }
+
+      case "beverages":{
+        this.listService.updateCategory(category,this.beverages);
+        break;
+      }
+
+      case "bread":{
+        this.listService.updateCategory(category,this.bread);
+        break;
+      }
+
+      case "international":{
+        this.listService.updateCategory(category,this.international);
+        break;
+      }
+
+      case "baking":{
+        this.listService.updateCategory(category,this.baking);
+        break;
+      }
+
+      case "grains":{
+        this.listService.updateCategory(category,this.grains);
+        break;
+      }
+
+      case "snacks":{
+        this.listService.updateCategory(category,this.snacks);
+        break;
+      }
+
+      case "pet":{
+        this.listService.updateCategory(category,this.pet);
+        break;
+      }
+
+      case "breakfast":{
+        this.listService.updateCategory(category,this.breakfast);
+        break;
+      }
+
+      case "household":{
+        this.listService.updateCategory(category,this.household);
+        break;
+      }
+
+      case "health":{
+        this.listService.updateCategory(category,this.health);
+        break;
+      }
+
+      case "frozen":{
+        this.listService.updateCategory(category,this.frozen);
+        break;
+      }
+
+      case "dairy":{
+        this.listService.updateCategory(category,this.dairy);
+        break;
+      }
+    }
+
+    
+  }
+
+  expandImage(){
+    console.log("sweety")
   }
  
 }
