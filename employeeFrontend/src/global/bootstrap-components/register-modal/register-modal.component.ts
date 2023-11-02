@@ -29,6 +29,8 @@ export class RegisterModalComponent implements OnInit{
   password = new FormControl();
   firstname = new FormControl();
   lastname = new FormControl();
+  phone = new FormControl();
+  address = new FormControl();
   modalReference:any;
   @ViewChild('content', { static: true }) content;
   showSuccess:boolean;
@@ -43,8 +45,8 @@ export class RegisterModalComponent implements OnInit{
     })
   }
 
-  submit(email:string, firstname:string, lastname:string,  password:string){
-    this.service.registerUser(new User(email,firstname,lastname,password)).subscribe(x => {
+  submit(email:string, firstname:string, lastname:string,  password:string, phone:string, address:string){
+    this.service.registerUser(new User(email,firstname,lastname,password,phone,address)).subscribe(x => {
       if(x){
         this.showSuccess = true;
       setTimeout(() =>{

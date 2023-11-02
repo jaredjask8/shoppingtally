@@ -1,7 +1,7 @@
 import { JsonPipe } from '@angular/common';
-import { Component, AfterViewInit, ElementRef, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, Output, EventEmitter, OnInit, ViewChild, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbDatepickerModule, NgbDateStruct, NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbDateStruct, NgbCalendar, NgbDate, NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { DatepickerService } from './datepicker.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { DatepickerService } from './datepicker.service';
 })
 export class DatepickerComponent implements AfterViewInit, OnInit{
   @Output() newItemEvent = new EventEmitter<NgbDateStruct>();
-  model: NgbDateStruct;
+  model: NgbDateStruct | any;
 	date: { year: number; month: number};
   displayMonths;
 	navigation = 'true';
@@ -21,6 +21,8 @@ export class DatepickerComponent implements AfterViewInit, OnInit{
 	outsideDays = 'visible';
   test:NodeListOf<Element>;
   mobileResolution:boolean;
+
+  
 
   constructor(private calendar: NgbCalendar, private dateService:DatepickerService, private elem: ElementRef){
     
@@ -31,12 +33,12 @@ export class DatepickerComponent implements AfterViewInit, OnInit{
     }else{
       this.displayMonths = 2;
     }
+    
   }
 
 
   ngAfterViewInit(){
     this.test=this.elem.nativeElement.querySelectorAll('.ngb-dp-day');
-    
   }
 
   selectToday() {
@@ -56,5 +58,5 @@ export class DatepickerComponent implements AfterViewInit, OnInit{
     }
   }
 
-
+  
 }

@@ -22,7 +22,15 @@
                     <mat-label>Password</mat-label>
                     <input matInput [formControl]="password" required>
                   </mat-form-field>
-                  <button mat-raised-button (click)="submit(email.value, firstname.value, lastname.value, password.value)">Go</button>
+                  <mat-form-field>
+                    <mat-label>Address</mat-label>
+                    <input matInput [formControl]="address" required>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Phone</mat-label>
+                    <input matInput [formControl]="phone" required>
+                  </mat-form-field>
+                  <button mat-raised-button (click)="submit(email.value, firstname.value, lastname.value, password.value,phone.value,address.value)">Go</button>
             </div>
                 
         </div>

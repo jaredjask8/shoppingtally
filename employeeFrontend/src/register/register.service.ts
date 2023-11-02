@@ -49,7 +49,7 @@ export class RegisterService {
   }
 
   registerUser(user: User):Observable<User>{
-    return this.http.post<User>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/register", user);
+    return this.http.post<User>("http://localhost:8080/api/v1/auth/register", user);
   }
 
   

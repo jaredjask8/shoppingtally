@@ -1,99 +1,22 @@
-.whatsNewContainer{
+.adminBody{
+    height: 700px;
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    background-color: #2A246A;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.adminOptions{
     color: white;
-    align-items: center;
-    width: 100%;
-}
-
-.whatsNewCurrentContainer{
-    display: flex;
-    flex-direction: column;
-}
-
-.whatsNewCurrent{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    border-radius: 20px;
-    padding:20px;
-    background-color: white;
-    color:#2A246A;
-}
-
-.whatsNewUploadContainer{
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-}
-
-.textContainer{
-    width: 200px;
-}
-
-.whatsNewUpload{
-    display: flex;
-    background-color: white;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    padding: 20px;
-    justify-content: space-evenly;
-}
-
-.uploadButton{
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-}
-
-.whatsNewUploadImage{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    background-color: #33FFFF;
-}
-
-.whatsNewTitle{
     text-align: center;
-}
-
-.fileButton{
-    position: relative;
-    top:12px;
-}
-
-
-.whatsNewUploadForm{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-}
-
-.whatsNewForm1{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    border-radius: 20px;
+    padding: 15px;
+    font-size: 20px;
+    background-color: #2A246A;
 }
 
 
-@media(max-width:900px){
-    .whatsNewContainer{
-        display: flex;
-        flex-direction: column;
-    }
 
-    .whatsNewUploadContainer{
-        width: 90%;
-    }
 
-    .whatsNewUpload{
-        display: flex;
-        flex-direction: column;
-    }
 
-    .whatsNewUploadImage{
-        align-items: center;
-    }
-}
+

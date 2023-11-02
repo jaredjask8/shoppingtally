@@ -1,13 +1,13 @@
-import {AfterViewInit, Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren, ViewContainerRef} from '@angular/core';
 import {FormBuilder, Validators, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatStepperModule} from '@angular/material/stepper';
-import {MatButtonModule} from '@angular/material/button';
+import {MatButton, MatButtonModule} from '@angular/material/button';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatDividerModule } from '@angular/material/divider';
 import { NavService } from 'src/global/nav/nav.service';
-import { NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbDatepicker, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ListService } from 'src/list/list_component/list.service';
 import { DatepickerService } from 'src/global/bootstrap-components/datepicker/datepicker.service';
 import { EnvironmentService } from 'src/global/utility/environment.service';
@@ -25,12 +25,13 @@ import {
   MatBottomSheetModule,
   MatBottomSheetRef,
 } from '@angular/material/bottom-sheet';
-
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import * as confetti from 'canvas-confetti';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { EditListComponent } from 'src/global/bootstrap-components/edit-list/edit-list.component';
 import { List } from 'src/list/models/List';
 import { Router } from '@angular/router';
+import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/drag-drop';
 
 /**
  * @title Stepper overview
@@ -54,7 +55,10 @@ import { Router } from '@angular/router';
     MatIconModule,
     MatRippleModule,
     MatBottomSheetModule,
-    EditListComponent
+    EditListComponent,
+    MatButtonToggleModule,
+    CdkDropList,
+    CdkDrag
   ],
   providers: [{
     provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }
@@ -63,6 +67,7 @@ import { Router } from '@angular/router';
 export class StepperComponent implements OnInit, AfterViewInit{
 
   @ViewChild("content") content;
+  @ViewChild('hourContainer')hoursContainer:ElementRef;
   list$:Observable<ListItem[]>;
   yes:ListItem[];
   dataSource = new MatTableDataSource<ListItem>(this.listService.list.value);
@@ -76,27 +81,38 @@ export class StepperComponent implements OnInit, AfterViewInit{
   showStepper:boolean=true
   canvas = this.renderer2.createElement('canvas');
   _itemIsClicked=false;
-  
 
 
   //STEPPER 2
+  previousShopper:string=''
+
+
+  //STEPPER 3
   currentDate:string="";
   takenUserDates:string[]=[];
   dateSelected:boolean=false;
   selectedHour:string="";
   previousHourSelected:any;
+  isShopperPicked:boolean=false;
+  currentShopper:string="";
+  datePickedFromCalendar:boolean=false
+  hourInstance;
+
+  stepCounter:number=0
+  resetDatePicker:boolean=false
 
 
 
   @ViewChild('we')we:ElementRef
 
 
-  constructor(private listService:ListService, private elem:ElementRef, private dateService:DatepickerService, private userService:EnvironmentService, private renderer2: Renderer2, private router:Router){
+  constructor(private listService:ListService, private elem:ElementRef, private dateService:DatepickerService, private userService:EnvironmentService, private renderer2: Renderer2, private router:Router, private datePickerComponent:ViewContainerRef){
     
   }
   ngAfterViewInit(): void {
     this.previousHourSelected = this.we.nativeElement;
   }
+
   
   
   ngOnInit(): void {
@@ -112,7 +128,23 @@ export class StepperComponent implements OnInit, AfterViewInit{
       
     });
     
-    
+    this.stepCounter = 1;
+  }
+
+
+  increaseStepCounter(){
+    this.stepCounter++;
+    console.log(this.stepCounter)
+  }
+
+  decreaseStepCounter(){
+    this.stepCounter--;
+    console.log(this.stepCounter)
+  }
+
+  resetStepCounter(){
+    this.stepCounter = 1;
+    console.log(this.stepCounter)
   }
 
   doesListHaveItems(itemCount:number){
@@ -125,6 +157,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
       this.listToDb.list+=item.image+"+"+item.name+"+"+item.quantity+"~";
 
     }) 
+
   }
 
   removeItem(itemName:string){
@@ -146,7 +179,6 @@ export class StepperComponent implements OnInit, AfterViewInit{
     if(itemQuantity != 1){
       this.listService.decreaseQuantity(this.yes,itemName).subscribe(d=>{
         this.yes = d.list
-        console.log(this.yes)   
       })
     }
 
@@ -172,8 +204,13 @@ export class StepperComponent implements OnInit, AfterViewInit{
 
   //STEPPER 2
   getDate(date:NgbDateStruct){
+    this.previousHourSelected = this.we.nativeElement;
+    this.dateSelected = false
+    this.datePickedFromCalendar = true;
     this.currentDate = date.year + "-" + date.month + "-" + date.day;
-    
+    //means date is clicked
+    //unhide hours
+    this.renderer2.removeClass(this.hoursContainer.nativeElement,'container')
     //console.log(this.takenUserDates)
     //get all hour elements and set them to init
     let hourArray:NodeList = this.elem.nativeElement.querySelectorAll('.hours');
@@ -219,6 +256,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
     }
   }
 
+
   isDatePicked(){
     if(this.currentDate.length > 0){
       return true;
@@ -228,11 +266,11 @@ export class StepperComponent implements OnInit, AfterViewInit{
   }
 
   setHour(hour:number,hourInstance:any){
-    this.renderer2.setStyle(hourInstance,'opacity','.5')
-    this.renderer2.setStyle(this.previousHourSelected,'opacity','1')
-    this.previousHourSelected = hourInstance
-    
-    
+    if(hourInstance != this.previousHourSelected){
+      this.renderer2.setStyle(hourInstance,'opacity','.5')
+      this.renderer2.setStyle(this.previousHourSelected,'opacity','1')
+      this.previousHourSelected = hourInstance
+    }
     
     
     this.dateSelected = true;
@@ -241,14 +279,18 @@ export class StepperComponent implements OnInit, AfterViewInit{
     
   }
 
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.yes, event.previousIndex, event.currentIndex);
+  }
+
   addDate(){
     this.listToDb.date = this.dateService.getDateToDb();
     console.log(this.listToDb.date)
     console.log(this.listToDb)
   }
 
-  getAllDates(){
-    this.listService.getAllDates(this.userService.getEnvironment().token).subscribe(d => {
+  getShopperDates(shopperId){
+    this.listService.getShopperDates(this.userService.getEnvironment().token, shopperId).subscribe(d => {
       this.takenUserDates = d;
       console.log(d)
     })
@@ -260,6 +302,36 @@ export class StepperComponent implements OnInit, AfterViewInit{
     }else{
       return false;
     }
+  }
+
+  //if shopper is different from previous and clicked reset the date with this.model
+
+  shopperPicked(index){
+    if(index == 1){
+      this.currentShopper = "Jay"
+      this.listToDb.shopperId = 1
+    }else{
+      this.currentShopper = "Josh"
+      this.listToDb.shopperId = 2
+    }
+
+    this.isShopperPicked = true;
+    
+    
+  }
+
+  resetHours(){
+    let hourArray:NodeList = this.elem.nativeElement.querySelectorAll('.hours');
+    hourArray.forEach(d => {
+      d.firstChild.parentElement.style.opacity="1"
+      d.firstChild.parentElement.style.pointerEvents="none"
+    })
+
+    this.isShopperPicked = false
+    this.currentDate = ''
+    this.selectedHour = ''
+    this.dateSelected=false
+    this.renderer2.addClass(this.hoursContainer.nativeElement,'container')
   }
 
 

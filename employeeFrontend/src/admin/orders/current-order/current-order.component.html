@@ -1,0 +1,62 @@
+<p>current-order works!</p>
+<p>current-order works!</p>
+<p>current-order works!</p>
+<p>current-order works!</p>
+
+<div class="example-container">
+    <h2>To do</h2>
+  
+    <div
+      cdkDropList
+      #todoList="cdkDropList"
+      [cdkDropListData]="todo"
+      [cdkDropListConnectedTo]="[deliList,meatList,bakeryList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let item of todo" cdkDrag>{{item.name}}</div>
+    </div>
+  </div>
+  
+  <div class="example-container">
+    <h2>Deli</h2>
+  
+    <div
+      cdkDropList
+      #deliList="cdkDropList"
+      [cdkDropListData]="deli"
+      [cdkDropListConnectedTo]="[meatList,bakeryList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let item of deli" cdkDrag>{{item.name}}</div>
+    </div>
+  </div>
+
+  <div class="example-container">
+    <h2>Bakery</h2>
+  
+    <div
+      cdkDropList
+      #bakeryList="cdkDropList"
+      [cdkDropListData]="bakery"
+      [cdkDropListConnectedTo]="[meatList,deliList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let item of bakery" cdkDrag>{{item.name}}</div>
+    </div>
+  </div>
+
+  <div class="example-container">
+    <h2>Meat</h2>
+  
+    <div
+      cdkDropList
+      #meatList="cdkDropList"
+      [cdkDropListData]="meat"
+      [cdkDropListConnectedTo]="[deliList,bakeryList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let item of meat" cdkDrag>{{item.name}}</div>
+    </div>
+  </div>
+
+  <button (click)="endCurrentOrder()">End Order</button>

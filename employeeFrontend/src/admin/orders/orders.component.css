@@ -1,0 +1,19 @@
+.orders{
+    text-align: center;
+}
+
+.orderContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.test{
+    background-color: blue;
+}
+
+wee{
+    align-self: center;
+}
+
+
+

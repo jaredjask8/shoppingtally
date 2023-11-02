@@ -47,6 +47,8 @@ public class AuthenticationService {
 		var user = User.builder().firstname(request.getFirstname())
 				.lastname(request.getLastname())
 				.email(request.getEmail())
+				.phone(request.getPhone())
+				.address(request.getAddress())
 				.password(passwordEncoder.encode(request.getPassword()))
 				.currentList("")
 				.role(Role.USER)
@@ -147,7 +149,10 @@ public class AuthenticationService {
 		});
 		
 		//return ListToFrontendWithCount.builder().list(listArray).itemCount(itemCount).build();
-		return new ListToFrontendWithCount(listArray,itemCount);
+		return ListToFrontendWithCount.builder()
+				.list(listArray)
+				.itemCount(itemCount)
+				.build();
 	}
 	
 	public ListToFrontendWithCount updateQuantity(FullListRequest list) {

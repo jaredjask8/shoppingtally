@@ -48,12 +48,15 @@ public class User implements UserDetails{
 	private String email;
 	private String firstname;
 	private String lastname;
+	private String address;
+	private String phone;
 	@Lob
 	@Column(columnDefinition="LONGTEXT")
 	private String currentList="";
 	
 	@Enumerated(EnumType.STRING)
 	private Role role;
+	private int shopperId;
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub

@@ -36,6 +36,9 @@ public class UserList {
 	@Column(columnDefinition="LONGTEXT")
 	public String list;
 	public String date;
+	public int shopperId;
+	public String isActive = "false";
+	public String isCompleted = "false";
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")

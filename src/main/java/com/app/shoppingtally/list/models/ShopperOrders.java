@@ -1,7 +1,9 @@
-package com.app.shoppingtally.auth.models;
+package com.app.shoppingtally.list.models;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.app.shoppingtally.auth.models.ListItemResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,8 +14,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ListToFrontendWithCount {
+public class ShopperOrders {
+	OrderData data;
+	String date;
 	List<ListItemResponse> list;
-	int itemCount;
-	
+	String isActive;
+	String isCompleted;
 }
