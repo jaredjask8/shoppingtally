@@ -25,6 +25,7 @@ export class NavComponent implements OnInit{
   showLogin:boolean=true;
   showAdmin:boolean;
   username:string="Guest"
+  cartVisibility:boolean
  
 
 	constructor(private offcanvasService: NgbOffcanvas, private registerService:RegisterService, private userService:EnvironmentService, private profileService:ProfileService, private navService:NavService) {
@@ -41,7 +42,11 @@ export class NavComponent implements OnInit{
     
   }
   ngOnInit(): void {
-    
+    console.log(this.cartVisibility)
+    this.navService.cartVisibility$.subscribe(d=>{
+      console.log(d)
+      this.cartVisibility = d.hasCurrentOrder
+    })
   }
   
   

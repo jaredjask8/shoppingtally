@@ -3,6 +3,8 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { NavService } from 'src/global/nav/nav.service';
+import { ListService } from 'src/list/list_component/list.service';
+import { UserOrderInfo } from 'src/list/models/UserOrderInfo';
 import { RegisterService } from 'src/register/register.service';
 
 @Component({
@@ -18,7 +20,7 @@ export class AppComponent implements OnInit{
 
   
 
-  constructor(private router:Router, private registerService: RegisterService, private navService:NavService, private modalService: NgbModal){
+  constructor(private router:Router, private registerService: RegisterService, private navService:NavService, private modalService: NgbModal, private listService:ListService){
     
   }
   ngOnInit(): void {
@@ -34,6 +36,11 @@ export class AppComponent implements OnInit{
     })
 
     this.showModal = this.navService.loginClicked$;
+    this.listService.getUserHasOrder().subscribe(d => {
+      console.log(d)
+      d.hasCurrentOrder
+      this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
+    })
   }
 
   openBackDropCustomClass(content) {

@@ -19,6 +19,12 @@ public interface ListRepository extends JpaRepository<UserList,Long>{
 	@Query(value="SELECT * FROM user_list WHERE user_id=:fid", nativeQuery=true)
 	List<UserList> findByUserId(@Param("fid") Long fid);
 	
+	@Query(value="SELECT * FROM user_list WHERE user_id=:fid AND is_current_order='true'", nativeQuery=true)
+	List<UserList> findByCurrentOrder(@Param("fid") Long fid);
+	
+	@Query(value="SELECT * FROM user_list WHERE user_id=:fid AND is_current_order='true'", nativeQuery=true)
+	UserList getUserListByCurrentOrder(@Param("fid") Long fid);
+	
 	@Query(value="SELECT date FROM user_list", nativeQuery=true)
 	List<String> getAllUserDates();
 	
@@ -38,6 +44,9 @@ public interface ListRepository extends JpaRepository<UserList,Long>{
 	
 	@Query(value="SELECT * FROM user_list WHERE date=:date AND user_id=:userId AND shopper_id=:shopperId", nativeQuery=true)
 	UserList getOrderList(@Param("date")String date, @Param("userId")Long userId, @Param("shopperId")int shopperId);
+	
+	@Query(value="SELECT date FROM user_list WHERE is_active='true' AND user_id=:id", nativeQuery=true)
+	String getCurrentList(@Param("id")Long id);
 	
 	
 }

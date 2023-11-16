@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CurrentOrderEntityResponse {
+public class CurrentOrderEntityShopperResponse {
 	List<ListItemResponse> todo;
 	List<ListItemResponse> deli;
 	List<ListItemResponse> bakery;
@@ -33,6 +33,7 @@ public class CurrentOrderEntityResponse {
 	List<ListItemResponse> pet;
 	List<ListItemResponse> breakfast;
 	List<ListItemResponse> meat;
+	List<ListItemResponse> completed;
 	
 	
 	String customer_address;

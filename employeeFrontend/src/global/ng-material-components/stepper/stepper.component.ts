@@ -32,6 +32,7 @@ import { EditListComponent } from 'src/global/bootstrap-components/edit-list/edi
 import { List } from 'src/list/models/List';
 import { Router } from '@angular/router';
 import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/drag-drop';
+import { UserOrderInfo } from 'src/list/models/UserOrderInfo';
 
 /**
  * @title Stepper overview
@@ -106,7 +107,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
   @ViewChild('we')we:ElementRef
 
 
-  constructor(private listService:ListService, private elem:ElementRef, private dateService:DatepickerService, private userService:EnvironmentService, private renderer2: Renderer2, private router:Router, private datePickerComponent:ViewContainerRef){
+  constructor(private listService:ListService, private elem:ElementRef, private dateService:DatepickerService, private userService:EnvironmentService, private renderer2: Renderer2, private router:Router, private datePickerComponent:ViewContainerRef, private navService:NavService){
     
   }
   ngAfterViewInit(): void {
@@ -343,6 +344,8 @@ export class StepperComponent implements OnInit, AfterViewInit{
 
 
   test(){
+    this.navService.cartVisibility.next(new UserOrderInfo(false,true))
+
     this.renderer2.setStyle(this.we.nativeElement,'display','initial')
     this.renderer2.setStyle(this.canvas,'width','100%')
     this.renderer2.setStyle(this.canvas,'height','500px')
@@ -376,6 +379,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
       this.renderer2.setStyle(this.we.nativeElement,'display','none')
       this.listService.resetStepper()
       this.router.navigateByUrl("/home")
+      this.listService.modalAfterOrderCreated.next(true)
     },4000)
 
 

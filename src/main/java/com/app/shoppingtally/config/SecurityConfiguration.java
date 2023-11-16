@@ -37,6 +37,8 @@ public class SecurityConfiguration {
 			.permitAll()
 			.requestMatchers("/api/v1/auth/**")
 			.permitAll()
+			.requestMatchers("/our-websocket/**")
+			.permitAll()
 			.anyRequest()
 			.authenticated()
 			.and()

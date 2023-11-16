@@ -1,9 +1,10 @@
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { ListService } from 'src/list/list_component/list.service';
-import { CurrentOrder } from 'src/list/models/CurrentOrder';
+import { CurrentOrderShopper } from 'src/list/models/CurrentOrderShopper';
 import { ListItemInterface } from 'src/list/models/ListItemInterface';
 
 @Component({
@@ -14,11 +15,12 @@ import { ListItemInterface } from 'src/list/models/ListItemInterface';
   imports:[
     CommonModule,
     CdkDropList,
-    CdkDrag
+    CdkDrag,
+    CdkScrollableModule
   ]
 })
 export class CurrentOrderComponent implements OnInit{
-  currentOrder:CurrentOrder
+  currentOrder:CurrentOrderShopper
   
   
 
@@ -29,6 +31,23 @@ export class CurrentOrderComponent implements OnInit{
     this.listService.getCurrentOrder().subscribe(d=>{
       
       this.todo = d.todo
+      this.deli = d.deli
+      this.health = d.health
+      this.dairy = d.dairy
+      this.breakfast = d.breakfast
+      this.international = d.international
+      this.baking = d.baking;
+      this.grains = d.grains
+      this.snacks = d.snacks
+      this.pet = d.pet
+      this.household = d.household
+      this.beverages = d.beverages
+      this.bread = d.bread
+      this.frozen = d.frozen
+      this.meat = d.meat
+      this.produce = d.produce
+      this.bakery = d.bakery
+      this.completed = d.completed
       this.currentOrder = d;
     })
   }
@@ -55,8 +74,9 @@ export class CurrentOrderComponent implements OnInit{
   health:ListItemInterface[] = [];
   frozen:ListItemInterface[] = [];
   dairy:ListItemInterface[] = [];
+  completed:ListItemInterface[] = [];
 
-  drop(event: CdkDragDrop<ListItemInterface[]>,category:string) {
+  drop(event: CdkDragDrop<ListItemInterface[]>,toCategory:string) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -68,87 +88,97 @@ export class CurrentOrderComponent implements OnInit{
       );
     }
 
-    switch(category){
-      case "deli":{
-        this.listService.updateCategory(category,this.deli);
-        break;
-      }
 
-      case "bakery":{
-        this.listService.updateCategory(category,this.bakery);
-        break;
-      }
 
-      case "meat":{
-        this.listService.updateCategory(category,this.meat);
-        break;
-      }
+    // let test = event.previousContainer.element.nativeElement.innerText;
+    // console.log(test.substring(0,test.indexOf('\n')))
 
-      case "produce":{
-        this.listService.updateCategory(category,this.produce);
-        break;
-      }
+    let fromCategory:string = event.previousContainer.element.nativeElement.parentElement.getElementsByTagName('h2')[0].innerText.toLowerCase().replace(/\s/g, "")
+    if(fromCategory != toCategory){
 
-      case "beverages":{
-        this.listService.updateCategory(category,this.beverages);
-        break;
-      }
-
-      case "bread":{
-        this.listService.updateCategory(category,this.bread);
-        break;
-      }
-
-      case "international":{
-        this.listService.updateCategory(category,this.international);
-        break;
-      }
-
-      case "baking":{
-        this.listService.updateCategory(category,this.baking);
-        break;
-      }
-
-      case "grains":{
-        this.listService.updateCategory(category,this.grains);
-        break;
-      }
-
-      case "snacks":{
-        this.listService.updateCategory(category,this.snacks);
-        break;
-      }
-
-      case "pet":{
-        this.listService.updateCategory(category,this.pet);
-        break;
-      }
-
-      case "breakfast":{
-        this.listService.updateCategory(category,this.breakfast);
-        break;
-      }
-
-      case "household":{
-        this.listService.updateCategory(category,this.household);
-        break;
-      }
-
-      case "health":{
-        this.listService.updateCategory(category,this.health);
-        break;
-      }
-
-      case "frozen":{
-        this.listService.updateCategory(category,this.frozen);
-        break;
-      }
-
-      case "dairy":{
-        this.listService.updateCategory(category,this.dairy);
-        break;
+      switch(toCategory){
+        case "deli":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "bakery":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "meat":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "produce":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "beverages":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "bread":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "international":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "baking":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "grains":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "snacks":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "pet":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "breakfast":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "household":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "health":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "frozen":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
+  
+        case "dairy":{
+          this.listService.updateCategory(toCategory,event.container.data,fromCategory,event.previousContainer.data).subscribe();
+          break;
+        }
       }
     }
+    
 
     
   }
@@ -156,5 +186,64 @@ export class CurrentOrderComponent implements OnInit{
   expandImage(){
     console.log("sweety")
   }
- 
+
+  completeItem(updateCategory:string,itemName:string){
+    this.listService.completeItem(updateCategory,itemName).subscribe(d => {
+      switch(updateCategory){
+        case 'deli':
+          this.deli = d.list
+          break;
+        case 'todo':
+          this.todo = d.list
+          break;
+        case 'bakery':
+          this.bakery = d.list
+          break;
+        case 'meat':
+          this.meat = d.list
+          break;
+        case 'produce':
+          this.produce = d.list
+          break;
+        case 'beverages':
+          this.beverages = d.list
+          break;
+        case 'health':
+          this.health = d.list
+          break; 
+        case 'dairy':
+          this.dairy = d.list
+          break; 
+        case 'breakfast':
+          this.breakfast = d.list
+          break;
+        case 'international':
+          this.international = d.list
+          break;
+        case 'baking':
+          this.baking = d.list
+          break;
+        case 'household':
+          this.household = d.list
+          break;
+        case 'grains':
+          this.grains = d.list
+          break;
+        case 'snacks':
+          this.snacks = d.list
+          break;
+        case 'pet':
+          this.pet = d.list
+          break;
+        case 'bread':
+          this.bread = d.list
+          break;
+      }
+
+      this.completed = d.completed
+    })
+
+    
+  }
+  
 }

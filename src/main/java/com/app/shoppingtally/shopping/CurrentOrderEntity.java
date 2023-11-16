@@ -27,39 +27,41 @@ public class CurrentOrderEntity implements Serializable{
 	public Long id;
 	
 	@Column(columnDefinition="LONGTEXT")
-	String todoList;
+	String todoList="";
 	@Column(columnDefinition="LONGTEXT")
-	String produceList;
+	String produceList="";
 	@Column(columnDefinition="LONGTEXT")
-	String beveragesList;
+	String beveragesList="";
 	@Column(columnDefinition="LONGTEXT")
-	String breadList;
+	String breadList="";
 	@Column(columnDefinition="LONGTEXT")
-	String internationalList;
+	String internationalList="";
 	@Column(columnDefinition="LONGTEXT")
-	String bakingList;
+	String bakingList="";
 	@Column(columnDefinition="LONGTEXT")
-	String pastaGrainsList;
+	String pastaGrainsList="";
 	@Column(columnDefinition="LONGTEXT")
-	String snacksList;
+	String snacksList="";
 	@Column(columnDefinition="LONGTEXT")
-	String petList;
+	String petList="";
 	@Column(columnDefinition="LONGTEXT")
-	String breakfastList;
+	String breakfastList="";
 	@Column(columnDefinition="LONGTEXT")
-	String deliList;
+	String deliList="";
 	@Column(columnDefinition="LONGTEXT")
-	String bakeryList;
+	String bakeryList="";
 	@Column(columnDefinition="LONGTEXT")
-	String meatList;
+	String meatList="";
 	@Column(columnDefinition="LONGTEXT")
-	String householdList;
+	String householdList="";
 	@Column(columnDefinition="LONGTEXT")
-	String healthList;
+	String healthList="";
 	@Column(columnDefinition="LONGTEXT")
-	String frozenList;
+	String frozenList="";
 	@Column(columnDefinition="LONGTEXT")
-	String dairyList;
+	String dairyList="";
+	@Column(columnDefinition="LONGTEXT")
+	String completedList="";
 	
 	String customer_address;
 	String customer_firstname;

@@ -3,51 +3,91 @@
 <p>current-order works!</p>
 <p>current-order works!</p>
 
-<div class="example-container">
-  <h2>To do</h2>
-  
-  <div
-    cdkDropList
-    #todoList="cdkDropList"
-    [cdkDropListData]="todo"
-    [cdkDropListConnectedTo]="[
-    meatList,
-    bakeryList,
-    dairyList,
-    breakfastList,
-    internationalList,
-    bakingList,
-    grainsList,
-    snacksList,
-    petList,
-    householdList,
-    beveragesList,
-    breadList,
-    healthList,
-    breadList,
-    frozenList,
-    meatList,
-    produceList,
-    deliList
-    ]"
-    class="example-list"
-    (cdkDropListDropped)="drop($event,'')">
-      <div class="example-box" *ngFor="let item of todo" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-      </div>
-  </div>
-</div>
-  
-  <div class="example-container">
-    <h2>Health</h2>
-  
+<div class="listsContainer" >
+  <div class="example-container" cdkScrollable>
+    <h2>To do</h2>
+    
     <div
       cdkDropList
-      #healthList="cdkDropList"
-      [cdkDropListData]="health"
+      #todoList="cdkDropList"
+      [cdkDropListData]="todo"
       [cdkDropListConnectedTo]="[
+      meatList,
+      bakeryList,
+      dairyList,
+      breakfastList,
+      internationalList,
+      bakingList,
+      grainsList,
+      snacksList,
+      petList,
+      householdList,
+      beveragesList,
+      breadList,
+      healthList,
+      breadList,
+      frozenList,
+      meatList,
+      produceList,
+      deliList
+      ]"
+      class="example-list test"
+      (cdkDropListDropped)="drop($event,'todo')">
+        <div class="example-box" *ngFor="let item of todo" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('todo',item.name)">Complete</button>
+        </div>
+    </div>
+  </div>
+    
+    <div class="example-container">
+      <h2>Health</h2>
+    
+      <div
+        cdkDropList
+        #healthList="cdkDropList"
+        [cdkDropListData]="health"
+        [cdkDropListConnectedTo]="[
+          meatList,
+          bakeryList,
+          dairyList,
+          breakfastList,
+          internationalList,
+          bakingList,
+          grainsList,
+          snacksList,
+          petList,
+          householdList,
+          beveragesList,
+          breadList,
+          healthList,
+          breadList,
+          frozenList,
+          meatList,
+          produceList,
+          deliList
+          ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'health')">
+        <div class="example-box" *ngFor="let item of health" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('health',item.name)">Complete</button>
+        </div>
+      </div>
+    </div>
+  
+    <div class="example-container">
+      <h2>Dairy</h2>
+    
+      <div
+        cdkDropList
+        #dairyList="cdkDropList"
+        [cdkDropListData]="dairy"
+        [cdkDropListConnectedTo]="[
         meatList,
         bakeryList,
         dairyList,
@@ -67,571 +107,568 @@
         produceList,
         deliList
         ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'health')">
-      <div class="example-box" *ngFor="let item of health" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'dairy')">
+        <div class="example-box" *ngFor="let item of dairy" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('dairy',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="example-container">
-    <h2>Dairy</h2>
   
-    <div
-      cdkDropList
-      #dairyList="cdkDropList"
-      [cdkDropListData]="dairy"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'dairy')">
-      <div class="example-box" *ngFor="let item of dairy" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+    <div class="example-container">
+      <h2>Breakfast</h2>
+    
+      <div
+        cdkDropList
+        #breakfastList="cdkDropList"
+        [cdkDropListData]="breakfast"
+        [cdkDropListConnectedTo]="[
+        meatList,
+        bakeryList,
+        dairyList,
+        breakfastList,
+        internationalList,
+        bakingList,
+        grainsList,
+        snacksList,
+        petList,
+        householdList,
+        beveragesList,
+        breadList,
+        healthList,
+        breadList,
+        frozenList,
+        meatList,
+        produceList,
+        deliList
+        ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'breakfast')">
+        <div class="example-box" *ngFor="let item of breakfast" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('breakfast',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="example-container">
-    <h2>Breakfast</h2>
   
-    <div
-      cdkDropList
-      #breakfastList="cdkDropList"
-      [cdkDropListData]="breakfast"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'breakfast')">
-      <div class="example-box" *ngFor="let item of breakfast" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+    <div class="example-container">
+      <h2>International</h2>
+    
+      <div
+        cdkDropList
+        #internationalList="cdkDropList"
+        [cdkDropListData]="international"
+        [cdkDropListConnectedTo]="[
+        meatList,
+        bakeryList,
+        dairyList,
+        breakfastList,
+        internationalList,
+        bakingList,
+        grainsList,
+        snacksList,
+        petList,
+        householdList,
+        beveragesList,
+        breadList,
+        healthList,
+        breadList,
+        frozenList,
+        meatList,
+        produceList,
+        deliList
+        ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'international')">
+        <div class="example-box" *ngFor="let item of international" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('international',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="example-container">
-    <h2>International</h2>
   
-    <div
-      cdkDropList
-      #internationalList="cdkDropList"
-      [cdkDropListData]="international"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'international')">
-      <div class="example-box" *ngFor="let item of international" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+    <div class="example-container">
+      <h2>Baking</h2>
+    
+      <div
+        cdkDropList
+        #bakingList="cdkDropList"
+        [cdkDropListData]="baking"
+        [cdkDropListConnectedTo]="[
+        meatList,
+        bakeryList,
+        dairyList,
+        breakfastList,
+        internationalList,
+        bakingList,
+        grainsList,
+        snacksList,
+        petList,
+        householdList,
+        beveragesList,
+        breadList,
+        healthList,
+        breadList,
+        frozenList,
+        meatList,
+        produceList,
+        deliList
+        ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'baking')">
+        <div class="example-box" *ngFor="let item of baking" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('baking',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="example-container">
-    <h2>Baking</h2>
   
-    <div
-      cdkDropList
-      #bakingList="cdkDropList"
-      [cdkDropListData]="baking"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'baking')">
-      <div class="example-box" *ngFor="let item of baking" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+    <div class="example-container">
+      <h2>Pasta / Grains</h2>
+    
+      <div
+        cdkDropList
+        #grainsList="cdkDropList"
+        [cdkDropListData]="grains"
+        [cdkDropListConnectedTo]="[
+        meatList,
+        bakeryList,
+        dairyList,
+        breakfastList,
+        internationalList,
+        bakingList,
+        grainsList,
+        snacksList,
+        petList,
+        householdList,
+        beveragesList,
+        breadList,
+        healthList,
+        breadList,
+        frozenList,
+        meatList,
+        produceList,
+        deliList
+        ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'grains')">
+        <div class="example-box" *ngFor="let item of grains" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('grains',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="example-container">
-    <h2>Pasta / Grains</h2>
   
-    <div
-      cdkDropList
-      #grainsList="cdkDropList"
-      [cdkDropListData]="grains"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'grains')">
-      <div class="example-box" *ngFor="let item of grains" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+    <div class="example-container">
+      <h2>Snacks</h2>
+    
+      <div
+        cdkDropList
+        #snacksList="cdkDropList"
+        [cdkDropListData]="snacks"
+        [cdkDropListConnectedTo]="[
+        meatList,
+        bakeryList,
+        dairyList,
+        breakfastList,
+        internationalList,
+        bakingList,
+        grainsList,
+        snacksList,
+        petList,
+        householdList,
+        beveragesList,
+        breadList,
+        healthList,
+        breadList,
+        frozenList,
+        meatList,
+        produceList,
+        deliList
+        ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'snacks')">
+        <div class="example-box" *ngFor="let item of snacks" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('snacks',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="example-container">
-    <h2>Snacks</h2>
   
-    <div
-      cdkDropList
-      #snacksList="cdkDropList"
-      [cdkDropListData]="snacks"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'snacks')">
-      <div class="example-box" *ngFor="let item of snacks" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+    <div class="example-container">
+      <h2>Pets</h2>
+    
+      <div
+        cdkDropList
+        #petList="cdkDropList"
+        [cdkDropListData]="pet"
+        [cdkDropListConnectedTo]="[
+        meatList,
+        bakeryList,
+        dairyList,
+        breakfastList,
+        internationalList,
+        bakingList,
+        grainsList,
+        snacksList,
+        petList,
+        householdList,
+        beveragesList,
+        breadList,
+        healthList,
+        breadList,
+        frozenList,
+        meatList,
+        produceList,
+        deliList
+        ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'pet')">
+        <div class="example-box" *ngFor="let item of pet" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('pet',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="example-container">
-    <h2>Pets</h2>
   
-    <div
-      cdkDropList
-      #petList="cdkDropList"
-      [cdkDropListData]="pet"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'pet')">
-      <div class="example-box" *ngFor="let item of pet" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+    <div class="example-container">
+      <h2>Household</h2>
+    
+      <div
+        cdkDropList
+        #householdList="cdkDropList"
+        [cdkDropListData]="household"
+        [cdkDropListConnectedTo]="[
+        meatList,
+        bakeryList,
+        dairyList,
+        breakfastList,
+        internationalList,
+        bakingList,
+        grainsList,
+        snacksList,
+        petList,
+        householdList,
+        beveragesList,
+        breadList,
+        healthList,
+        breadList,
+        frozenList,
+        meatList,
+        produceList,
+        deliList
+        ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'household')">
+        <div class="example-box" *ngFor="let item of household" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('household',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="example-container">
-    <h2>Household</h2>
   
-    <div
-      cdkDropList
-      #householdList="cdkDropList"
-      [cdkDropListData]="household"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'household')">
-      <div class="example-box" *ngFor="let item of household" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+    <div class="example-container">
+      <h2>Beverages</h2>
+    
+      <div
+        cdkDropList
+        #beveragesList="cdkDropList"
+        [cdkDropListData]="beverages"
+        [cdkDropListConnectedTo]="[
+        meatList,
+        bakeryList,
+        dairyList,
+        breakfastList,
+        internationalList,
+        bakingList,
+        grainsList,
+        snacksList,
+        petList,
+        householdList,
+        beveragesList,
+        breadList,
+        healthList,
+        breadList,
+        frozenList,
+        meatList,
+        produceList,
+        deliList
+        ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'beverages')">
+        <div class="example-box" *ngFor="let item of beverages" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('beverages',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="example-container">
-    <h2>Beverages</h2>
   
-    <div
-      cdkDropList
-      #beveragesList="cdkDropList"
-      [cdkDropListData]="beverages"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'beverages')">
-      <div class="example-box" *ngFor="let item of beverages" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+    <div class="example-container">
+      <h2>Bread</h2>
+    
+      <div
+        cdkDropList
+        #breadList="cdkDropList"
+        [cdkDropListData]="bread"
+        [cdkDropListConnectedTo]="[
+        meatList,
+        bakeryList,
+        dairyList,
+        breakfastList,
+        internationalList,
+        bakingList,
+        grainsList,
+        snacksList,
+        petList,
+        householdList,
+        beveragesList,
+        breadList,
+        healthList,
+        breadList,
+        frozenList,
+        meatList,
+        produceList,
+        deliList
+        ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'bread')">
+        <div class="example-box" *ngFor="let item of bread" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('bread',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="example-container">
-    <h2>Bread</h2>
   
-    <div
-      cdkDropList
-      #breadList="cdkDropList"
-      [cdkDropListData]="bread"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'bread')">
-      <div class="example-box" *ngFor="let item of bread" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+    <div class="example-container">
+      <h2>Frozen</h2>
+    
+      <div
+        cdkDropList
+        #frozenList="cdkDropList"
+        [cdkDropListData]="frozen"
+        [cdkDropListConnectedTo]="[
+        meatList,
+        bakeryList,
+        dairyList,
+        breakfastList,
+        internationalList,
+        bakingList,
+        grainsList,
+        snacksList,
+        petList,
+        householdList,
+        beveragesList,
+        breadList,
+        healthList,
+        breadList,
+        frozenList,
+        meatList,
+        produceList,
+        deliList
+        ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'frozen')">
+        <div class="example-box" *ngFor="let item of frozen" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('frozen',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="example-container">
-    <h2>Frozen</h2>
   
-    <div
-      cdkDropList
-      #frozenList="cdkDropList"
-      [cdkDropListData]="frozen"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'frozen')">
-      <div class="example-box" *ngFor="let item of frozen" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+    <div class="example-container">
+      <h2>Meat</h2>
+    
+      <div
+        cdkDropList
+        #meatList="cdkDropList"
+        [cdkDropListData]="meat"
+        [cdkDropListConnectedTo]="[
+        meatList,
+        bakeryList,
+        dairyList,
+        breakfastList,
+        internationalList,
+        bakingList,
+        grainsList,
+        snacksList,
+        petList,
+        householdList,
+        beveragesList,
+        breadList,
+        healthList,
+        breadList,
+        frozenList,
+        meatList,
+        produceList,
+        deliList
+        ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'meat')">
+        <div class="example-box" *ngFor="let item of meat" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('meat',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="example-container">
-    <h2>Meat</h2>
   
-    <div
-      cdkDropList
-      #meatList="cdkDropList"
-      [cdkDropListData]="meat"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'meat')">
-      <div class="example-box" *ngFor="let item of meat" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+    <div class="example-container">
+      <h2>Produce</h2>
+    
+      <div
+        cdkDropList
+        #produceList="cdkDropList"
+        [cdkDropListData]="produce"
+        [cdkDropListConnectedTo]="[
+        meatList,
+        bakeryList,
+        dairyList,
+        breakfastList,
+        internationalList,
+        bakingList,
+        grainsList,
+        snacksList,
+        petList,
+        householdList,
+        beveragesList,
+        breadList,
+        healthList,
+        breadList,
+        frozenList,
+        meatList,
+        produceList,
+        deliList
+        ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'produce')">
+        <div class="example-box" *ngFor="let item of produce" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('produce',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="example-container">
-    <h2>Produce</h2>
   
-    <div
-      cdkDropList
-      #produceList="cdkDropList"
-      [cdkDropListData]="produce"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'produce')">
-      <div class="example-box" *ngFor="let item of produce" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+    <div class="example-container">
+      <h2>Bakery</h2>
+    
+      <div
+        cdkDropList
+        #bakeryList="cdkDropList"
+        [cdkDropListData]="bakery"
+        [cdkDropListConnectedTo]="[
+        meatList,
+        bakeryList,
+        dairyList,
+        breakfastList,
+        internationalList,
+        bakingList,
+        grainsList,
+        snacksList,
+        petList,
+        householdList,
+        beveragesList,
+        breadList,
+        healthList,
+        breadList,
+        frozenList,
+        meatList,
+        produceList,
+        deliList
+        ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'bakery')">
+        <div class="example-box" *ngFor="let item of bakery" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('bakery',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="example-container">
-    <h2>Bakery</h2>
   
-    <div
-      cdkDropList
-      #bakeryList="cdkDropList"
-      [cdkDropListData]="bakery"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'bakery')">
-      <div class="example-box" *ngFor="let item of bakery" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+    <div class="example-container">
+      <h2>Deli</h2>
+    
+      <div
+        cdkDropList
+        #deliList="cdkDropList"
+        [cdkDropListData]="deli"
+        [cdkDropListConnectedTo]="[
+        meatList,
+        bakeryList,
+        dairyList,
+        breakfastList,
+        internationalList,
+        bakingList,
+        grainsList,
+        snacksList,
+        petList,
+        householdList,
+        beveragesList,
+        breadList,
+        healthList,
+        breadList,
+        frozenList,
+        meatList,
+        produceList,
+        deliList
+        ]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'deli')">
+        <div class="example-box" *ngFor="let item of deli" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <button (click)="completeItem('deli',item.name)">Complete</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="example-container">
-    <h2>Deli</h2>
-  
-    <div
-      cdkDropList
-      #deliList="cdkDropList"
-      [cdkDropListData]="deli"
-      [cdkDropListConnectedTo]="[
-      meatList,
-      bakeryList,
-      dairyList,
-      breakfastList,
-      internationalList,
-      bakingList,
-      grainsList,
-      snacksList,
-      petList,
-      householdList,
-      beveragesList,
-      breadList,
-      healthList,
-      breadList,
-      frozenList,
-      meatList,
-      produceList,
-      deliList
-      ]"
-      class="example-list"
-      (cdkDropListDropped)="drop($event,'deli')">
-      <div class="example-box" *ngFor="let item of deli" cdkDrag>
-        <div style="width: 100px;">{{item.name}}</div>
-        <div>{{item.quantity}}</div>
-        <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+
+    <div class="example-container">
+      <h2>Completed</h2>
+    
+      <div
+        cdkDropList
+        #completedList="cdkDropList"
+        [cdkDropListData]="completed"
+        [cdkDropListConnectedTo]="[]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event,'completed')">
+        <div class="example-box" *ngFor="let item of completed" cdkDrag>
+          <div style="width: 100px;">{{item.name}}</div>
+          <div>{{item.quantity}}</div>
+          <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
+        </div>
       </div>
     </div>
-  </div>
+</div>
 
-  
 
   <button (click)="endCurrentOrder()">End Order</button>

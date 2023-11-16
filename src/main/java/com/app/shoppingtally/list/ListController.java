@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.Date;
 import java.util.List;
@@ -16,12 +17,19 @@ import com.app.shoppingtally.auth.models.FullListRequest;
 import com.app.shoppingtally.auth.models.ListItemResponse;
 import com.app.shoppingtally.auth.models.ListToFrontendWithCount;
 import com.app.shoppingtally.date.DateService;
+import com.app.shoppingtally.list.models.CategoryUpdateRequest;
+import com.app.shoppingtally.list.models.CompleteItemRequest;
+import com.app.shoppingtally.list.models.CompleteItemResponse;
 import com.app.shoppingtally.list.models.CurrentOrder;
 import com.app.shoppingtally.list.models.ShopperOrders;
 import com.app.shoppingtally.list.models.ShopperRequest;
+import com.app.shoppingtally.list.models.UserOrderInfo;
 import com.app.shoppingtally.shopping.CurrentOrderEntity;
-import com.app.shoppingtally.shopping.CurrentOrderEntityResponse;
+import com.app.shoppingtally.shopping.CurrentOrderEntityShopperResponse;
+import com.app.shoppingtally.shopping.CurrentOrderEntityUserResponse;
 import com.app.shoppingtally.token.Token;
+
+import io.jsonwebtoken.io.IOException;
 
 @CrossOrigin("http://localhost:4200")
 @RestController
@@ -63,12 +71,13 @@ public class ListController {
 	@PostMapping("/startOrder")
 	public ListToFrontendWithCount startOrder(@RequestBody CurrentOrder currentOrder, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 		return listService.createCurrentOrder(currentOrder, token);
-		//return token;
+		
 	}
+	
 	
 	@CrossOrigin
 	@PostMapping("/getCurrentOrder")
-	public CurrentOrderEntityResponse getCurrentOrder(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+	public CurrentOrderEntityShopperResponse getCurrentOrder(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 		return listService.getCurrentOrder(token);
 	}
 	
@@ -76,6 +85,48 @@ public class ListController {
 	@PostMapping("/endCurrentOrder")
 	public String endCurrentOrder(@RequestBody CurrentOrder currentOrder, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 		return listService.endCurrentOrder(currentOrder,token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/updateCategories")
+	public String updateCategories(@RequestBody CategoryUpdateRequest update, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.updateCategories(update, token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/completeItem")
+	public CompleteItemResponse completeItem(@RequestBody CompleteItemRequest update, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.completeItem(update, token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/getActiveOrder")
+	public CurrentOrderEntityUserResponse getActiveOrder(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) throws ClassNotFoundException {
+		return listService.getActiveOrder(token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/hasCurrentOrder")
+	public UserOrderInfo hasCurrentOrder(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.getUserOrderInfo(token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/getUserList")
+	public ListToFrontendWithCount getUserList(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.getUserList(token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/addItemToCurrentOrder")
+	public List<ListItemResponse> addItemToCurrentOrder(@RequestBody ListItemResponse item, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.addItemToCurrentOrder(item,token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/addItemToActiveOrder")
+	public CurrentOrderEntityUserResponse addItemToActiveOrder(@RequestBody ListItemResponse item,@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.addItemToActiveOrder(item, token);
 	}
 	
 }

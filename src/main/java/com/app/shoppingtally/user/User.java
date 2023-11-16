@@ -57,6 +57,7 @@ public class User implements UserDetails{
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	private int shopperId;
+	private String socketKey;
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub

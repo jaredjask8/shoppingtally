@@ -9,6 +9,8 @@ import { RegisterService } from 'src/register/register.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { ListService } from 'src/list/list_component/list.service';
+import { UserOrderInfo } from 'src/list/models/UserOrderInfo';
 
 
 @Component({
@@ -30,7 +32,7 @@ export class LoginModalComponent implements OnInit{
   showBadCred: boolean;
   showLoginSuccess:boolean;
   modalReference:any;
-  constructor(private service: EnvironmentService, private registerService:RegisterService, private modalService: NgbModal, private navService:NavService, private cdr:ChangeDetectorRef){}
+  constructor(private service: EnvironmentService, private registerService:RegisterService, private modalService: NgbModal, private navService:NavService, private cdr:ChangeDetectorRef, private listService:ListService){}
   email = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl()
   token:string;
@@ -64,6 +66,11 @@ export class LoginModalComponent implements OnInit{
         this.service.setUser(d);
         this.registerService.setAdmin(d);
       });
+
+      this.listService.getUserHasOrder(token).subscribe(d => {
+        console.log(d)
+        this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
+      })
   
     }
 

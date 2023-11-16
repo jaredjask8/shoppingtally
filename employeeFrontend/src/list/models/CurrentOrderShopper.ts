@@ -1,6 +1,6 @@
 import { ListItemInterface } from "./ListItemInterface";
 
-export interface CurrentOrder{
+export interface CurrentOrderShopper{
     todo:ListItemInterface[],
     breakfast:ListItemInterface[],
     bread:ListItemInterface[],
@@ -18,6 +18,7 @@ export interface CurrentOrder{
     health:ListItemInterface[],
     frozen:ListItemInterface[],
     dairy:ListItemInterface[],
+    completed:ListItemInterface[]
     
     customer_address:string,
     customer_firstname:string,
