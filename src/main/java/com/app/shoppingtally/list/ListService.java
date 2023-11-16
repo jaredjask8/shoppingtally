@@ -232,7 +232,6 @@ public class ListService {
 		UserList list = listRepo.getOrderList(currentOrder.getDate(),client.get().getId(),shopperId);
 		list.setIsActive("true");
 		log.info(client.get().getSocketKey());
-		messagingTemplate.convertAndSendToUser(client.get().getSocketKey(), "/topic/messages", "true");
 		listRepo.save(list);
 		CurrentOrderEntity createFullOrder = CurrentOrderEntity.builder()
 				.date(currentOrder.getDate())
@@ -250,7 +249,7 @@ public class ListService {
 		
 		
 		
-		
+		messagingTemplate.convertAndSendToUser(client.get().getSocketKey(), "/topic/messages", "true");
 		//log.info(createFullOrder.toString());
 		return ListToFrontendWithCount.builder()
 				.itemCount(formattedList.size())
