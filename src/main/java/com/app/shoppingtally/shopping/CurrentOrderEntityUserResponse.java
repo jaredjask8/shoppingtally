@@ -17,6 +17,7 @@ public class CurrentOrderEntityUserResponse {
 	String shopper_firstname;
 	String shopper_lastname;
 	String shopper_phone;
+	String date;
 	
 	List<ListItemResponse> todo;
 	List<ListItemResponse> deli;

@@ -15,5 +15,6 @@ import lombok.NoArgsConstructor;
 public class ListToFrontendWithCount {
 	List<ListItemResponse> list;
 	int itemCount;
+	String date;
 	
 }

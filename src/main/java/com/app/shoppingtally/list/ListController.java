@@ -21,6 +21,7 @@ import com.app.shoppingtally.list.models.CategoryUpdateRequest;
 import com.app.shoppingtally.list.models.CompleteItemRequest;
 import com.app.shoppingtally.list.models.CompleteItemResponse;
 import com.app.shoppingtally.list.models.CurrentOrder;
+import com.app.shoppingtally.list.models.ListItemWithCategoryRequest;
 import com.app.shoppingtally.list.models.ShopperOrders;
 import com.app.shoppingtally.list.models.ShopperRequest;
 import com.app.shoppingtally.list.models.UserOrderInfo;
@@ -48,6 +49,7 @@ public class ListController {
 	public ListToFrontendWithCount sendList(@RequestBody UserList list) {
 		return listService.addList(list);
 	}
+
 	
 	@CrossOrigin
 	@PostMapping("/user")
@@ -127,6 +129,42 @@ public class ListController {
 	@PostMapping("/addItemToActiveOrder")
 	public CurrentOrderEntityUserResponse addItemToActiveOrder(@RequestBody ListItemResponse item,@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 		return listService.addItemToActiveOrder(item, token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/deleteCurrentOrderItem")
+	public List<ListItemResponse> deleteCurrentOrderItem(@RequestBody ListItemResponse item,@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.deleteCurrentOrderItem(item, token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/increaseCurrentOrderQuantity")
+	public List<ListItemResponse> increaseCurrentOrderQuantity(@RequestBody ListItemResponse item,@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.increaseCurrentOrderQuantity(item, token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/decreaseCurrentOrderQuantity")
+	public List<ListItemResponse> decreaseCurrentOrderQuantity(@RequestBody ListItemResponse item,@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.decreaseCurrentOrderQuantity(item, token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/increaseActiveOrderQuantity")
+	public CurrentOrderEntityUserResponse increaseActiveOrderQuantity(@RequestBody ListItemWithCategoryRequest itemWithCategory,@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.increaseActiveOrderQuantity(itemWithCategory, token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/decreaseActiveOrderQuantity")
+	public CurrentOrderEntityUserResponse decreaseActiveOrderQuantity(@RequestBody ListItemWithCategoryRequest itemWithCategory,@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.decreaseActiveOrderQuantity(itemWithCategory, token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/deleteActiveOrderItem")
+	public CurrentOrderEntityUserResponse deleteActiveOrderItem(@RequestBody ListItemWithCategoryRequest itemWithCategory,@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.deleteActiveOrderQuantity(itemWithCategory, token);
 	}
 	
 }

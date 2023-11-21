@@ -4,6 +4,7 @@ export interface CurrentOrderUser{
     shopper_firstname:string;
     shopper_lastname:string;
     shopper_phone:string;
+    date:string;
 
     todo:ListItemInterface[],
     breakfast:ListItemInterface[],
@@ -23,4 +24,6 @@ export interface CurrentOrderUser{
     frozen:ListItemInterface[],
     dairy:ListItemInterface[],
     completed:ListItemInterface[]
+
+    
 }

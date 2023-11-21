@@ -1,11 +1,16 @@
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, from } from 'rxjs';
 import { ListService } from 'src/list/list_component/list.service';
 import { CurrentOrderShopper } from 'src/list/models/CurrentOrderShopper';
 import { ListItemInterface } from 'src/list/models/ListItemInterface';
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
+import { EnvironmentService } from 'src/global/utility/environment.service';
+import { CurrentOrderUser } from 'src/list/models/CurrentOrderUser';
 
 @Component({
   selector: 'app-current-order',
@@ -19,12 +24,15 @@ import { ListItemInterface } from 'src/list/models/ListItemInterface';
     CdkScrollableModule
   ]
 })
-export class CurrentOrderComponent implements OnInit{
-  currentOrder:CurrentOrderShopper
+export class CurrentOrderComponent implements OnInit,OnDestroy{
+  currentOrder:CurrentOrderShopper;
+  serverUrl = 'http://localhost/test/our-websocket'
+  title = 'WebSockets chat';
+  stompClient;
   
   
 
-  constructor(private listService:ListService){}
+  constructor(private listService:ListService, private router:Router, private userService:EnvironmentService){}
 
   ngOnInit(): void {
     //get current order list
@@ -50,10 +58,23 @@ export class CurrentOrderComponent implements OnInit{
       this.completed = d.completed
       this.currentOrder = d;
     })
+
+    this.initializeWebSocketConnection();
+  }
+
+  ngOnDestroy(){
+    this.stompClient.disconnect(function() {
+      alert("See you next time!");
+    });
   }
 
   endCurrentOrder(){
     this.listService.endCurrentOrder(this.currentOrder.customer_email, this.currentOrder.date).subscribe(d=>console.log(d));
+    let that = this;
+    setTimeout(() => {
+      that.router.navigate(["/admin/orders"])
+    },1000)
+    
   }
 
   
@@ -245,5 +266,37 @@ export class CurrentOrderComponent implements OnInit{
 
     
   }
-  
+
+  initializeWebSocketConnection(){
+
+    let ws = new SockJS(this.serverUrl);
+    this.stompClient = Stomp.over(ws);
+    let that = this;
+    this.stompClient.connect({token:this.userService.getEnvironment().token}, function(frame) {
+
+      that.stompClient.subscribe("/user/topic/activeOrder", function (message) {
+        let activeOrderUpdate:CurrentOrderUser = JSON.parse(message.body)
+        that.todo = activeOrderUpdate.todo
+        that.deli = activeOrderUpdate.deli
+        that.health = activeOrderUpdate.health
+        that.dairy = activeOrderUpdate.dairy
+        that.breakfast = activeOrderUpdate.breakfast
+        that.international = activeOrderUpdate.international
+        that.baking = activeOrderUpdate.baking
+        that.grains = activeOrderUpdate.grains
+        that.snacks = activeOrderUpdate.snacks
+        that.pet = activeOrderUpdate.pet
+        that.household = activeOrderUpdate.household
+        that.beverages = activeOrderUpdate.beverages
+        that.bread = activeOrderUpdate.bread
+        that.frozen = activeOrderUpdate.frozen
+        that.meat = activeOrderUpdate.meat
+        that.produce = activeOrderUpdate.produce
+        that.bakery = activeOrderUpdate.bakery
+        that.completed = activeOrderUpdate.completed
+
+        console.log(that.produce)
+      })
+    });
+  }
 }

@@ -5,6 +5,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.tomcat.util.json.JSONParser;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ import com.app.shoppingtally.list.models.CategoryUpdateRequest;
 import com.app.shoppingtally.list.models.CompleteItemRequest;
 import com.app.shoppingtally.list.models.CompleteItemResponse;
 import com.app.shoppingtally.list.models.CurrentOrder;
+import com.app.shoppingtally.list.models.ListItemWithCategoryRequest;
 import com.app.shoppingtally.list.models.OrderData;
 import com.app.shoppingtally.list.models.ShopperOrders;
 import com.app.shoppingtally.list.models.ShopperRequest;
@@ -32,9 +36,13 @@ import com.app.shoppingtally.shopping.CurrentOrderEntity;
 import com.app.shoppingtally.shopping.CurrentOrderEntityShopperResponse;
 import com.app.shoppingtally.shopping.CurrentOrderEntityUserResponse;
 import com.app.shoppingtally.shopping.CurrentOrderRepo;
+import com.app.shoppingtally.socket.Message;
 import com.app.shoppingtally.token.Token;
 import com.app.shoppingtally.user.User;
 import com.app.shoppingtally.user.UserRepo;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +58,8 @@ public class ListService {
 	private final CurrentOrderRepo currentOrderRepo;
 	private String setList = null;
 	private final SimpMessagingTemplate messagingTemplate;
+	
+	//////////////////CLIENT///////////////////
 	
 	ListToFrontendWithCount addList(UserList list){
 		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(list.getToken()));
@@ -182,12 +192,1808 @@ public class ListService {
 			return ListToFrontendWithCount.builder()
 					.list(convertStringListToArray(userList.get(0).getList()))
 					.itemCount(userList.size())
+					.date(userList.get(0).getDate())
 					.build();
 		}
 		
 	}
 	
-	//ADMIN//
+	List<ListItemResponse> addItemToCurrentOrder(ListItemResponse item, String token){
+		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		UserList list = listRepo.getUserListByCurrentOrder(user.get().getId());
+		String tempItem=item.getImage()+"+"+item.getName()+"+"+item.getQuantity()+"~";
+		String newList = tempItem+list.getList();
+		list.setList(newList);
+		listRepo.save(list);
+		return convertStringListToArray(newList);
+	}
+	
+	CurrentOrderEntityUserResponse addItemToActiveOrder(ListItemResponse item, String token) {
+		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		CurrentOrderEntity currentOrder = currentOrderRepo.findByDate(listRepo.getCurrentList(user.get().getId()));
+		if(currentOrder != null) {
+			log.info(currentOrder.toString());
+			String tempItem=item.getImage()+"+"+item.getName()+"+"+item.getQuantity()+"~";
+			String todoList = currentOrder.getTodoList();
+			String newTodoList = tempItem+todoList;
+			log.info(newTodoList);
+		}else {
+			return new CurrentOrderEntityUserResponse();
+			//log.info("sweeet");
+		}
+		
+		return new CurrentOrderEntityUserResponse();
+	}
+	
+	List<ListItemResponse> deleteCurrentOrderItem(ListItemResponse item, String token){
+		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		UserList list = listRepo.getUserListByCurrentOrder(user.get().getId());
+		String newList="";
+		
+		for(ListItemResponse currentOrderItem : convertStringListToArray(list.getList())) {
+			if(!currentOrderItem.getName().equals(item.getName())) {
+				newList += currentOrderItem.getImage()+"+"+currentOrderItem.getName()+"+"+currentOrderItem.getQuantity()+"~";
+			}
+			
+			
+		}
+		
+		list.setList(newList);
+		listRepo.save(list);
+		
+		return convertStringListToArray(newList);
+	}
+
+	List<ListItemResponse> increaseCurrentOrderQuantity(ListItemResponse item, String token){
+		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		UserList list = listRepo.getUserListByCurrentOrder(user.get().getId());
+		String newList = "";
+		for(ListItemResponse currentOrderItem : convertStringListToArray(list.getList())) {
+			if(!currentOrderItem.getName().equals(item.getName())) {
+				log.info(currentOrderItem.getName() + "   " + item.getName());
+				newList+=currentOrderItem.getImage()+"+"+currentOrderItem.getName()+"+"+currentOrderItem.getQuantity()+"~";
+			}else {
+				//get item quantity and increase it
+				int oldQuantity = Integer.parseInt(currentOrderItem.getQuantity());
+				int newQuantity = ++oldQuantity;
+				log.info(String.valueOf(newQuantity));
+				newList+=currentOrderItem.getImage()+"+"+currentOrderItem.getName()+"+"+newQuantity+"~";
+			}
+		}
+		
+		list.setList(newList);
+		listRepo.save(list);
+		return convertStringListToArray(newList);
+	}
+	
+	List<ListItemResponse> decreaseCurrentOrderQuantity(ListItemResponse item, String token){
+		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		UserList list = listRepo.getUserListByCurrentOrder(user.get().getId());
+		String newList = "";
+		for(ListItemResponse currentOrderItem : convertStringListToArray(list.getList())) {
+			if(!currentOrderItem.getName().equals(item.getName())) {
+				log.info(currentOrderItem.getName() + "   " + item.getName());
+				newList+=currentOrderItem.getImage()+"+"+currentOrderItem.getName()+"+"+currentOrderItem.getQuantity()+"~";
+			}else {
+				//get item quantity and increase it
+				int oldQuantity = Integer.parseInt(currentOrderItem.getQuantity());
+				int newQuantity = --oldQuantity;
+				log.info(String.valueOf(newQuantity));
+				newList+=currentOrderItem.getImage()+"+"+currentOrderItem.getName()+"+"+newQuantity+"~";
+			}
+		}
+		
+		list.setList(newList);
+		listRepo.save(list);
+		return convertStringListToArray(newList);
+	}
+	
+	CurrentOrderEntityUserResponse increaseActiveOrderQuantity(ListItemWithCategoryRequest itemWithCategory, String token) {
+		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		CurrentOrderEntity activeOrder = currentOrderRepo.findByDate(listRepo.getCurrentList(user.get().getId()));
+		String newList = "";
+		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate());
+		String socketKey = userRepo.getSocketKeyByShopperId(shopperId);
+		log.info(user.get().getEmail());
+		switch(itemWithCategory.getCategory()) {
+			case "todo":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getTodoList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setTodoList(newList);
+				currentOrderRepo.save(activeOrder);
+				
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(newList))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "health":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getHealthList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setHealthList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(newList))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "dairy":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getDairyList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setDairyList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(newList))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "breakfast":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBreakfastList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setBreakfastList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(newList))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "international":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getInternationalList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setInternationalList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(newList))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "baking":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBakingList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setBakingList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(newList))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "grains":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getPastaGrainsList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setPastaGrainsList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(newList))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "snacks":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getSnacksList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setSnacksList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(newList))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "pet":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getPetList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setDairyList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(newList))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "household":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getHouseholdList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setHouseholdList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(newList))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "beverages":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBeveragesList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setBeveragesList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(newList))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "bread":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBreadList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setBreadList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(newList))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "frozen":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getFrozenList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setFrozenList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(newList))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "meat":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getMeatList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setMeatList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(newList))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "produce":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getProduceList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setProduceList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(newList))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "bakery":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBakeryList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setBakeryList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(newList))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "deli":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getDeliList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setDeliList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(newList))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "completed":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getCompletedList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = ++oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setCompletedList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(newList))
+						.build();
+			default:
+				log.info("hit default");
+				return new CurrentOrderEntityUserResponse();
+		}
+	}
+	
+	CurrentOrderEntityUserResponse decreaseActiveOrderQuantity(ListItemWithCategoryRequest itemWithCategory, String token) {
+		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		CurrentOrderEntity activeOrder = currentOrderRepo.findByDate(listRepo.getCurrentList(user.get().getId()));
+		String newList = "";
+		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate());
+		String socketKey = userRepo.getSocketKeyByShopperId(shopperId);
+		log.info(user.get().getEmail());
+		switch(itemWithCategory.getCategory()) {
+			case "todo":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getTodoList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setTodoList(newList);
+				currentOrderRepo.save(activeOrder);
+				
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(newList))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "health":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getHealthList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setHealthList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(newList))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "dairy":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getDairyList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setDairyList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(newList))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "breakfast":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBreakfastList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setBreakfastList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(newList))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "international":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getInternationalList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setInternationalList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(newList))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "baking":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBakingList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setBakingList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(newList))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "grains":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getPastaGrainsList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setPastaGrainsList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(newList))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "snacks":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getSnacksList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setSnacksList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(newList))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "pet":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getPetList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setDairyList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(newList))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "household":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getHouseholdList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setHouseholdList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(newList))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "beverages":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBeveragesList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setBeveragesList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(newList))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "bread":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBreadList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setBreadList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(newList))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "frozen":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getFrozenList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setFrozenList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(newList))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "meat":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getMeatList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setMeatList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(newList))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "produce":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getProduceList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setProduceList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(newList))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "bakery":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBakeryList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setBakeryList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(newList))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "deli":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getDeliList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setDeliList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(newList))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			case "completed":
+				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getCompletedList())) {
+					if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+					}else {
+						int oldQuantity = Integer.parseInt(activeOrderItem.getQuantity());
+						int newQuantity = --oldQuantity;
+						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
+					}
+				}
+				activeOrder.setCompletedList(newList);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(activeOrder.getTodoList()))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(newList))
+						.build();
+			default:
+				log.info("hit default");
+				return new CurrentOrderEntityUserResponse();
+		}
+	}
+	
+	CurrentOrderEntityUserResponse deleteActiveOrderQuantity(ListItemWithCategoryRequest itemWithCategory, String token){
+		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		CurrentOrderEntity activeOrder = currentOrderRepo.findByDate(listRepo.getCurrentList(user.get().getId()));
+		String newList = "";
+		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate());
+		String socketKey = userRepo.getSocketKeyByShopperId(shopperId);
+		
+		switch(itemWithCategory.getCategory()) {
+		case "todo":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getTodoList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setTodoList(newList);
+			currentOrderRepo.save(activeOrder);
+			
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(newList))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "health":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getHealthList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setHealthList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(newList))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "dairy":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getDairyList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setDairyList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(newList))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "breakfast":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBreakfastList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setBreakfastList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(newList))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "international":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getInternationalList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setInternationalList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(newList))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "baking":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBakingList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setBakingList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(newList))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "grains":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getPastaGrainsList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setPastaGrainsList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(newList))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "snacks":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getSnacksList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setSnacksList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(newList))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "pet":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getPetList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setDairyList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(newList))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "household":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getHouseholdList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setHouseholdList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(newList))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "beverages":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBeveragesList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setBeveragesList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(newList))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "bread":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBreadList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setBreadList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(newList))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "frozen":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getFrozenList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setFrozenList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(newList))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "meat":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getMeatList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setMeatList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(newList))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "produce":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getProduceList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setProduceList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(newList))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "bakery":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getBakeryList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setBakeryList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(newList))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "deli":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getDeliList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setDeliList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(newList))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(activeOrder.getCompletedList()))
+					.build();
+		case "completed":
+			for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getCompletedList())) {
+				if(!activeOrderItem.getName().equals(itemWithCategory.getItem().getName())) {
+					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
+				}
+			}
+			activeOrder.setCompletedList(newList);
+			currentOrderRepo.save(activeOrder);
+			return CurrentOrderEntityUserResponse.builder()
+					.todo(convertStringListToArray(activeOrder.getTodoList()))
+					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.produce(convertStringListToArray(activeOrder.getProduceList()))
+					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+					.bread(convertStringListToArray(activeOrder.getBreadList()))
+					.international(convertStringListToArray(activeOrder.getInternationalList()))
+					.baking(convertStringListToArray(activeOrder.getBakingList()))
+					.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+					.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+					.deli(convertStringListToArray(activeOrder.getDeliList()))
+					.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+					.meat(convertStringListToArray(activeOrder.getMeatList()))
+					.household(convertStringListToArray(activeOrder.getHouseholdList()))
+					.health(convertStringListToArray(activeOrder.getHealthList()))
+					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
+					.completed(convertStringListToArray(newList))
+					.build();
+		default:
+			log.info("hit default");
+			return new CurrentOrderEntityUserResponse();
+	}
+	}
+	
+	
+	
+	
+	//////////////////ADMIN///////////////////
+	
 	List<ShopperOrders> getOrders(String token) {
 		//sending admin token
 		//getting id from shopper
@@ -250,7 +2056,7 @@ public class ListService {
 		
 		
 		messagingTemplate.convertAndSendToUser(client.get().getSocketKey(), "/topic/messages", "true");
-		//log.info(createFullOrder.toString());
+		log.info(client.get().getSocketKey());
 		return ListToFrontendWithCount.builder()
 				.itemCount(formattedList.size())
 				.list(formattedList)
@@ -464,10 +2270,15 @@ public class ListService {
 	
 	
 	String updateCategories(CategoryUpdateRequest update, String token) {
-		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		Optional<User> shopper = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
 		
-		CurrentOrderEntity currentOrder = currentOrderRepo.findUserById(Long.valueOf(user.get().getShopperId()));
-		
+		CurrentOrderEntity currentOrder = currentOrderRepo.findUserById(Long.valueOf(shopper.get().getShopperId()));
+		//get user by date
+		Long userId = listRepo.getUserByDate(currentOrder.getDate());
+		log.info(userId.toString());
+		//get socket key by user
+		String socketKey = userRepo.getSocketKeyById(userId);
+		log.info(socketKey);
 		if(update.getFromCategory().contains(update.getToCategory())) {
 			switch(update.getToCategory()) {
 				case "deli":
@@ -546,6 +2357,8 @@ public class ListService {
 					}else {
 						currentOrder.setTodoList(convertArrayListToString(update.getPreviousCategoryList()));
 					}
+					
+					//send message to client as a CurrentOrderEntityUserResponse
 					
 					currentOrderRepo.save(currentOrder);
 				}else if(update.getFromCategory().equals("health")) {
@@ -2710,7 +4523,29 @@ public class ListService {
 		
 		
 		
-		
+		messagingTemplate.convertAndSendToUser(socketKey, "/topic/activeOrder", 
+				CurrentOrderEntityUserResponse.builder()
+				.todo(convertStringListToArray(currentOrder.getTodoList()))
+				.health(convertStringListToArray(currentOrder.getHealthList()))
+				.dairy(convertStringListToArray(currentOrder.getDairyList()))
+				.breakfast(convertStringListToArray(currentOrder.getBreakfastList()))
+				.international(convertStringListToArray(currentOrder.getInternationalList()))
+				.baking(convertStringListToArray(currentOrder.getBakingList()))
+				.grains(convertStringListToArray(currentOrder.getPastaGrainsList()))
+				.snacks(convertStringListToArray(currentOrder.getSnacksList()))
+				.pet(convertStringListToArray(currentOrder.getPetList()))
+				.household(convertStringListToArray(currentOrder.getHouseholdList()))
+				.beverages(convertStringListToArray(currentOrder.getBeveragesList()))
+				.bread(convertStringListToArray(currentOrder.getBreadList()))
+				.frozen(convertStringListToArray(currentOrder.getFrozenList()))
+				.meat(convertStringListToArray(currentOrder.getMeatList()))
+				.produce(convertStringListToArray(currentOrder.getProduceList()))
+				.bakery(convertStringListToArray(currentOrder.getBakeryList()))
+				.deli(convertStringListToArray(currentOrder.getDeliList()))
+				.completed(convertStringListToArray(currentOrder.getCompletedList()))
+				.date(currentOrder.getDate())
+				.build()
+				);
 		
 		return "nice";
 	}
@@ -2722,6 +4557,8 @@ public class ListService {
 		String updatedList="";
 		List<ListItemResponse> newFromListArray = new ArrayList<ListItemResponse>();
 		CurrentOrderEntity currentOrder = currentOrderRepo.findUserById(Long.valueOf(user.get().getShopperId()));
+		Long userId = listRepo.getUserByDate(currentOrder.getDate());
+		String socketKey = userRepo.getSocketKeyById(userId);
 		switch(update.getUpdateCategory()) {
 			case "todo":
 				for(ListItemResponse list : convertStringListToArray(currentOrder.getTodoList())) {
@@ -2746,7 +4583,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
-				
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -2776,6 +4613,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -2804,6 +4642,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -2832,6 +4671,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -2860,6 +4700,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -2888,6 +4729,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -2916,6 +4758,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -2944,6 +4787,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -2972,6 +4816,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -3000,6 +4845,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -3028,6 +4874,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -3056,6 +4903,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -3084,6 +4932,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -3112,6 +4961,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -3140,6 +4990,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -3168,6 +5019,7 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
@@ -3196,11 +5048,14 @@ public class ListService {
 				}
 				currentOrder.setCompletedList(updatedList);
 				currentOrderRepo.save(currentOrder);
+				sendActiveOrderToClient(socketKey,currentOrder);
 				return CompleteItemResponse.builder()
 						.completed(convertStringListToArray(updatedList))
 						.list(newFromListArray)
 						.build();
 		}
+		
+		
 		
 		return new CompleteItemResponse();
 	}
@@ -3229,34 +5084,42 @@ public class ListService {
 				.frozen(convertStringListToArray(currentOrder.getFrozenList()))
 				.dairy(convertStringListToArray(currentOrder.getDairyList()))
 				.completed(convertStringListToArray(currentOrder.getCompletedList()))
+				.date(currentOrder.getDate())
 				.build();
 	}
 	
-	List<ListItemResponse> addItemToCurrentOrder(ListItemResponse item, String token){
-		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
-		UserList list = listRepo.getUserListByCurrentOrder(user.get().getId());
-		String tempItem=item.getImage()+"+"+item.getName()+"+"+item.getQuantity()+"~";
-		String newList = tempItem+list.getList();
-		list.setList(newList);
-		listRepo.save(list);
-		return convertStringListToArray(newList);
+	
+	public void setSocketCommunication(String message) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		CurrentOrderEntityUserResponse activeOrder = objectMapper.readValue(message, CurrentOrderEntityUserResponse.class);
+		//get shopperId from date of order
+		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate().toString());
+		log.info(message);
+		String socketKey = userRepo.getSocketKeyByShopperId(shopperId);
+		messagingTemplate.convertAndSendToUser(socketKey,"/topic/activeOrder", message);
 	}
 	
-	CurrentOrderEntityUserResponse addItemToActiveOrder(ListItemResponse item, String token) {
-		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
-		CurrentOrderEntity currentOrder = currentOrderRepo.findByDate(listRepo.getCurrentList(user.get().getId()));
-		if(currentOrder != null) {
-			log.info(currentOrder.toString());
-			String tempItem=item.getImage()+"+"+item.getName()+"+"+item.getQuantity()+"~";
-			String todoList = currentOrder.getTodoList();
-			String newTodoList = tempItem+todoList;
-			log.info(newTodoList);
-		}else {
-			return new CurrentOrderEntityUserResponse();
-			//log.info("sweeet");
-		}
-		
-		return new CurrentOrderEntityUserResponse();
+	void sendActiveOrderToClient(String socketKey, CurrentOrderEntity currentOrder) {
+		messagingTemplate.convertAndSendToUser(socketKey,"/topic/activeOrder", CurrentOrderEntityUserResponse.builder()
+				.todo(convertStringListToArray(currentOrder.getTodoList()))
+				.health(convertStringListToArray(currentOrder.getHealthList()))
+				.dairy(convertStringListToArray(currentOrder.getDairyList()))
+				.breakfast(convertStringListToArray(currentOrder.getBreakfastList()))
+				.international(convertStringListToArray(currentOrder.getInternationalList()))
+				.baking(convertStringListToArray(currentOrder.getBakingList()))
+				.grains(convertStringListToArray(currentOrder.getPastaGrainsList()))
+				.snacks(convertStringListToArray(currentOrder.getSnacksList()))
+				.pet(convertStringListToArray(currentOrder.getPetList()))
+				.household(convertStringListToArray(currentOrder.getHouseholdList()))
+				.beverages(convertStringListToArray(currentOrder.getBeveragesList()))
+				.bread(convertStringListToArray(currentOrder.getBreadList()))
+				.frozen(convertStringListToArray(currentOrder.getFrozenList()))
+				.meat(convertStringListToArray(currentOrder.getMeatList()))
+				.produce(convertStringListToArray(currentOrder.getProduceList()))
+				.bakery(convertStringListToArray(currentOrder.getBakeryList()))
+				.deli(convertStringListToArray(currentOrder.getDeliList()))
+				.completed(convertStringListToArray(currentOrder.getCompletedList()))
+				.date(currentOrder.getDate())
+				.build());
 	}
-	
 }

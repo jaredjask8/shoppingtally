@@ -42,69 +42,77 @@ export class ListService {
     this.modalAfterOrderCreated$ = this.modalAfterOrderCreated.asObservable()
   }
 
-  //http://localhost:8080
+  //"http://localhost:8080"
+  //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
+  serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
 
   postList(list:ListToDB):Observable<List>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + list.token);
-    return this.http.post<List>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list", list, {headers:headers})
+    return this.http.post<List>(this.serverUrl + "/api/v1/list", list, {headers:headers})
   }
 
   getDates(token:string):Observable<PreviousListsFromDB[]>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<PreviousListsFromDB[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/user", {token:token},{headers:headers})
+    return this.http.post<PreviousListsFromDB[]>(this.serverUrl+"/api/v1/list/user", {token:token},{headers:headers})
   }
 
   getShopperDates(token:string,shopperId:number):Observable<string[]>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<string[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/dates",{token:token,shopperId:shopperId},{headers:headers})
+    return this.http.post<string[]>(this.serverUrl+"/api/v1/list/dates",{token:token,shopperId:shopperId},{headers:headers})
   }
 
   getShopperOrders():Observable<ShopperOrder[]>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<ShopperOrder[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/getOrders",null,{headers:headers})
+    return this.http.post<ShopperOrder[]>(this.serverUrl+"/api/v1/list/getOrders",null,{headers:headers})
   }
 
   startOrder(email,date):Observable<ActiveShopperOrder>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<ActiveShopperOrder>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/startOrder",{email:email,date:date},{headers:headers})
+    return this.http.post<ActiveShopperOrder>(this.serverUrl+"/api/v1/list/startOrder",{email:email,date:date},{headers:headers})
   }
 
   getCurrentOrder():Observable<CurrentOrderShopper>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<CurrentOrderShopper>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/getCurrentOrder",null,{headers:headers})
+    return this.http.post<CurrentOrderShopper>(this.serverUrl+"/api/v1/list/getCurrentOrder",null,{headers:headers})
   }
 
   endCurrentOrder(email:string, date:string){
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/endCurrentOrder",{email:email,date:date},{headers:headers})
+    return this.http.post(this.serverUrl+"/api/v1/list/endCurrentOrder",{email:email,date:date},{headers:headers})
   }
 
   updateCategory(toCategory:string,currentCategoryList:ListItemInterface[],fromCategory:string,previousCategoryList:ListItemInterface[]):Observable<CategoryUpdates>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<CategoryUpdates>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/updateCategories",new CategoryUpdates(toCategory,currentCategoryList,fromCategory,previousCategoryList),{headers:headers})
+    return this.http.post<CategoryUpdates>(this.serverUrl+"/api/v1/list/updateCategories",new CategoryUpdates(toCategory,currentCategoryList,fromCategory,previousCategoryList),{headers:headers})
   }
 
   completeItem(updateCategory:string,itemName:string):Observable<CompleteItemResponse>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<CompleteItemResponse>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/completeItem",{updateCategory:updateCategory,itemName:itemName},{headers:headers})
+    return this.http.post<CompleteItemResponse>(this.serverUrl+"/api/v1/list/completeItem",{updateCategory:updateCategory,itemName:itemName},{headers:headers})
   }
 
   getActiveOrder():Observable<CurrentOrderUser>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<CurrentOrderUser>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/getActiveOrder",null,{headers:headers})
+    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/getActiveOrder",null,{headers:headers})
   }
 
   getUserHasOrder(token?:string):Observable<UserOrderInfo>{
     let tokenFromEnvironment = token || this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + tokenFromEnvironment);
-    return this.http.post<UserOrderInfo>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/hasCurrentOrder",null,{headers:headers})
+    return this.http.post<UserOrderInfo>(this.serverUrl+"/api/v1/list/hasCurrentOrder",null,{headers:headers})
+  }
+
+  deleteCurrentOrderItem(item:ListItem):Observable<ListItemInterface[]>{
+    let token = this.userService.getEnvironment().token
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/deleteCurrentOrderItem",item,{headers:headers})
   }
 
 
@@ -119,37 +127,37 @@ export class ListService {
     //update currentCart with observable
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<string>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/addToList",{token:token, currentItem:currentItem},{headers:headers})
+    return this.http.post<string>(this.serverUrl+"/api/v1/auth/addToList",{token:token, currentItem:currentItem},{headers:headers})
   }
 
   addItemToActiveOrder(item:ListItem):Observable<ListItemInterface[]>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<ListItemInterface[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/addItemToActiveOrder",item,{headers:headers})
+    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/addItemToActiveOrder",item,{headers:headers})
   }
 
   addItemToCurrentOrder(item:ListItem):Observable<ListItemInterface[]>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<ListItemInterface[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/addItemToCurrentOrder",item,{headers:headers})
+    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/addItemToCurrentOrder",item,{headers:headers})
   }
 
   addFullList(list:ListItem[]):Observable<string>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<string>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/addFullList",{token:token, list:list},{headers:headers})
+    return this.http.post<string>(this.serverUrl+"/api/v1/auth/addFullList",{token:token, list:list},{headers:headers})
   }
 
   getCurrentList():Observable<List>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<List>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/getUserList",token,{headers:headers})
+    return this.http.post<List>(this.serverUrl+"/api/v1/auth/getUserList",token,{headers:headers})
   }
 
   getUserList():Observable<List>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<List>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/list/getUserList",token,{headers:headers})
+    return this.http.post<List>(this.serverUrl+"/api/v1/list/getUserList",token,{headers:headers})
   }
 
   removeListItem(list:string):Observable<List>{
@@ -169,7 +177,7 @@ export class ListService {
 
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<List>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/deleteListItem",new ListItemToDb(token,list),{headers:headers})
+    return this.http.post<List>(this.serverUrl+"/api/v1/auth/deleteListItem",new ListItemToDb(token,list),{headers:headers})
   }
 
   resetStepper(){
@@ -196,7 +204,7 @@ export class ListService {
         d.quantity = updatedQuantity
       }
     })
-    return this.http.post<List>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/updateQuantity",{token:token, list:tempList},{headers:headers})
+    return this.http.post<List>(this.serverUrl+"/api/v1/auth/updateQuantity",{token:token, list:tempList},{headers:headers})
   }
 
   increaseQuantity(currentList:ListItem[],itemName:string):Observable<List>{
@@ -215,12 +223,40 @@ export class ListService {
       if(d.name == itemName){
         let currentQuantity:number = Number(d.quantity);
         let updatedQuantity:string = ++currentQuantity+"";
-        d.quantity = updatedQuantity
+        d.quantity = updatedQuantity;
       }
     })
-    return this.http.post<List>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/updateQuantity",{token:token, list:tempList},{headers:headers})
+    return this.http.post<List>(this.serverUrl+"/api/v1/auth/updateQuantity",{token:token, list:tempList},{headers:headers})
   }
 
+  increaseCurrentOrderQuantity(item:ListItem):Observable<ListItemInterface[]>{
+    let token = this.userService.getEnvironment().token
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/increaseCurrentOrderQuantity",item,{headers:headers})
+  }
 
+  decreaseCurrentOrderQuantity(item:ListItem):Observable<ListItemInterface[]>{
+    let token = this.userService.getEnvironment().token
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/decreaseCurrentOrderQuantity",item,{headers:headers})
+  }
+
+  increaseActiveOrderQuantity(item, category):Observable<CurrentOrderUser>{
+    let token = this.userService.getEnvironment().token
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/increaseActiveOrderQuantity",{item,category},{headers:headers})
+  }
+
+  decreaseActiveOrderQuantity(item, category):Observable<CurrentOrderUser>{
+    let token = this.userService.getEnvironment().token
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/decreaseActiveOrderQuantity",{item,category},{headers:headers})
+  }
+
+  deleteActiveOrderItem(item, category):Observable<CurrentOrderUser>{
+    let token = this.userService.getEnvironment().token
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/deleteActiveOrderItem",{item,category},{headers:headers})
+  }
   
 }

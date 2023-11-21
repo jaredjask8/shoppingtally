@@ -32,7 +32,7 @@ export class LoginModalComponent implements OnInit{
   showBadCred: boolean;
   showLoginSuccess:boolean;
   modalReference:any;
-  constructor(private service: EnvironmentService, private registerService:RegisterService, private modalService: NgbModal, private navService:NavService, private cdr:ChangeDetectorRef, private listService:ListService){}
+  constructor(private service: EnvironmentService, private registerService:RegisterService, private modalService: NgbModal, private navService:NavService, private cdr:ChangeDetectorRef, private listService:ListService, private router:Router){}
   email = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl()
   token:string;
@@ -81,6 +81,8 @@ export class LoginModalComponent implements OnInit{
       this.checkToken(d.token)
       this.cdr.detectChanges()
     });
+
+    this.router.navigateByUrl("/home")
   }
 
   
