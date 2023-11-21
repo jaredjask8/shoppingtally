@@ -26,7 +26,7 @@ import { CurrentOrderUser } from 'src/list/models/CurrentOrderUser';
 })
 export class CurrentOrderComponent implements OnInit,OnDestroy{
   currentOrder:CurrentOrderShopper;
-  serverUrl = 'http://localhost/test/our-websocket'
+  serverUrl = 'https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket'
   title = 'WebSockets chat';
   stompClient;
   
