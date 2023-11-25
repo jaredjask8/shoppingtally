@@ -210,19 +210,64 @@ public class ListService {
 	
 	CurrentOrderEntityUserResponse addItemToActiveOrder(ListItemResponse item, String token) {
 		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
-		CurrentOrderEntity currentOrder = currentOrderRepo.findByDate(listRepo.getCurrentList(user.get().getId()));
-		if(currentOrder != null) {
-			log.info(currentOrder.toString());
-			String tempItem=item.getImage()+"+"+item.getName()+"+"+item.getQuantity()+"~";
-			String todoList = currentOrder.getTodoList();
-			String newTodoList = tempItem+todoList;
-			log.info(newTodoList);
+		CurrentOrderEntity activeOrder = currentOrderRepo.findByDate(listRepo.getCurrentList(user.get().getId()));
+		if(activeOrder != null) {
+			if(activeOrder.getTodoList() != null) {
+				String tempItem=item.getImage()+"+"+item.getName()+"+"+item.getQuantity()+"~";
+				String todoList = activeOrder.getTodoList();
+				String newTodoList = tempItem+todoList;
+				activeOrder.setTodoList(newTodoList);
+				currentOrderRepo.save(activeOrder);			return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(newTodoList))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			}else {
+				String tempItem=item.getImage()+"+"+item.getName()+"+"+item.getQuantity()+"~";
+				activeOrder.setTodoList(tempItem);
+				currentOrderRepo.save(activeOrder);
+				return CurrentOrderEntityUserResponse.builder()
+						.todo(convertStringListToArray(tempItem))
+						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
+						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.produce(convertStringListToArray(activeOrder.getProduceList()))
+						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
+						.bread(convertStringListToArray(activeOrder.getBreadList()))
+						.international(convertStringListToArray(activeOrder.getInternationalList()))
+						.baking(convertStringListToArray(activeOrder.getBakingList()))
+						.grains(convertStringListToArray(activeOrder.getPastaGrainsList()))
+						.snacks(convertStringListToArray(activeOrder.getSnacksList()))
+						.deli(convertStringListToArray(activeOrder.getDeliList()))
+						.bakery(convertStringListToArray(activeOrder.getBakeryList()))
+						.meat(convertStringListToArray(activeOrder.getMeatList()))
+						.household(convertStringListToArray(activeOrder.getHouseholdList()))
+						.health(convertStringListToArray(activeOrder.getHealthList()))
+						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
+						.completed(convertStringListToArray(activeOrder.getCompletedList()))
+						.build();
+			}
+			
 		}else {
 			return new CurrentOrderEntityUserResponse();
 			//log.info("sweeet");
 		}
 		
-		return new CurrentOrderEntityUserResponse();
 	}
 	
 	List<ListItemResponse> deleteCurrentOrderItem(ListItemResponse item, String token){
@@ -2098,7 +2143,9 @@ public class ListService {
 		if(currentOrder.getTodoList() == null) {
 			todo = new ArrayList<ListItemResponse>();
 		}else {
+			
 			todo = convertStringListToArray(currentOrder.getTodoList());
+			
 		}
 		
 		if(currentOrder.getBreakfastList() == null || currentOrder.getBreakfastList().equals("")) {

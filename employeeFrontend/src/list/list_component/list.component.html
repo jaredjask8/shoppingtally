@@ -111,9 +111,9 @@
     
           
     
-          <button *ngIf="!hasCurrentOrder else currentOrderButton" mat-raised-button [disabled]="currentItem == '' || currentQuantity == ''"  (click)="addToList(); emptyGoogleImageArray()">Add to cart</button>
+          <button *ngIf="!hasCurrentOrder else currentOrderButton" mat-raised-button [disabled]="currentItem == '' || currentQuantity == ''"  (click)="addToList()">Add to cart</button>
           <ng-template #currentOrderButton>
-            <button mat-raised-button (click)="addToOrder()">Add to current order</button>
+            <button mat-raised-button (click)="addToOrder()" [disabled]="currentItem == '' || currentQuantity == ''">Add to current order</button>
           </ng-template>
         </div>
       </div>
