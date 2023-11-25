@@ -147,7 +147,7 @@ export class ListComponent implements OnInit, OnDestroy {
     let ws = new SockJS(this.serverUrl);
     this.stompClient = Stomp.over(ws);
     let that = this;
-    this.stompClient.debug = null;
+    //this.stompClient.debug = null;
     this.stompClient.connect({ token: this.userService.getEnvironment().token }, function (frame) {
       //console.log(frame)
       that.stompClient.subscribe("/user/topic/messages", function (message) {
@@ -274,7 +274,9 @@ export class ListComponent implements OnInit, OnDestroy {
 
 
   addToList() {
-    this.listService.addListItem(new ListItem(this.currentItem, this.currentQuantity, this.currentImage)).subscribe(d => console.log(d))
+    this.listService.addListItem(new ListItem(this.currentItem, this.currentQuantity, this.currentImage)).subscribe(d => {
+      this.navService.cartCount.next(d);
+    })
     //this.list.push(item)
     //this.table.renderRows();
     this.resetItem()

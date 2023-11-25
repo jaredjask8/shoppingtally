@@ -179,7 +179,11 @@
 		
 		
 	</div>
-	<img class="cartIcon" src="../../assets/img/cartIcon.png" (click)="cartClicked()" *ngIf=!cartVisibility> 
+	<div class="iconContainer">
+		<img class="cartIcon" src="../../assets/img/cartIcon.png" (click)="cartClicked()" *ngIf=!cartVisibility>
+		<div class="cartItemCounter">{{cartItemCounter}}</div>
+	</div>
+	
 	<div class="menuContainer" (click)="openEnd(content)">
 		<div class="line l1"></div>
 		<div class="line l2"></div>

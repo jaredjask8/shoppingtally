@@ -116,7 +116,7 @@ export class ListService {
   }
 
 
-  addListItem(item:ListItem){
+  addListItem(item:ListItem):Observable<string>{
     
     // const currentValue = this.list.value;
     // const updatedValue = [...currentValue, item]
