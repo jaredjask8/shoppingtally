@@ -44,7 +44,7 @@ export class ListService {
 
   //"http://localhost:8080"
   //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
-  serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
+  serverUrl = "http://localhost:8080"
 
   postList(list:ListToDB):Observable<List>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + list.token);
@@ -116,7 +116,7 @@ export class ListService {
   }
 
 
-  addListItem(item:ListItem){
+  addListItem(item:ListItem):Observable<string>{
     
     // const currentValue = this.list.value;
     // const updatedValue = [...currentValue, item]
@@ -130,10 +130,10 @@ export class ListService {
     return this.http.post<string>(this.serverUrl+"/api/v1/auth/addToList",{token:token, currentItem:currentItem},{headers:headers})
   }
 
-  addItemToActiveOrder(item:ListItem):Observable<ListItemInterface[]>{
+  addItemToActiveOrder(item:ListItem):Observable<CurrentOrderUser>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/addItemToActiveOrder",item,{headers:headers})
+    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/addItemToActiveOrder",item,{headers:headers})
   }
 
   addItemToCurrentOrder(item:ListItem):Observable<ListItemInterface[]>{

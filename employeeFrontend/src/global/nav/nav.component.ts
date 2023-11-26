@@ -20,6 +20,7 @@ import { OrderModalComponent } from "../bootstrap-components/order-modal/order-m
 })
 export class NavComponent implements OnInit{
   closeResult: string;
+  cartItemCounter:string;
 
   //control nav components on login and logout
   showLogin:boolean=true;
@@ -47,6 +48,9 @@ export class NavComponent implements OnInit{
       console.log(d)
       this.cartVisibility = d.hasCurrentOrder
     })
+
+    this.navService.getCartCount().subscribe(d=>this.cartItemCounter = d)
+    this.navService.cartCount$.subscribe(d=>this.cartItemCounter=d)
   }
   
   

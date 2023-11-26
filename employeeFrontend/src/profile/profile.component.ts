@@ -9,6 +9,7 @@ import { JwtUserResponse } from 'src/models/JwtUserResponse';
 import { RegisterService } from 'src/register/register.service';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { NavService } from 'src/global/nav/nav.service';
 
 @Component({
   selector: 'app-profile',
@@ -27,7 +28,7 @@ export class ProfileComponent implements OnInit{
 
   
   
-  constructor(private listService:ListService, private userService:EnvironmentService, private registerService:RegisterService, private profileService:ProfileService, private router:Router){}
+  constructor(private listService:ListService, private userService:EnvironmentService, private registerService:RegisterService, private profileService:ProfileService, private router:Router, private navService:NavService){}
   ngOnInit(): void {
 
   }
@@ -39,6 +40,7 @@ export class ProfileComponent implements OnInit{
   signOut(){
     this.profileService.setSignOut(true);
     this.userService.removeUser();
+    this.navService.cartCount.next("");
     this.router.navigate(['/','home']);
   }
 

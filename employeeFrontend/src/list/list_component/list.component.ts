@@ -147,8 +147,9 @@ export class ListComponent implements OnInit, OnDestroy {
     let ws = new SockJS(this.serverUrl);
     this.stompClient = Stomp.over(ws);
     let that = this;
+    //this.stompClient.debug = null;
     this.stompClient.connect({ token: this.userService.getEnvironment().token }, function (frame) {
-
+      //console.log(frame)
       that.stompClient.subscribe("/user/topic/messages", function (message) {
 
 
@@ -210,6 +211,8 @@ export class ListComponent implements OnInit, OnDestroy {
       })
 
 
+    }, function(message){
+      console.log(message)
     });
   }
 
@@ -271,9 +274,17 @@ export class ListComponent implements OnInit, OnDestroy {
 
 
   addToList() {
-    this.listService.addListItem(new ListItem(this.currentItem, this.currentQuantity, this.currentImage)).subscribe(d => console.log(d))
+    this.listService.addListItem(new ListItem(this.currentItem, this.currentQuantity, this.currentImage)).subscribe(d => {
+      this.navService.cartCount.next(d);
+    })
     //this.list.push(item)
     //this.table.renderRows();
+    this.resetItem()
+  }
+
+  resetItem(){
+    this.currentItem = "";
+    this.currentQuantity = "";
   }
 
 
@@ -315,13 +326,37 @@ export class ListComponent implements OnInit, OnDestroy {
   addToOrder() {
     if (this.isActiveOrder) {
       //send to activeOrder order
-      this.listService.addItemToActiveOrder(new ListItem(this.currentItem, this.currentQuantity, this.currentImage)).subscribe(d => console.log(d))
+      this.listService.addItemToActiveOrder(new ListItem(this.currentItem, this.currentQuantity, this.currentImage)).subscribe(d => {
+        this.todo = d.todo
+        this.deli = d.deli
+        this.health = d.health
+        this.dairy = d.dairy
+        this.breakfast = d.breakfast
+        this.international = d.international
+        this.baking = d.baking;
+        this.grains = d.grains
+        this.snacks = d.snacks
+        this.pet = d.pet
+        this.household = d.household
+        this.beverages = d.beverages
+        this.bread = d.bread
+        this.frozen = d.frozen
+        this.meat = d.meat
+        this.produce = d.produce
+        this.bakery = d.bakery
+        this.completed = d.completed
+      })
+
+      let newItem:ListItem = new ListItem(this.currentItem,this.currentQuantity,this.currentImage);
+      this.updateActiveOrderFrontend('todo',newItem,'add');
     } else {
       //send to currentOrder
       this.listService.addItemToCurrentOrder(new ListItem(this.currentItem, this.currentQuantity, this.currentImage)).subscribe(d => {
         this.currentOrderList = d
       })
     }
+
+    this.resetItem()
   }
 
   increaseCurrentOrderQuantity(item: ListItem) {
@@ -746,6 +781,11 @@ export class ListComponent implements OnInit, OnDestroy {
             })
             break;
         }
+        break
+      case 'add':
+        this.todo.unshift(item);
+        console.log("SWEEEET")
+        break;
     }
 
     this.sendActiveOrderMessage()

@@ -30,6 +30,19 @@
     margin-right: 20px;
 }
 
+.iconContainer{
+    position: relative;
+    display: flex;
+    color: white;
+}
+
+.cartItemCounter{
+    position: absolute;
+    left: 25px;
+    top:-9px;
+    font-size: 10px;
+}
+
 .row{
     position: relative;
     width: 100%;

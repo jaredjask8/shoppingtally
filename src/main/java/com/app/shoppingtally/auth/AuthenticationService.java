@@ -20,6 +20,8 @@ import com.app.shoppingtally.auth.models.ListItemResponse;
 import com.app.shoppingtally.auth.models.ListToFrontendWithCount;
 import com.app.shoppingtally.auth.models.ListItemRequest;
 import com.app.shoppingtally.config.JwtService;
+import com.app.shoppingtally.list.ListRepository;
+import com.app.shoppingtally.list.UserList;
 import com.app.shoppingtally.token.Token;
 import com.app.shoppingtally.token.TokenRepository;
 import com.app.shoppingtally.token.TokenType;
@@ -37,6 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthenticationService {
 	
 	private final UserRepo repository;
+	private final ListRepository listRepo;
 	private final PasswordEncoder passwordEncoder;
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
@@ -93,11 +96,13 @@ public class AuthenticationService {
 		return repository.findByEmail(jwtService.extractUsername(token.getToken())).get();
 	}
 	
-	public void updateCurrentList(ListItemRequest item) {
+	public String updateCurrentList(ListItemRequest item) {
 		User user = repository.findByEmail(jwtService.extractUsername(item.getToken())).get();
 		String currentList = user.getCurrentList();
 		user.setCurrentList(currentList+=item.getCurrentItem());
 		repository.save(user);
+		Integer count = user.getCurrentList().split("~").length;
+		return count.toString();
 	}
 	
 	public String updateCurrentListWithFullList(FullListRequest list) {
@@ -173,4 +178,11 @@ public class AuthenticationService {
 		return getCurrentList(list.getToken());
 	}
 	
+	
+	public String getCartCount(String token) {
+		Optional<User> user = repository.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		Integer count = user.get().getCurrentList().split("~").length;
+		return count.toString();
+		
+	}
 }
