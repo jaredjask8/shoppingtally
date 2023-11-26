@@ -173,6 +173,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
     this.listService.removeListItem(tempList).subscribe(d=>{
       this.yes = d.list
       this.doesListHaveItems(d.itemCount);
+      this.navService.cartCount.next(d.itemCount.toString())
     });
   }
 

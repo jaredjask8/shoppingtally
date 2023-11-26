@@ -39,8 +39,8 @@
 .cartItemCounter{
     position: absolute;
     left: 25px;
-    top:-10px;
-    font-size: 11px;
+    top:-9px;
+    font-size: 10px;
 }
 
 .row{

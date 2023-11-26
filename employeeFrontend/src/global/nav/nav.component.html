@@ -179,8 +179,8 @@
 		
 		
 	</div>
-	<div class="iconContainer">
-		<img class="cartIcon" src="../../assets/img/cartIcon.png" (click)="cartClicked()" *ngIf=!cartVisibility>
+	<div class="iconContainer" *ngIf=!cartVisibility>
+		<img class="cartIcon" src="../../assets/img/cartIcon.png" (click)="cartClicked()">
 		<div class="cartItemCounter">{{cartItemCounter}}</div>
 	</div>
 	

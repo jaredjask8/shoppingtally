@@ -50,8 +50,6 @@ export class NavComponent implements OnInit{
     })
 
     this.navService.getCartCount().subscribe(d=>this.cartItemCounter = d)
-
-    //this.cartItemCounter = this.navService.cartCount.getValue();
     this.navService.cartCount$.subscribe(d=>this.cartItemCounter=d)
   }
   

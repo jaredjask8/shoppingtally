@@ -71,6 +71,10 @@ export class LoginModalComponent implements OnInit{
         console.log(d)
         this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
       })
+
+      this.navService.getCartCount().subscribe(d=>{
+        this.navService.cartCount.next(d)
+      })
   
     }
 
