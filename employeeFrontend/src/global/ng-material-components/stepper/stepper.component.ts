@@ -126,7 +126,6 @@ export class StepperComponent implements OnInit, AfterViewInit{
     this.listService.getCurrentList().subscribe(d => {
       this.yes = d.list
       this.doesListHaveItems(d.itemCount);
-      
     });
     
     this.stepCounter = 1;

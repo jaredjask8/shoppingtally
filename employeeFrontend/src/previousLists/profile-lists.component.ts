@@ -5,6 +5,7 @@ import { ListItemInterface } from 'src/list/models/ListItemInterface';
 import { PreviousListsFromDB } from '../previousLists/models/PreviousListsFromDB';
 import { ListService } from 'src/list/list_component/list.service';
 import { EnvironmentService } from 'src/global/utility/environment.service';
+import { NavService } from 'src/global/nav/nav.service';
 
 @Component({
   selector: 'app-profile-lists',
@@ -20,7 +21,7 @@ export class ProfileListsComponent implements OnInit{
   inputUsed:boolean = false;
   filteredList;
   
-  constructor(private listService:ListService, private userService:EnvironmentService){
+  constructor(private listService:ListService, private userService:EnvironmentService, private navService:NavService){
 
   }
 
@@ -51,7 +52,9 @@ export class ProfileListsComponent implements OnInit{
   }
 
   addItemFromMasterList(index){
-    this.listService.addListItem(this.fullList[index]).subscribe(d=>console.log(d))
+    this.listService.addListItem(this.fullList[index]).subscribe(d=>{
+      this.navService.cartCount.next(d)
+    })
   }
 
   addFullList(){

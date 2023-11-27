@@ -26,7 +26,7 @@ import { CurrentOrderUser } from '../models/CurrentOrderUser';
   styleUrls: ['./list.component.css'],
 })
 export class ListComponent implements OnInit, OnDestroy {
-  serverUrl = 'https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket'
+  serverUrl = 'http://localhost/test/our-websocket'
   title = 'WebSockets chat';
   stompClient;
 
@@ -275,6 +275,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
   addToList() {
     this.listService.addListItem(new ListItem(this.currentItem, this.currentQuantity, this.currentImage)).subscribe(d => {
+      console.log(d)
       this.navService.cartCount.next(d);
     })
     //this.list.push(item)

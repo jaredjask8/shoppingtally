@@ -180,9 +180,19 @@ public class AuthenticationService {
 	
 	
 	public String getCartCount(String token) {
+		List<String> tempList = new ArrayList<String>();
 		Optional<User> user = repository.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
 		Integer count = user.get().getCurrentList().split("~").length;
-		return count.toString();
+		tempList = Arrays.asList(user.get().getCurrentList().split("~"));
+		log.info(tempList.toString());
+		
+		if(tempList.get(0).equals("")) {
+			
+			return "0";
+		}else {
+			log.info("INNNNNNNNN");
+			return count.toString();
+		}
 		
 	}
 }
