@@ -44,7 +44,7 @@ export class ListService {
 
   //"http://localhost:8080"
   //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
-  serverUrl = "http://localhost:8080"
+  serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
 
   postList(list:ListToDB):Observable<List>{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + list.token);

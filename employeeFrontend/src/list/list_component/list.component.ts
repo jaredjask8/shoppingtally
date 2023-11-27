@@ -26,7 +26,7 @@ import { CurrentOrderUser } from '../models/CurrentOrderUser';
   styleUrls: ['./list.component.css'],
 })
 export class ListComponent implements OnInit, OnDestroy {
-  serverUrl = 'http://localhost/test/our-websocket'
+  serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket"
   title = 'WebSockets chat';
   stompClient;
 

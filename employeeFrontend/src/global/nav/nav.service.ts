@@ -36,7 +36,7 @@ export class NavService implements OnInit{
   getCartCount():Observable<string>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<string>("http://localhost:8080/api/v1/auth/getCartCount",null,{headers:headers})
+    return this.http.post<string>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/getCartCount",null,{headers:headers})
   }
 
 
