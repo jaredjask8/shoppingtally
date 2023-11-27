@@ -1,6 +1,6 @@
+@import "@tomtom-international/web-sdk-maps";
 
-
-.reviews-body{
+.body{
     padding-top: 100px;
     display: flex;
     flex-direction: row;
@@ -50,12 +50,5 @@ mat-divider{
 
 #map {
     height: 400px;
-}
-
-@media (max-width:700px){
-    .reviews-body{
-        display: flex;
-        flex-direction: column;
-    }
-}
+  }
 
