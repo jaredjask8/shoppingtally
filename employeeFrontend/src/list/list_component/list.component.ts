@@ -122,6 +122,7 @@ export class ListComponent implements OnInit, OnDestroy {
           this.completed = d.completed
           this.currentOrderDate = d.date
         })
+        this.navService.cartCount.next("0");
       } else {
         this.listService.getUserList().subscribe(d => {
           this.currentOrderList = d.list
