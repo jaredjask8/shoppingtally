@@ -18,6 +18,8 @@ import * as SockJS from 'sockjs-client';
 import { CurrentOrderComponent } from 'src/admin/orders/current-order/current-order.component';
 import { CurrentOrderUserClass } from '../models/CurrentOrderUserClass';
 import { CurrentOrderUser } from '../models/CurrentOrderUser';
+import { CurrentOrderUserClassWithUpdateMessage } from '../models/CurrentOrderUserClassWithUpdateMessage';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -26,6 +28,7 @@ import { CurrentOrderUser } from '../models/CurrentOrderUser';
   styleUrls: ['./list.component.css'],
 })
 export class ListComponent implements OnInit, OnDestroy {
+  //socket
   serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket"
   title = 'WebSockets chat';
   stompClient;
@@ -62,7 +65,7 @@ export class ListComponent implements OnInit, OnDestroy {
   isActiveOrder: boolean
   hasCurrentOrder: boolean
   currentOrderList: ListItemInterface[]
-
+  cart:ListItemInterface[]
   //lists
   todo: ListItemInterface[]
   breakfast: ListItemInterface[]
@@ -85,8 +88,9 @@ export class ListComponent implements OnInit, OnDestroy {
 
   stringArray: any[] = []
   componentInstance = this;
+  isItemValid:boolean = false;
 
-  constructor(private service: GroceryService, private userService: EnvironmentService, private listService: ListService, private dateService: DatepickerService, private elem: ElementRef, private renderer: Renderer2, private navService: NavService) {
+  constructor(private service: GroceryService, private userService: EnvironmentService, private listService: ListService, private dateService: DatepickerService, private elem: ElementRef, private renderer: Renderer2, private navService: NavService,private snackBar: MatSnackBar) {
     this.previousImage = elem.nativeElement
     this.initializeWebSocketConnection();
   }
@@ -100,36 +104,41 @@ export class ListComponent implements OnInit, OnDestroy {
     this.navService.cartVisibility$.subscribe(d => {
       console.log(d)
       this.isActiveOrder = d.hasActive
-      if (d.hasActive) {
-        this.listService.getActiveOrder().subscribe(d => {
-          this.todo = d.todo
-          this.deli = d.deli
-          this.health = d.health
-          this.dairy = d.dairy
-          this.breakfast = d.breakfast
-          this.international = d.international
-          this.baking = d.baking;
-          this.grains = d.grains
-          this.snacks = d.snacks
-          this.pet = d.pet
-          this.household = d.household
-          this.beverages = d.beverages
-          this.bread = d.bread
-          this.frozen = d.frozen
-          this.meat = d.meat
-          this.produce = d.produce
-          this.bakery = d.bakery
-          this.completed = d.completed
-          this.currentOrderDate = d.date
+      if(!d.hasActive && !d.hasCurrentOrder){
+        //get cart
+        this.listService.getCurrentList().subscribe(e=>{
+          this.cart = e.list
+        })
+      }else if(d.hasCurrentOrder && !d.hasActive){
+        //get current order
+        this.listService.getUserList().subscribe(e => {
+          this.currentOrderList = e.list
+          this.currentOrderDate = e.date;
+        })
+      }else{
+        //get active order
+        this.listService.getActiveOrder().subscribe(e => {
+          this.todo = e.todo
+          this.deli = e.deli
+          this.health = e.health
+          this.dairy = e.dairy
+          this.breakfast = e.breakfast
+          this.international = e.international
+          this.baking = e.baking;
+          this.grains = e.grains
+          this.snacks = e.snacks
+          this.pet = e.pet
+          this.household = e.household
+          this.beverages = e.beverages
+          this.bread = e.bread
+          this.frozen = e.frozen
+          this.meat = e.meat
+          this.produce = e.produce
+          this.bakery = e.bakery
+          this.completed = e.completed
+          this.currentOrderDate = e.date
         })
         this.navService.cartCount.next("0");
-      } else {
-        this.listService.getUserList().subscribe(d => {
-          this.currentOrderList = d.list
-          this.currentOrderDate = d.date;
-        })
-
-
       }
     })
     //this.listService.getUserHasOrder().subscribe(d=>console.log(d))
@@ -217,12 +226,13 @@ export class ListComponent implements OnInit, OnDestroy {
     });
   }
 
-  sendActiveOrderMessage() {
-    this.stompClient.send('/ws/test', {}, JSON.stringify(new CurrentOrderUserClass(
+  sendActiveOrderMessage(updateMessage:string) {
+    this.stompClient.send('/ws/test', {}, JSON.stringify(new CurrentOrderUserClassWithUpdateMessage(
       "",
       "",
       "",
       this.currentOrderDate,
+      updateMessage,
       this.todo,
       this.breakfast,
       this.bread,
@@ -258,15 +268,25 @@ export class ListComponent implements OnInit, OnDestroy {
 
   }
 
-  getImages() {
-    this.service.getImages(this.currentItem).subscribe(d => {
+  getImages(item:string) {
+    this.service.getImages(item).subscribe(d => {
       this.googleImageArray = of(d.items)
 
     })
   }
 
-  setItemName(item) {
-    this.currentItem = item;
+  setItemName(item:string) {
+    
+      if(this.checkItemValidity(item)){
+        this.isItemValid = true;
+        this.currentItem = item;
+        console.log("item not in list")
+      }else{
+        //hide button and display message
+        this.isItemValid = false;
+        this.snackBar.open("Item already in current order")
+        setTimeout(()=>{this.snackBar.dismiss()},2000)
+      }
   }
 
   setQuantity(quantity) {
@@ -276,9 +296,12 @@ export class ListComponent implements OnInit, OnDestroy {
 
   addToList() {
     this.listService.addListItem(new ListItem(this.currentItem, this.currentQuantity, this.currentImage)).subscribe(d => {
-      console.log(d)
-      this.navService.cartCount.next(d);
+      this.cart = d.list
+      let count = d.itemCount.toString()
+      this.navService.cartCount.next(count);
     })
+    this.snackBar.open("Item added")
+    setTimeout(()=>{this.snackBar.dismiss()},2000)
     //this.list.push(item)
     //this.table.renderRows();
     this.resetItem()
@@ -287,6 +310,8 @@ export class ListComponent implements OnInit, OnDestroy {
   resetItem(){
     this.currentItem = "";
     this.currentQuantity = "";
+    this.googleImageArray = null;
+    this.isItemValid = false;
   }
 
 
@@ -314,16 +339,7 @@ export class ListComponent implements OnInit, OnDestroy {
     console.log(this.currentImage)
   }
 
-  searchClick() {
-    if (this.isSearchClicked == false) {
-      this.isSearchClicked = true
-    }
-  }
-
-  emptyGoogleImageArray() {
-    this.googleImageArray = null;
-    this.currentImage = null
-  }
+  
 
   addToOrder() {
     if (this.isActiveOrder) {
@@ -350,12 +366,16 @@ export class ListComponent implements OnInit, OnDestroy {
       })
 
       let newItem:ListItem = new ListItem(this.currentItem,this.currentQuantity,this.currentImage);
-      this.updateActiveOrderFrontend('todo',newItem,'add');
+      this.updateActiveOrderFrontend('todo',newItem,'added');
+      this.snackBar.open("Item added")
+      setTimeout(()=>{this.snackBar.dismiss()},2000)
     } else {
       //send to currentOrder
       this.listService.addItemToCurrentOrder(new ListItem(this.currentItem, this.currentQuantity, this.currentImage)).subscribe(d => {
         this.currentOrderList = d
       })
+      this.snackBar.open("Item added")
+      setTimeout(()=>{this.snackBar.dismiss()},2000)
     }
 
     this.resetItem()
@@ -394,6 +414,8 @@ export class ListComponent implements OnInit, OnDestroy {
       this.bakery = d.bakery
       this.completed = d.completed
     })
+
+    
 
     this.updateActiveOrderFrontend(category, item, choice)
 
@@ -436,14 +458,16 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   updateActiveOrderFrontend(category: string, item: ListItem, choice: string) {
+    let updateMessage = "";
+    let newQuantity = 0;
     switch (choice) {
-      case 'increase':
+      case 'increased':
         switch (category) {
           case 'todo':
             this.todo.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.todo[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.todo[index].quantity = newQuantity.toString()
               }
             })
@@ -452,7 +476,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.health.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.health[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.health[index].quantity = newQuantity.toString()
               }
             })
@@ -461,7 +485,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.dairy.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.dairy[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.dairy[index].quantity = newQuantity.toString()
               }
             })
@@ -470,7 +494,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.breakfast.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.breakfast[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.breakfast[index].quantity = newQuantity.toString()
               }
             })
@@ -479,7 +503,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.international.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.international[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.international[index].quantity = newQuantity.toString()
               }
             })
@@ -488,7 +512,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.baking.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.baking[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.baking[index].quantity = newQuantity.toString()
               }
             })
@@ -497,7 +521,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.grains.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.grains[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.grains[index].quantity = newQuantity.toString()
               }
             })
@@ -506,7 +530,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.snacks.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.snacks[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.snacks[index].quantity = newQuantity.toString()
               }
             })
@@ -515,7 +539,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.pet.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.pet[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.pet[index].quantity = newQuantity.toString()
               }
             })
@@ -524,7 +548,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.household.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.household[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.household[index].quantity = newQuantity.toString()
               }
             })
@@ -533,7 +557,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.beverages.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.beverages[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.beverages[index].quantity = newQuantity.toString()
               }
             })
@@ -542,7 +566,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.bread.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.bread[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.bread[index].quantity = newQuantity.toString()
               }
             })
@@ -551,7 +575,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.frozen.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.frozen[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.frozen[index].quantity = newQuantity.toString()
               }
             })
@@ -560,7 +584,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.meat.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.meat[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.meat[index].quantity = newQuantity.toString()
               }
             })
@@ -569,7 +593,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.produce.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.produce[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.produce[index].quantity = newQuantity.toString()
               }
             })
@@ -578,7 +602,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.bakery.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.bakery[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.bakery[index].quantity = newQuantity.toString()
               }
             })
@@ -587,7 +611,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.deli.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.deli[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.deli[index].quantity = newQuantity.toString()
               }
             })
@@ -596,22 +620,21 @@ export class ListComponent implements OnInit, OnDestroy {
             this.completed.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.completed[index].quantity)
-                let newQuantity = ++initialQuantity;
+                newQuantity = ++initialQuantity;
                 this.completed[index].quantity = newQuantity.toString()
               }
             })
             break;
 
         }
-
         break
-      case 'decrease':
+      case 'decreased':
         switch (category) {
           case 'todo':
             this.todo.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.todo[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.todo[index].quantity = newQuantity.toString()
               }
             })
@@ -620,7 +643,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.health.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.health[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.health[index].quantity = newQuantity.toString()
               }
             })
@@ -629,7 +652,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.dairy.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.dairy[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.dairy[index].quantity = newQuantity.toString()
               }
             })
@@ -638,7 +661,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.breakfast.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.breakfast[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.breakfast[index].quantity = newQuantity.toString()
               }
             })
@@ -647,7 +670,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.international.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.international[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.international[index].quantity = newQuantity.toString()
               }
             })
@@ -656,7 +679,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.baking.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.baking[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.baking[index].quantity = newQuantity.toString()
               }
             })
@@ -665,7 +688,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.grains.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.grains[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.grains[index].quantity = newQuantity.toString()
               }
             })
@@ -674,7 +697,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.snacks.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.snacks[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.snacks[index].quantity = newQuantity.toString()
               }
             })
@@ -683,7 +706,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.pet.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.pet[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.pet[index].quantity = newQuantity.toString()
               }
             })
@@ -692,7 +715,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.household.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.household[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.household[index].quantity = newQuantity.toString()
               }
             })
@@ -701,7 +724,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.beverages.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.beverages[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.beverages[index].quantity = newQuantity.toString()
               }
             })
@@ -710,7 +733,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.bread.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.bread[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.bread[index].quantity = newQuantity.toString()
               }
             })
@@ -719,7 +742,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.frozen.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.frozen[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.frozen[index].quantity = newQuantity.toString()
               }
             })
@@ -728,7 +751,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.meat.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.meat[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.meat[index].quantity = newQuantity.toString()
               }
             })
@@ -737,7 +760,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.produce.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.produce[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.produce[index].quantity = newQuantity.toString()
               }
             })
@@ -746,7 +769,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.bakery.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.bakery[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.bakery[index].quantity = newQuantity.toString()
               }
             })
@@ -755,7 +778,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.deli.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.deli[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.deli[index].quantity = newQuantity.toString()
               }
             })
@@ -764,7 +787,7 @@ export class ListComponent implements OnInit, OnDestroy {
             this.completed.forEach((d, index) => {
               if (item.name == d.name) {
                 let initialQuantity = parseInt(this.completed[index].quantity)
-                let newQuantity = --initialQuantity;
+                newQuantity = --initialQuantity;
                 this.completed[index].quantity = newQuantity.toString()
               }
             })
@@ -772,7 +795,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
         }
         break
-      case 'delete':
+      case 'deleted':
         switch (category) {
           case 'todo':
             this.todo.forEach((d, index) => {
@@ -784,12 +807,72 @@ export class ListComponent implements OnInit, OnDestroy {
             break;
         }
         break
-      case 'add':
+      case 'added':
         this.todo.unshift(item);
         console.log("SWEEEET")
         break;
     }
 
-    this.sendActiveOrderMessage()
+    if(choice === 'decreased' || choice === 'increased'){
+      updateMessage = "" + item.name +" has been " + choice + " to a total of "+newQuantity
+    }else{
+      updateMessage = "" + item.name +" has been " + choice
+    }
+
+    
+
+    this.sendActiveOrderMessage(updateMessage)
+  }
+
+  checkItemValidity(item:string):boolean{
+    let tempArray:ListItemInterface[] = [];
+    let activeListArray:ListItemInterface[] = tempArray.concat(
+      this.todo,
+      this.deli,
+      this.health,
+      this.dairy,
+      this.breakfast,
+      this.international,
+      this.baking,
+      this.grains,
+      this.snacks,
+      this.pet,
+      this.household,
+      this.beverages,
+      this.bread,
+      this.frozen,
+      this.meat,
+      this.produce,
+      this.bakery,
+      this.completed  
+    )
+    var itemFound:boolean=true;
+    
+    if(!this.hasCurrentOrder && !this.isActiveOrder){
+      //cart state
+      this.cart.forEach(d=>{
+        if(d.name === item){
+          itemFound = false;
+        }
+      })
+    }else if(this.hasCurrentOrder && !this.isActiveOrder){
+      //current order state
+      this.currentOrderList.forEach(d=>{
+        if(d.name === item){
+          itemFound = false;
+        }
+      })
+    }else{
+      //active order state
+      activeListArray.forEach(d=>{
+        //console.log(d.name)
+        if(d.name === item){
+          itemFound = false;
+        }
+      })
+    }
+
+    return itemFound;
+    
   }
 }

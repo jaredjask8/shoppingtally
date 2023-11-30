@@ -116,7 +116,7 @@ export class ListService {
   }
 
 
-  addListItem(item:ListItem):Observable<string>{
+  addListItem(item:ListItem):Observable<List>{
     
     // const currentValue = this.list.value;
     // const updatedValue = [...currentValue, item]
@@ -127,7 +127,7 @@ export class ListService {
     //update currentCart with observable
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<string>(this.serverUrl+"/api/v1/auth/addToList",{token:token, currentItem:currentItem},{headers:headers})
+    return this.http.post<List>(this.serverUrl+"/api/v1/auth/addToList",{token:token, currentItem:currentItem},{headers:headers})
   }
 
   addItemToActiveOrder(item:ListItem):Observable<CurrentOrderUser>{
@@ -258,5 +258,6 @@ export class ListService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
     return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/deleteActiveOrderItem",{item,category},{headers:headers})
   }
+
   
 }

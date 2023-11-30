@@ -96,13 +96,17 @@ public class AuthenticationService {
 		return repository.findByEmail(jwtService.extractUsername(token.getToken())).get();
 	}
 	
-	public String updateCurrentList(ListItemRequest item) {
+	public ListToFrontendWithCount updateCurrentList(ListItemRequest item) {
 		User user = repository.findByEmail(jwtService.extractUsername(item.getToken())).get();
 		String currentList = user.getCurrentList();
 		user.setCurrentList(currentList+=item.getCurrentItem());
 		repository.save(user);
 		Integer count = user.getCurrentList().split("~").length;
-		return count.toString();
+		return ListToFrontendWithCount.builder()
+				.itemCount(count)
+				.list(convertStringListToArray(user.getCurrentList()))
+				.date("")
+				.build();
 	}
 	
 	public String updateCurrentListWithFullList(FullListRequest list) {
@@ -187,12 +191,38 @@ public class AuthenticationService {
 		log.info(tempList.toString());
 		
 		if(tempList.get(0).equals("")) {
-			
 			return "0";
 		}else {
 			log.info("INNNNNNNNN");
 			return count.toString();
 		}
+		
+	}
+	
+	List<ListItemResponse> convertStringListToArray(String list){
+		if( list != null) {
+			List<ListItemResponse> listArray = new ArrayList<ListItemResponse>();
+			var tempArray = list.split("~");
+			
+			Stream<String> arr_stream = Arrays.stream(tempArray);
+			arr_stream.forEach((d) -> {
+				
+				if(d != "") {
+					var splitByCategory = d.split("\\+");
+					var image = splitByCategory[0];
+					var name = splitByCategory[1];
+					var quantity = splitByCategory[2];
+					listArray.add(new ListItemResponse(image,name,quantity));
+				}
+				
+				
+			});
+			
+			return listArray;
+		}else {
+			return new ArrayList<ListItemResponse>();
+		}
+		
 		
 	}
 }

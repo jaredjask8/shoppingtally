@@ -13,6 +13,7 @@ import {MatIconModule} from '@angular/material/icon';
 import { DatepickerComponent } from 'src/global/bootstrap-components/datepicker/datepicker.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import {MatDividerModule} from '@angular/material/divider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import {MatDividerModule} from '@angular/material/divider';
     MatIconModule,
     DatepickerComponent,
     MatStepperModule,
-    MatDividerModule
+    MatDividerModule,
+    MatSnackBarModule
     
   ],
   

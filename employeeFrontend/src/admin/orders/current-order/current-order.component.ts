@@ -11,6 +11,8 @@ import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { EnvironmentService } from 'src/global/utility/environment.service';
 import { CurrentOrderUser } from 'src/list/models/CurrentOrderUser';
+import { CurrentOrderUserClassWithUpdateMessage } from 'src/list/models/CurrentOrderUserClassWithUpdateMessage';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-current-order',
@@ -21,7 +23,8 @@ import { CurrentOrderUser } from 'src/list/models/CurrentOrderUser';
     CommonModule,
     CdkDropList,
     CdkDrag,
-    CdkScrollableModule
+    CdkScrollableModule,
+    MatButtonModule
   ]
 })
 export class CurrentOrderComponent implements OnInit,OnDestroy{
@@ -31,6 +34,7 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
   serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket"
   title = 'WebSockets chat';
   stompClient;
+  updateLog:string[]=[]
   
   
 
@@ -277,7 +281,7 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
     this.stompClient.connect({token:this.userService.getEnvironment().token}, function(frame) {
 
       that.stompClient.subscribe("/user/topic/activeOrder", function (message) {
-        let activeOrderUpdate:CurrentOrderUser = JSON.parse(message.body)
+        let activeOrderUpdate:CurrentOrderUserClassWithUpdateMessage = JSON.parse(message.body)
         that.todo = activeOrderUpdate.todo
         that.deli = activeOrderUpdate.deli
         that.health = activeOrderUpdate.health
@@ -296,8 +300,9 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
         that.produce = activeOrderUpdate.produce
         that.bakery = activeOrderUpdate.bakery
         that.completed = activeOrderUpdate.completed
-
-        console.log(that.produce)
+        //activeOrderUpdate.updateMessage
+        that.updateLog.unshift(activeOrderUpdate.updateMessage);
+        console.log(that.updateLog)
       })
     });
   }

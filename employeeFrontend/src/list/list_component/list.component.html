@@ -6,73 +6,15 @@
           <div class="input-container">
             <mat-form-field class="itemInput" appearance="fill" >
               <mat-label>Enter item</mat-label>
-              <input matInput #input placeholder="Ex. Nougat" [(ngModel)]="customItem" >  <!-- (keyup)="getItems($event)" -->
+              <input matInput #input placeholder="Ex. Nougat" (input)="resetItem()">  <!-- (keyup)="getItems($event)" -->
             </mat-form-field>
-            <button mat-raised-button (click)="getItems(); searchClick()">Search</button>
-          </div>
+            <button mat-raised-button (click)="getImages(input.value);setItemName(input.value)">Search</button>
+          </div>      
     
-
-          <div class="api-container custom">
-            <h3>Custom Item</h3>
-            <div class="customItemContainer" *ngIf="input.value != '';else test">
-              <svg xmlns="http://www.w3.org/2000/svg" width="35px" height="35px" fill="white" class="bi bi-basket" viewBox="0 0 16 16">
-                <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z"/>
-              </svg>
-              <button  mat-raised-button (click)="setItemName(customItem)" class="mt-3 customItem"><b>{{customItem}}</b></button>
-            </div>
-            <ng-template #test>
-              <div class="customItemContainer">
-                <svg xmlns="http://www.w3.org/2000/svg" width="35px" height="35px" fill="white" class="bi bi-basket" viewBox="0 0 16 16">
-                  <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z"/>
-                </svg>
-                <button  mat-raised-button class="mt-3 customItem customItemTemplate"></button>
-              </div>
-            </ng-template>
-          </div>
-          <div class="api-container branded">
-            <h3>Items</h3>
-            <div class="common-container" *ngIf="brandedArray;else itemsTemplate">
-              <div *ngFor="let value of brandedArray | async" class="item-container">
-                <!-- <img src={{value.photo.thumb}} height="40px" width="40px"> -->
-                <button class="itemBtns" mat-raised-button (click)="setItemName(value.brand_name_item_name)"><b>{{value.brand_name_item_name}}</b></button>
-              </div>
-            </div>
-            <ng-template #itemsTemplate>
-              <div class="common-container">
-                <div class="item-container">
-                  <button mat-raised-button class="itemBtnsTemplate" mat-raised-button></button>
-                </div>
-                <div class="item-container">
-                  <button mat-raised-button class="itemBtnsTemplate" mat-raised-button></button>
-                </div>
-                <div class="item-container">
-                  <button mat-raised-button class="itemBtnsTemplate" mat-raised-button></button>
-                </div>
-                <div class="item-container">
-                  <button mat-raised-button class="itemBtnsTemplate" mat-raised-button></button>
-                </div>
-                <div class="item-container">
-                  <button mat-raised-button class="itemBtnsTemplate" mat-raised-button></button>
-                </div>
-                
-                
-              </div>
-              
-              
-              
-            </ng-template>
-          </div>
-          
-          
-    
-          <div class="finalizedItemContainer mt-5 mb-3">
-            <div *ngIf="isItemClicked()">
-              <div class="imageBtnContainer mt-2">
-                <button (click)="getImages()" class="imageSearchBtn" mat-raised-button>Image Search</button>
-              </div>
+          <div class="finalizedItemContainer mt-3 mb-3">
               <div class="images" *ngIf="googleImageArray;else imageArrayTemplate">
                 <div (click)="isImageClicked(image)" *ngFor="let value of googleImageArray | async" class="image-container">
-                  <img #image src={{value.image.thumbnailLink}} >
+                  <img #image src={{value.image.thumbnailLink}}>
                 </div>
               </div>
               <ng-template #imageArrayTemplate>
@@ -80,15 +22,9 @@
                   <div class="image-container-template">
                     <button mat-raised-button class="imageBtnTemplate"></button>
                   </div>
-                  <div class="image-container-template">
-                    <button mat-raised-button class="imageBtnTemplate"></button>
-                  </div>
-                  <div class="image-container-template">
-                    <button mat-raised-button class="imageBtnTemplate"></button>
-                  </div>
                 </div>
               </ng-template>
-            </div>
+            
             <div class="selectedItemContainer">
               <div>Selected item: {{currentItem}}</div>
               <div *ngIf="currentItem == '' ? false : true" (click)="isEditClicked()">
@@ -111,9 +47,9 @@
     
           
     
-          <button *ngIf="!hasCurrentOrder else currentOrderButton" mat-raised-button [disabled]="currentItem == '' || currentQuantity == ''"  (click)="addToList()">Add to cart</button>
+          <button *ngIf="!hasCurrentOrder else currentOrderButton" mat-raised-button [disabled]="currentItem == '' || currentQuantity == '' || !isItemValid"  (click)="addToList()">Add to cart</button>
           <ng-template #currentOrderButton>
-            <button mat-raised-button (click)="addToOrder()" [disabled]="currentItem == '' || currentQuantity == ''">Add to current order</button>
+            <button mat-raised-button (click)="addToOrder()" [disabled]="currentItem == '' || currentQuantity == '' || !isItemValid">Add to current order</button>
           </ng-template>
         </div>
       </div>
@@ -157,7 +93,6 @@
       </ng-container> 
 
       <ng-container *ngIf="hasCurrentOrder && isActiveOrder">
-        <div style="background-color: aquamarine;">test</div>
         <div class="activeOrderContainer">
           <div class="activeOrderTitle">Current Order</div>
           <div class="activeOrderScrollContainer">
@@ -166,7 +101,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'todo','increase')">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'todo','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -175,7 +110,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'todo','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'todo','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -183,7 +118,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -194,7 +129,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'health','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'health','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -203,7 +138,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'health','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'health','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -211,7 +146,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -222,7 +157,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'dairy','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'dairy','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -231,7 +166,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'dairy','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'dairy','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -239,7 +174,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -250,7 +185,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'breakfast','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'breakfast','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -259,7 +194,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'breakfast','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'breakfast','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -267,7 +202,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -278,7 +213,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'international','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'international','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -287,7 +222,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'international','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'international','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -295,7 +230,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -306,7 +241,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'baking','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'baking','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -315,7 +250,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'baking','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'baking','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -323,7 +258,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -334,7 +269,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'grains','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'grains','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -343,7 +278,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'grains','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'grains','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -351,7 +286,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -362,7 +297,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'snacks','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'snacks','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -371,7 +306,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'snacks','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'snacks','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -379,7 +314,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -390,7 +325,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'pet','increase')">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'pet','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -399,7 +334,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'pet','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'pet','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -407,7 +342,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -418,7 +353,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'household','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'household','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -427,7 +362,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'household','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'household','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -435,7 +370,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')"> 
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')"> 
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -446,7 +381,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'beverages','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'beverages','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -455,7 +390,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'beverages','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'beverages','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -463,7 +398,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -474,7 +409,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'bread','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'bread','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -483,7 +418,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'bread','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'bread','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -491,7 +426,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -502,7 +437,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'frozen','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'frozen','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -511,7 +446,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'frozen','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'frozen','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -519,7 +454,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -530,7 +465,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'meat','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'meat','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -539,7 +474,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'meat','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'meat','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -547,7 +482,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -558,7 +493,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'produce','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'produce','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -567,7 +502,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'produce','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'produce','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -575,7 +510,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -586,7 +521,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'bakery','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'bakery','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -595,7 +530,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'bakery','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'bakery','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -603,7 +538,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -614,7 +549,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'deli','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'deli','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -623,7 +558,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'deli','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'deli','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -631,7 +566,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
@@ -643,7 +578,7 @@
               <img [src]=item.image height="auto" width="50px">
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'completed','increase');sendActiveOrderMessage()">
+                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'completed','increased')">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
                     <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
                   </svg>
@@ -652,7 +587,7 @@
                 <div style="padding: 0; margin: 0;text-align: center;">
                   {{item.quantity}}
                 </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'completed','decrease')"> 
+                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'completed','decreased')"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
                     <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
                   </svg>
@@ -660,7 +595,7 @@
                 
                 
               </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','delete')">
+              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
                   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>

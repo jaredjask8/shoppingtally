@@ -48,7 +48,7 @@ public class AuthenticationController {
 	
 	@CrossOrigin
 	@PostMapping("/addToList")
-	public String addToList(@RequestBody ListItemRequest item) {
+	public ListToFrontendWithCount addToList(@RequestBody ListItemRequest item) {
 		return service.updateCurrentList(item);
 	}
 	

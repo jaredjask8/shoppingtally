@@ -53,7 +53,7 @@ export class ProfileListsComponent implements OnInit{
 
   addItemFromMasterList(index){
     this.listService.addListItem(this.fullList[index]).subscribe(d=>{
-      this.navService.cartCount.next(d)
+      this.navService.cartCount.next(d.itemCount.toString())
     })
   }
 

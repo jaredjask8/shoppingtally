@@ -62,6 +62,10 @@
   width:400px !important;
 }
 
+::ng-deep .mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color:#2A246A !important;
+}
+
 .input-container{
   display: flex;
   width:100%;

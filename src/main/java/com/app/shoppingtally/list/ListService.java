@@ -35,6 +35,7 @@ import com.app.shoppingtally.list.models.UserOrderInfo;
 import com.app.shoppingtally.shopping.CurrentOrderEntity;
 import com.app.shoppingtally.shopping.CurrentOrderEntityShopperResponse;
 import com.app.shoppingtally.shopping.CurrentOrderEntityUserResponse;
+import com.app.shoppingtally.shopping.CurrentOrderEntityUserResponseWithUpdateMessage;
 import com.app.shoppingtally.shopping.CurrentOrderRepo;
 import com.app.shoppingtally.socket.Message;
 import com.app.shoppingtally.token.Token;
@@ -5138,7 +5139,7 @@ public class ListService {
 	
 	public void setSocketCommunication(String message) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
-		CurrentOrderEntityUserResponse activeOrder = objectMapper.readValue(message, CurrentOrderEntityUserResponse.class);
+		CurrentOrderEntityUserResponseWithUpdateMessage activeOrder = objectMapper.readValue(message, CurrentOrderEntityUserResponseWithUpdateMessage.class);
 		//get shopperId from date of order
 		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate().toString());
 		log.info(message);

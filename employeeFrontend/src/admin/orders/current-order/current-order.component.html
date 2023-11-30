@@ -1,9 +1,6 @@
-<p>current-order works!</p>
-<p>current-order works!</p>
-<p>current-order works!</p>
-<p>current-order works!</p>
 
-<div class="listsContainer" >
+<div class="orderContainer pt-5">
+<div class="listsContainer">
   <div class="example-container" cdkScrollable>
     <h2>To do</h2>
     
@@ -37,7 +34,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('todo',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('todo',item.name)">Complete</button>
         </div>
     </div>
   </div>
@@ -75,7 +72,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('health',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('health',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -113,7 +110,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('dairy',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('dairy',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -151,7 +148,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('breakfast',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('breakfast',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -189,7 +186,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('international',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('international',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -227,7 +224,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('baking',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('baking',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -265,7 +262,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('grains',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('grains',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -303,7 +300,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('snacks',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('snacks',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -341,7 +338,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('pet',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('pet',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -379,7 +376,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('household',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('household',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -417,7 +414,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('beverages',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('beverages',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -455,7 +452,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('bread',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('bread',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -493,7 +490,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('frozen',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('frozen',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -531,7 +528,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('meat',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('meat',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -569,7 +566,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('produce',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('produce',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -607,7 +604,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('bakery',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('bakery',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -645,7 +642,7 @@
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
           <img (click)="expandImage()" [src]=item.image height="auto" width="40px">
-          <button (click)="completeItem('deli',item.name)">Complete</button>
+          <button mat-raised-button (click)="completeItem('deli',item.name)">Complete</button>
         </div>
       </div>
     </div>
@@ -669,6 +666,13 @@
       </div>
     </div>
 </div>
+<h2 class="updateLogTitle">Update Log</h2>
+<div class="updateLogContainer">
+  <div class="updateLog" *ngFor="let update of updateLog">
+    <p>{{update}}</p>
+  </div>
+</div>
 
 
-  <button (click)="endCurrentOrder()">End Order</button>
+<button mat-raised-button class="endOrderButton mt-3" (click)="endCurrentOrder()">End Order</button>
+</div>
