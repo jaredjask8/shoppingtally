@@ -59,7 +59,7 @@
           <div class="activeOrderTitle">Current Order</div>
           <div class="activeOrderScrollContainer">
             <div class="activeOrderItemContainer" *ngFor="let item of currentOrderList">
-              <img *ngIf="currentImage != '' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != '' else imageTemplate" [src]=item.image height="auto" width="50px">
               <ng-template #imageTemplate>
                 <img src="../../assets/img/bag.png" height="auto" width="50px">
               </ng-template>
@@ -101,7 +101,10 @@
           <div class="activeOrderScrollContainer">
             <div class="categoryTitle">Todo</div>
             <div class="activeOrderItemContainer" *ngFor="let item of todo">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'todo','increased')">
@@ -129,7 +132,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of health">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'health','increased')">
@@ -157,7 +163,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of dairy">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'dairy','increased')">
@@ -185,7 +194,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of breakfast">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf=" item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'breakfast','increased')">
@@ -213,7 +225,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of international">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'international','increased')">
@@ -241,7 +256,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of baking">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'baking','increased')">
@@ -269,7 +287,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of grains">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'grains','increased')">
@@ -297,7 +318,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of snacks">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'snacks','increased')">
@@ -325,7 +349,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of pet">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'pet','increased')">
@@ -353,7 +380,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of household">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'household','increased')">
@@ -381,7 +411,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of beverages">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'beverages','increased')">
@@ -409,7 +442,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of bread">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'bread','increased')">
@@ -437,7 +473,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of frozen">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'frozen','increased')">
@@ -465,7 +504,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of meat">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'meat','increased')">
@@ -493,7 +535,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of produce">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'produce','increased')">
@@ -521,7 +566,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of bakery">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'bakery','increased')">
@@ -549,7 +597,10 @@
               </div>
             </div>
             <div class="activeOrderItemContainer" *ngFor="let item of deli">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'deli','increased')">
@@ -578,7 +629,10 @@
             </div>
             <div class="categoryTitle">Completed</div>
             <div class="activeOrderItemContainer" *ngFor="let item of completed">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'completed','increased')">
