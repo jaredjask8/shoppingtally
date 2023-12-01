@@ -7,12 +7,10 @@
   <mat-step label="Review">
       <div class="tableContainer">
           <div class="rowContainer pt-2 pb-3" *ngFor="let item of yes">
-            <div *ngIf="item.image == 'null'">
-              <img src='../../../assets/img/bag.png' height="70px" width="70px">
-            </div>
-            <div *ngIf="item.image != 'null'">
-              <img [src]='item.image' height="auto" width="70px">
-            </div>
+            <img *ngIf="item.image != 'undefined' else imageTemplate" [src]=item.image height="70px" width="70px">
+            <ng-template #imageTemplate>
+              <img src="../../../assets/img/bag.png" height="auto" width="50px">
+            </ng-template>
             <div style="width: 150px; text-align: center;">
               {{item.name}}
             </div>

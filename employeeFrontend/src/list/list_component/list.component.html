@@ -59,7 +59,10 @@
           <div class="activeOrderTitle">Current Order</div>
           <div class="activeOrderScrollContainer">
             <div class="activeOrderItemContainer" *ngFor="let item of currentOrderList">
-              <img [src]=item.image height="auto" width="50px">
+              <img *ngIf="currentImage != '' else imageTemplate" [src]=item.image height="auto" width="50px">
+              <ng-template #imageTemplate>
+                <img src="../../assets/img/bag.png" height="auto" width="50px">
+              </ng-template>
               <div class="orderNameContainer">{{item.name}}</div>
               <div class="quantityContainer">
                 <div class="upArrow" (click)="increaseCurrentOrderQuantity(item)">

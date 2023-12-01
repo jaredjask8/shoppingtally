@@ -47,7 +47,7 @@ export class ListComponent implements OnInit, OnDestroy {
   previousImage: any;
   currentItem: string = '';
   currentQuantity: string = '';
-  currentImage: string;
+  currentImage: string = "";
   currentDate: string = "";
   isSearchClicked: boolean = false
   currentOrderDate: string;
@@ -276,7 +276,7 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   setItemName(item:string) {
-    
+
       if(this.checkItemValidity(item)){
         this.isItemValid = true;
         this.currentItem = item;
@@ -300,6 +300,7 @@ export class ListComponent implements OnInit, OnDestroy {
       let count = d.itemCount.toString()
       this.navService.cartCount.next(count);
     })
+    
     this.snackBar.open("Item added")
     setTimeout(()=>{this.snackBar.dismiss()},2000)
     //this.list.push(item)
@@ -375,6 +376,7 @@ export class ListComponent implements OnInit, OnDestroy {
         this.currentOrderList = d
       })
       this.snackBar.open("Item added")
+      console.log(this.currentImage)
       setTimeout(()=>{this.snackBar.dismiss()},2000)
     }
 
