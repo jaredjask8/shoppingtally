@@ -160,17 +160,22 @@ export class ProfileListsComponent implements OnInit{
   }
 
   addItemToCart(index){
-    if(this.checkItemValidity(this.fullList[index].name)){
-      this.listService.addListItem(this.fullList[index]).subscribe(d=>{
-        this.navService.cartCount.next(d.itemCount.toString())
-        this.cart = d
-      })
-      this.snackBar.open("Item added")
-      setTimeout(()=>{this.snackBar.dismiss()},2000)
-    }else{
-      this.snackBar.open("Item already in current order")
-      setTimeout(()=>{this.snackBar.dismiss()},2000)
-    }
+    let that = this
+    this.listService.getCurrentList().subscribe(d=>{
+      that.cart = d
+      if(that.checkItemValidity(that.fullList[index].name)){
+        that.listService.addListItem(that.fullList[index]).subscribe(d=>{
+          that.navService.cartCount.next(d.itemCount.toString())
+          that.cart = d
+        })
+        that.snackBar.open("Item added")
+        setTimeout(()=>{that.snackBar.dismiss()},2000)
+      }else{
+        that.snackBar.open("Item already in current order")
+        setTimeout(()=>{that.snackBar.dismiss()},2000)
+      }
+    })
+    
     
   }
 
