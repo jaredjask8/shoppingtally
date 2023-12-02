@@ -298,11 +298,13 @@ export class StepperComponent implements OnInit, AfterViewInit{
   }
 
   dateIsSelected(){
+    console.log(this.yes)
     if(this.selectedHour == ""){
       return true;
     }else{
       return false;
     }
+    
   }
 
   //if shopper is different from previous and clicked reset the date with this.model

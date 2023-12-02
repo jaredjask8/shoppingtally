@@ -276,7 +276,6 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   setItemName(item:string) {
-
       if(this.checkItemValidity(item)){
         this.isItemValid = true;
         this.currentItem = item;

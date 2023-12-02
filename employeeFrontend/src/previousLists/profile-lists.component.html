@@ -26,10 +26,15 @@
       <h1 class="mb-3">Master List</h1>
       <div class="yes mt-3" *ngIf="!inputUsed else filteredFullList">
         <div class="listContainer" *ngFor="let item of fullList; let i = index">
-          <img [src]="item.image" height="40px" width="auto">
+          <img *ngIf="item.image != '' && item.image != 'null' else imageTemplate" [src]="item.image" height="40px" width="auto">
+          <ng-template #imageTemplate>
+            <img src="../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
           <div class="nameContainer">{{item.name}}</div>
-          <div>{{item.quantity}}</div>
-          <button mat-raised-button (click)="addItemFromMasterList(i)">Add to cart</button>
+          <button *ngIf="!hasOrder else orderButtonTemplate" mat-raised-button (click)="addItemToCart(i)">Add to cart</button>
+          <ng-template #orderButtonTemplate>
+            <button mat-raised-button (click)="addItemToOrderState(i)">Add to order</button>
+          </ng-template>
         </div>
       </div>
       <ng-template #filteredFullList>
@@ -37,8 +42,10 @@
           <div class="listContainer" *ngFor="let item of filteredList; let i = index">
             <img [src]="item.image" height="40px" width="auto">
             <div class="nameContainer">{{item.name}}</div>
-            <div>{{item.quantity}}</div>
-            <button mat-raised-button (click)="addItemFromMasterList(i)">Add to cart</button>
+            <button *ngIf="!hasOrder else orderButtonTemplate" mat-raised-button (click)="addItemToCart(i)">Add to cart</button>
+            <ng-template #orderButtonTemplate>
+              <button mat-raised-button (click)="addItemToOrderState(i)">Add to order</button>
+            </ng-template>
           </div>
         </div>
       </ng-template>

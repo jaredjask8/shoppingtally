@@ -7,7 +7,7 @@
   <mat-step label="Review">
       <div class="tableContainer">
           <div class="rowContainer pt-2 pb-3" *ngFor="let item of yes">
-            <img *ngIf="item.image != 'undefined' else imageTemplate" [src]=item.image height="70px" width="70px">
+            <img *ngIf="item.image != 'undefined' && item.image != 'null' else imageTemplate" [src]=item.image height="70px" width="70px">
             <ng-template #imageTemplate>
               <img src="../../../assets/img/bag.png" height="auto" width="50px">
             </ng-template>
@@ -126,7 +126,13 @@
       <mat-table [dataSource]="yes" class="table">
         <ng-container matColumnDef="image">
           <mat-header-cell *matHeaderCellDef> Image</mat-header-cell>
-          <mat-cell *matCellDef="let row"> <img [src]=row.image> </mat-cell>
+          <mat-cell *matCellDef="let row"> 
+            <img *ngIf="row.image != 'undefined' && row.image != 'null' else imageTemplate" [src]=row.image height="auto" width="70px"> 
+            <ng-template #imageTemplate>
+              <img src="../../../assets/img/bag.png" height="auto" width="70px">
+            </ng-template>
+          </mat-cell>
+          
         </ng-container>  
         
         <ng-container matColumnDef="name">
