@@ -11,7 +11,7 @@ import { Recipes } from './models/Recipes';
 export class MealkitService implements OnInit{
   //"http://localhost:8080"
   //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
-  serverUrl = "http://localhost:8080"
+  serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
   constructor(private http:HttpClient, private userService:EnvironmentService) { }
 
   ngOnInit(){
