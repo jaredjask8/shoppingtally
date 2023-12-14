@@ -23,6 +23,9 @@ public class Recipes {
 	public String id;
 	public String name;
 	public List<Ingredient> ingredients;
-	public List<String> directions;
+	public List<String> steps;
+	public List<String> tags;
 	public String description;
+	public String image;
+	public String servingSize;
 }

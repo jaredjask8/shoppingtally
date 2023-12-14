@@ -1,5 +1,7 @@
 export interface IngredientsInterface{
-    ingredient:string
     quantity:string
+    initialQuantity:string
     unit:string
+    basicIngredient:string
+    recipeIngredient:string
 }

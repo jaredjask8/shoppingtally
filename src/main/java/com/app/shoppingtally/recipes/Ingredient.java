@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Ingredient {
-	String ingredient;
-	String measurement;
+	String basicIngredient;
+	String recipeIngredient;
+	String unit;
+	String quantity;
+	String initialQuantity;
 }

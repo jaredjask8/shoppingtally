@@ -1,0 +1,107 @@
+.mealkitContainer{
+    padding-top: 70px;
+}
+.recipesContainer{
+    height:200px;
+    width: 100%;
+    background-color: white;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+.recipeContainer{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.recipeContainer:hover{
+    .recipeName{
+        background-color: rgba(5, 5, 5, 1);
+    }
+}
+
+.recipeSearchContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width:100%;
+    background-color: white;
+}
+
+
+
+.recipeName{
+    text-align: center;
+    position: absolute;
+    color: white;
+    bottom: 0px;
+    width: 150px;
+    padding: 10px;
+    line-height: 1;
+    background-color: rgba(5, 5, 5, .3);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    transition:  background .4s ease-in-out;
+}
+
+img{
+    border-radius: 20px;
+}
+
+img:hover{
+    .recipeName{
+        background-color: rgba(5, 5, 5, 1);
+    }
+}
+
+h1{
+    text-align: center;
+}
+
+h5{
+    text-align: center;
+}
+
+.currentRecipeContainer{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.currentRecipeDataContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.currentRecipeImage{
+    margin-right: 100px;
+}
+
+
+.tagsContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+  }
+
+  .currentRecipeContainerWithImage{
+    display:flex;
+    background-color: white;
+    justify-content: center;
+    
+  }
+
+  @media(max-width:1000px){
+    .currentRecipeImage{
+        display: none;
+    }
+  }

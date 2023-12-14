@@ -14,9 +14,21 @@
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
             </svg>
         </button>
+        <h5 class="mt-4">Add serving size</h5>
+        <mat-form-field>
+            <mat-label>Select size</mat-label>
+            <mat-select #servingSizeSelect formControlName="sizeControl">
+                <mat-option [value]=num *ngFor="let num of [1,2,3,4,5,6,7,8,9,10]; let i = index">
+                    {{num}}
+                  </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button (click)="setServingSize(servingSizeSelect.value)" mat-raised-button>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+            </svg>
+        </button>
         <h5 class="mt-4">Add ingredients</h5>
- 
-
         <form [formGroup]="ingredientsForm" class="ingredientsForm">
             <mat-form-field>
                 <mat-label>Select quantity</mat-label>
@@ -35,17 +47,35 @@
                 </mat-select>
             </mat-form-field>
             <mat-form-field>
-                <mat-label>Ingredient</mat-label>
-                <input formControlName="ingredientControl" #ingredientTemplate matInput placeholder="Shredded potato">
+                <mat-label>Recipe ingredient</mat-label>
+                <input formControlName="trueIngredientControl" #recipeIngredientTemplate matInput placeholder="Shredded potato">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Basic ingredient</mat-label>
+                <input formControlName="basicIngredientControl" #basicIngredientTemplate matInput placeholder="Potato">
             </mat-form-field>
         </form>
             
-        <button (click)="addToRecipeIngredients(quantitySelect.value, ingredientTemplate.value, unitSelect.value)" mat-raised-button>
+        <button (click)="addToRecipeIngredients(quantitySelect.value, basicIngredientTemplate.value,recipeIngredientTemplate.value,unitSelect.value)" mat-raised-button>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
             </svg>
         </button>
 
+        <h5 class="mt-4">Add recipe tag</h5>
+        <mat-form-field>
+            <mat-label>Tag</mat-label>
+            <mat-select #tagSelect>
+                <mat-option [value]=tag *ngFor="let tag of tags; let i = index">
+                    {{tag}}
+                  </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button (click)="addToRecipeTags(tagSelect.value)" mat-raised-button>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+            </svg>
+        </button>
         <h5 class="mt-4">Add steps</h5>
         <mat-form-field>
             <mat-label>Step</mat-label>
@@ -58,7 +88,6 @@
         </button>
 
         <h5 class="mt-4">Add description</h5>
-        
         <mat-form-field>
             <mat-label>Description</mat-label>
             <input #descriptionTemplate matInput placeholder="Ex. Pizza">
@@ -83,7 +112,8 @@
             <h5 class="mt-2">Ingredients</h5>
             <ng-container *ngIf="recipeIngredients.length != 0 else recipeIngredientsSkeleton">
                 <div class="recipeDataContainer" *ngFor="let ingredient of recipeIngredients; let i = index">
-                    <div style="width: 500px;">{{i+1}} . {{ingredient.quantity}} {{ingredient.unit}} {{ingredient.ingredient}}</div>
+                    <div style="width: 200px;">{{i+1}} . RI = {{ingredient.quantity}} {{ingredient.unit}} {{ingredient.recipeIngredient}} </div>
+                    <div style="width: 200px;">BI = {{ingredient.basicIngredient}}</div>
                     <svg (click)="editIngredients(i, ingredient)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                         <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
                     </svg>
@@ -114,13 +144,48 @@
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field>
-                        <mat-label>Ingredient</mat-label>
-                        <input #ingredientEditTemplate matInput placeholder="Shredded potato" [value]=recipeIngredients[currentIngredientsEditIndex].ingredient>
+                        <mat-label>Recipe ingredient</mat-label>
+                        <input #recipeIngredientEditTemplate matInput placeholder="Shredded potato" [value]=recipeIngredients[currentIngredientsEditIndex].recipeIngredient>
                     </mat-form-field>
-                    <button class="finishEditButton m-2" (click)="finishIngredientsEdit(quantityEditSelect.value,unitEditSelect.value,ingredientEditTemplate.value)" mat-raised-button>Finish</button>
+                    <mat-form-field>
+                        <mat-label>Basic ingredient</mat-label>
+                        <input #basicIngredientEditTemplate matInput placeholder="Shredded potato" [value]=recipeIngredients[currentIngredientsEditIndex].basicIngredient>
+                    </mat-form-field>
+                    <button class="finishEditButton m-2" (click)="finishIngredientsEdit(quantityEditSelect.value,unitEditSelect.value,basicIngredientEditTemplate.value,recipeIngredientEditTemplate.value)" mat-raised-button>Finish</button>
                 </div>
                 
             </div>
+        </div>
+        <div class="mt-2 recipeSkeletonContainer">
+            <h5 class="mt-2">Tags</h5>
+            <ng-container *ngIf="recipeTags.length != 0 else recipeTagsSkeleton"> 
+                <div class="container-fluid">
+                    <div class="row gy-3">
+                        <div class="col-6 col-sm-4 col-lg-2 tagsContainer" *ngFor="let tag of recipeTags; let i = index">
+                            <button mat-raised-button class="mr-3">{{tag}}</button>
+                        </div>
+                    </div>
+                </div>
+                
+            </ng-container>
+            <ng-template #recipeTagsSkeleton>
+                <div class="recipeTagsSkeletonRow">
+                    <button class="mt-2 recipeSkeletonButtons" mat-raised-button></button>
+                    <button class="mt-2 recipeSkeletonButtons" mat-raised-button></button>
+                    <button class="mt-2 recipeSkeletonButtons" mat-raised-button></button>
+                </div>
+                <div class="recipeTagsSkeletonRow">
+                    <button class="mt-2 recipeSkeletonButtons" mat-raised-button></button>
+                    <button class="mt-2 recipeSkeletonButtons" mat-raised-button></button>
+                    <button class="mt-2 recipeSkeletonButtons" mat-raised-button></button>
+                </div>
+                <div class="recipeTagsSkeletonRow">
+                    <button class="mt-2 recipeSkeletonButtons" mat-raised-button></button>
+                    <button class="mt-2 recipeSkeletonButtons" mat-raised-button></button>
+                    <button class="mt-2 recipeSkeletonButtons" mat-raised-button></button>
+                </div>
+            </ng-template>
+            
         </div>
         <div class="mt-2 recipeSkeletonContainer">
             <h5 class="mt-2">Steps</h5>
@@ -160,6 +225,6 @@
         </div>
     </div>
     
-    
+    <button (click)="addRecipe()" [disabled]="recipeName == '' || recipeIngredients.length == 0 || recipeSteps.length == 0" class="mt-3" mat-raised-button>Add to recipes</button>
 </div>
 

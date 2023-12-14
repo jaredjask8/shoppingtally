@@ -258,16 +258,6 @@ export class ListComponent implements OnInit, OnDestroy {
     this.listService.deleteCurrentOrderItem(item).subscribe(d => this.currentOrderList = d)
   }
 
-
-
-  getItems() {
-    this.service.getItems(this.customItem).subscribe(d => {
-      this.brandedArray = of(d.branded)
-    });
-
-
-  }
-
   getImages(item:string) {
     this.service.getImages(item).subscribe(d => {
       this.googleImageArray = of(d.items)
@@ -279,7 +269,6 @@ export class ListComponent implements OnInit, OnDestroy {
       if(this.checkItemValidity(item)){
         this.isItemValid = true;
         this.currentItem = item;
-        console.log("item not in list")
       }else{
         //hide button and display message
         this.isItemValid = false;

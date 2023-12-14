@@ -117,7 +117,7 @@ public class ListService {
 		}
 	}
 	
-	List<ListItemResponse> convertStringListToArray(String list){
+	public List<ListItemResponse> convertStringListToArray(String list){
 		if( list != null) {
 			List<ListItemResponse> listArray = new ArrayList<ListItemResponse>();
 			var tempArray = list.split("~");

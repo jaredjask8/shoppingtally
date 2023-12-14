@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +22,7 @@ import com.app.shoppingtally.auth.models.ListToFrontendWithCount;
 import com.app.shoppingtally.auth.models.ListItemRequest;
 import com.app.shoppingtally.config.JwtService;
 import com.app.shoppingtally.list.ListRepository;
+import com.app.shoppingtally.list.ListService;
 import com.app.shoppingtally.list.UserList;
 import com.app.shoppingtally.token.Token;
 import com.app.shoppingtally.token.TokenRepository;
@@ -44,6 +46,7 @@ public class AuthenticationService {
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
 	private final TokenRepository tokenRepository;
+	ListUtils listUtils = new ListUtils();
 	
 	
 	public AuthenticationResponse register(RegisterRequest request) {
@@ -96,8 +99,8 @@ public class AuthenticationService {
 		return repository.findByEmail(jwtService.extractUsername(token.getToken())).get();
 	}
 	
-	public ListToFrontendWithCount updateCurrentList(ListItemRequest item) {
-		User user = repository.findByEmail(jwtService.extractUsername(item.getToken())).get();
+	public ListToFrontendWithCount updateCurrentList(ListItemRequest item, String token) {
+		User user = repository.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token))).get();
 		String currentList = user.getCurrentList();
 		user.setCurrentList(currentList+=item.getCurrentItem());
 		repository.save(user);
@@ -109,21 +112,24 @@ public class AuthenticationService {
 				.build();
 	}
 	
-	public String updateCurrentListWithFullList(FullListRequest list) {
+	public ListToFrontendWithCount updateCurrentListWithFullList(List<ListItemResponse> list, String token) {
 		//log.info(list.toString());
-		User user = repository.findByEmail(jwtService.extractUsername(list.getToken())).get();
-		String currentList = user.getCurrentList();
+		Optional<User> user = repository.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		String currentList = user.get().getCurrentList();
 		String tempList="";
 		
-		for(ListItemResponse d:list.getList()) {
+		for(ListItemResponse d:list) {
 			tempList+=d.getImage()+"+"+d.getName()+"+"+d.getQuantity()+"~";
 		}
 		
-		user.setCurrentList(currentList+=tempList);
-		repository.save(user);
+		user.get().setCurrentList(currentList+=tempList);
+		repository.save(user.get());
 		
 		
-		return tempList;
+		return ListToFrontendWithCount.builder()
+				.itemCount(listUtils.convertStringListToArray(user.get().getCurrentList()).size())
+				.list(listUtils.convertStringListToArray(user.get().getCurrentList()))
+				.build();
 	}
 	
 	public ListToFrontendWithCount deleteListItem(ListFromFrontend list) {

@@ -23,7 +23,9 @@ import com.app.shoppingtally.token.Token;
 import com.app.shoppingtally.user.User;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -48,14 +50,15 @@ public class AuthenticationController {
 	
 	@CrossOrigin
 	@PostMapping("/addToList")
-	public ListToFrontendWithCount addToList(@RequestBody ListItemRequest item) {
-		return service.updateCurrentList(item);
+	public ListToFrontendWithCount addToList(@RequestBody ListItemRequest item, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return service.updateCurrentList(item,token);
 	}
 	
 	@CrossOrigin
 	@PostMapping("/addFullList")
-	public String addToList(@RequestBody FullListRequest list) {
-		return service.updateCurrentListWithFullList(list);
+	public ListToFrontendWithCount addToList(@RequestBody List<ListItemResponse> list, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		log.info(token);
+		return service.updateCurrentListWithFullList(list,token);
 		
 	}
 	

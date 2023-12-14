@@ -14,6 +14,7 @@ const routes: Routes = [
 	{ path: 'profile', loadChildren: () => import('../profile/profile.module').then(m => m.ProfileModule) },
 	{ path: 'reviews', loadChildren: () => import('../reviews/reviews.module').then(m => m.ReviewsModule) },
 	{ path: 'admin', loadChildren: () => import('../admin/admin.module').then(m => m.AdminModule)}, //, canActivate:[adminGuard]
+	{ path: 'mealkit', loadChildren: () => import('../mealkit/mealkit.module').then(m => m.MealkitModule) },
 	{ path: '**', redirectTo: 'home' }
 ];
 

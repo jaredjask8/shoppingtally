@@ -1,9 +1,21 @@
 import { IngredientsInterface } from "./IngredientsInterface";
 
-export interface Recipes{
-    id:string;
+export class Recipes{
     ingredients:IngredientsInterface[]
-    directions:string[]
+    steps:string[]
     name:string
     description:string
+    image:string
+    tags:string[]
+    servingSize:string
+
+    constructor(ingredients:IngredientsInterface[],steps:string[],name:string,description:string,image:string,tags:string[],servingSize:string){
+        this.ingredients = ingredients;
+        this.description = description;
+        this.name = name;
+        this.steps = steps;
+        this.image = image   
+        this.tags = tags
+        this.servingSize = servingSize
+    }
 }

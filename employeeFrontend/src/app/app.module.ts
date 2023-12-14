@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule} from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NavComponent } from 'src/global/nav/nav.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
@@ -24,6 +24,7 @@ import { LoginModalComponent } from 'src/global/bootstrap-components/login-modal
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { RegisterModalComponent } from 'src/global/bootstrap-components/register-modal/register-modal.component';
 import { OrderModalComponent } from 'src/global/bootstrap-components/order-modal/order-modal.component';
+import { MyInterceptor } from './MyInterceptor';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,7 @@ import { OrderModalComponent } from 'src/global/bootstrap-components/order-modal
     OrderModalComponent
     
   ],
-  providers: [EnvironmentService],
+  providers: [EnvironmentService,{ provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true }],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

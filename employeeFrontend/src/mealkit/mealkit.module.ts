@@ -3,22 +3,25 @@ import { CommonModule } from '@angular/common';
 
 import { MealkitRoutingModule } from './mealkit-routing.module';
 import { MealkitComponent } from './mealkit.component';
-import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSelect, MatSelectModule } from '@angular/material/select';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
-  declarations: [MealkitComponent],
+  declarations: [
+    MealkitComponent
+  ],
   imports: [
     CommonModule,
     MealkitRoutingModule,
-    MatInputModule,
     MatButtonModule,
-    MatSelectModule,
     FormsModule,
-    ReactiveFormsModule
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule
   ]
 })
 export class MealkitModule { }

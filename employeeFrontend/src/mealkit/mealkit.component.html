@@ -1,0 +1,85 @@
+<div class="mealkitContainer">
+    <h1>Recipes</h1>
+<div class="recipesContainer container-fluid p-3">
+    <div class="row g-5">
+        <ng-container *ngIf="!isTagActive && !isNameActive">
+            <div class="col-6 col-sm-4 col-md-3 col-xl-2 recipeContainer" *ngFor="let recipe of recipeArray">
+                <img (click)="loadRecipeData(recipe)" class="recipeImage" [src]=recipe.image height="170px" width="150px">
+                <div class="recipeName">{{recipe.name}}</div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="isTagActive">
+            <div class="col-6 col-sm-4 col-md-3 col-xl-2 recipeContainer" *ngFor="let recipe of filterByTagsArray">
+                <img (click)="loadRecipeData(recipe)" class="recipeImage" [src]=recipe.image height="170px" width="150px">
+                <div class="recipeName">{{recipe.name}}</div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="isNameActive">
+            <div class="col-6 col-sm-4 col-md-3 col-xl-2 recipeContainer" *ngFor="let recipe of filterByNameArray">
+                <img (click)="loadRecipeData(recipe)" class="recipeImage" [src]=recipe.image height="170px" width="150px">
+                <div class="recipeName">{{recipe.name}}</div>
+            </div>
+        </ng-container>
+    </div>
+    
+</div>
+<div class="recipeSearchContainer p-3">
+    <h5>Search recipe by name or tag</h5>
+    <mat-form-field>
+        <mat-label>Name / Tag</mat-label>
+        <input #recipeSearchTemplate matInput placeholder="Ex... /pork/vegan/chicken" (keyup)="searchForRecipe(recipeSearchTemplate.value)">
+    </mat-form-field>
+</div>
+
+<div class="currentRecipeContainerWithImage mt-3 p-4" *ngIf="currentRecipe">
+    <img class="currentRecipeImage" [src]=currentRecipe.image height="auto" width="500px">
+    <div  class="currentRecipeContainer mt-2">
+        <h1>{{currentRecipe.name}}</h1>
+        <h5>Serving size : {{currentServingSize}}</h5>
+        <h4 class="mt-3">Ingredients</h4>
+        <ng-container *ngIf="setInitialCurrentRecipe else convertedRecipeArrayTemplate">
+            <div class="currentRecipeDataContainer" *ngFor="let ingredient of currentRecipe.ingredients">
+                {{ingredient.initialQuantity}} {{ingredient.unit}} {{ingredient.recipeIngredient}}
+            </div>
+        </ng-container>
+        <ng-template #convertedRecipeArrayTemplate>
+            <div class="currentRecipeDataContainer" *ngFor="let ingredient of convertedRecipeArray.ingredients">
+                {{ingredient.quantity}} {{ingredient.unit}} {{ingredient.recipeIngredient}}
+            </div>
+        </ng-template>
+        
+        
+    
+        <h4 class="mt-3">Steps</h4>
+        <div class="currentRecipeDataContainer" *ngFor="let step of currentRecipe.steps;let i = index">
+            {{i+1}} . {{step}}
+        </div>
+        <h4 class="mt-3">Change serving size</h4>
+        <mat-form-field>
+            <mat-label>Select size</mat-label>
+            <mat-select #servingSizeSelect (selectionChange)="convert(servingSizeSelect.value)">
+                <mat-option [value]=num *ngFor="let num of servingSizeArray; let i = index">
+                    {{num}}
+                  </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <h4 class="mt-3">Tags</h4>
+        <div class="tagsContainer">
+            <div *ngFor="let tag of currentRecipe.tags; let i = index">
+                <button mat-raised-button class="ml-3">{{tag}}</button>
+            </div>
+        </div>
+        <button *ngIf="hasCartOrder else orderButtonTemplate" (click)="addRecipeToCart()" class="mt-3" mat-raised-button>Add recipe to cart</button>
+        <ng-template #orderButtonTemplate>
+            <button mat-raised-button (click)="addRecipeToOrderState()">Add to order</button>
+        </ng-template>
+    
+    </div>
+
+    
+</div>
+</div>
+
+
+
+
