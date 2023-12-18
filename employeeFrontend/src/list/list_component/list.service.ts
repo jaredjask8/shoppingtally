@@ -120,12 +120,12 @@ export class ListService {
     return this.http.post<List>(this.serverUrl+"/api/v1/auth/addFullList",list)
   }
 
-  addFullListToCurrentOrder(list:ListItemInterface[]){
-
+  addFullListToCurrentOrder(list:ListItemInterface[]):Observable<ListItemInterface[]>{
+    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/addListToCurrentOrder",list)
   }
 
-  addFullListToActiveOrder(list:ListItemInterface[]){
-
+  addFullListToActiveOrder(list:ListItemInterface[]):Observable<CurrentOrderUser>{
+    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/addListToActiveOrder",list)
   }
 
   getCurrentList():Observable<List>{
@@ -135,9 +135,7 @@ export class ListService {
   }
 
   getUserList():Observable<List>{
-    let token = this.userService.getEnvironment().token
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<List>(this.serverUrl+"/api/v1/list/getUserList",token,{headers:headers})
+    return this.http.post<List>(this.serverUrl+"/api/v1/list/getUserList",null)
   }
 
   removeListItem(list:string):Observable<List>{
@@ -152,11 +150,6 @@ export class ListService {
   }
 
   decreaseQuantity(currentList:ListItem[],itemName:string):Observable<List>{
-    let token = this.userService.getEnvironment().token
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-
-    console.log(token)
-    
     //take current list 
     //find item we are changing 
     //change string to update quantity
@@ -170,15 +163,10 @@ export class ListService {
         d.quantity = updatedQuantity
       }
     })
-    return this.http.post<List>(this.serverUrl+"/api/v1/auth/updateQuantity",{token:token, list:tempList},{headers:headers})
+    return this.http.post<List>(this.serverUrl+"/api/v1/auth/updateQuantity",{list:tempList})
   }
 
   increaseQuantity(currentList:ListItem[],itemName:string):Observable<List>{
-    let token = this.userService.getEnvironment().token
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-
-    console.log(token)
-    
     //take current list 
     //find item we are changing 
     //change string to update quantity
@@ -192,37 +180,27 @@ export class ListService {
         d.quantity = updatedQuantity;
       }
     })
-    return this.http.post<List>(this.serverUrl+"/api/v1/auth/updateQuantity",{token:token, list:tempList},{headers:headers})
+    return this.http.post<List>(this.serverUrl+"/api/v1/auth/updateQuantity",{list:tempList})
   }
 
   increaseCurrentOrderQuantity(item:ListItem):Observable<ListItemInterface[]>{
-    let token = this.userService.getEnvironment().token
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/increaseCurrentOrderQuantity",item,{headers:headers})
+    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/increaseCurrentOrderQuantity",item)
   }
 
   decreaseCurrentOrderQuantity(item:ListItem):Observable<ListItemInterface[]>{
-    let token = this.userService.getEnvironment().token
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/decreaseCurrentOrderQuantity",item,{headers:headers})
+    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/decreaseCurrentOrderQuantity",item)
   }
 
   increaseActiveOrderQuantity(item, category):Observable<CurrentOrderUser>{
-    let token = this.userService.getEnvironment().token
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/increaseActiveOrderQuantity",{item,category},{headers:headers})
+    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/increaseActiveOrderQuantity",{item,category})
   }
 
   decreaseActiveOrderQuantity(item, category):Observable<CurrentOrderUser>{
-    let token = this.userService.getEnvironment().token
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/decreaseActiveOrderQuantity",{item,category},{headers:headers})
+    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/decreaseActiveOrderQuantity",{item,category})
   }
 
   deleteActiveOrderItem(item, category):Observable<CurrentOrderUser>{
-    let token = this.userService.getEnvironment().token
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/deleteActiveOrderItem",{item,category},{headers:headers})
+    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/deleteActiveOrderItem",{item,category})
   }
 
 

@@ -199,6 +199,29 @@ public class ListService {
 		
 	}
 	
+	List<ListItemResponse> addListToCurrentOrder(List<ListItemResponse> list, String token){
+		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		UserList currentOrder = listRepo.getUserListByCurrentOrder(user.get().getId());
+		String currentList = currentOrder.getList();
+		String updatedList = convertArrayListToString(list);
+		String newList = updatedList+=currentList;
+		currentOrder.setList(newList);
+		listRepo.save(currentOrder);
+		return convertStringListToArray(newList);
+	}
+	
+	CurrentOrderEntity addListToActiveOrder(List<ListItemResponse> list, String token){
+		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		CurrentOrderEntity activeOrder = currentOrderRepo.findByDate(listRepo.getCurrentList(user.get().getId()));
+		String currentTodoList = activeOrder.getTodoList();
+		String updatedList = convertArrayListToString(list);
+		String newList = updatedList+=currentTodoList;
+		activeOrder.setTodoList(newList);
+		currentOrderRepo.save(activeOrder);
+		return activeOrder;
+		
+	}
+	
 	List<ListItemResponse> addItemToCurrentOrder(ListItemResponse item, String token){
 		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
 		UserList list = listRepo.getUserListByCurrentOrder(user.get().getId());

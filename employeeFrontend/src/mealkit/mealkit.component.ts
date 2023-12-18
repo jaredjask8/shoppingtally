@@ -115,6 +115,8 @@ export class MealkitComponent implements OnInit{
   }
 
   convert(size:number){
+    let servingSizeToInt = parseInt(this.currentRecipe.servingSize)
+    let doMath = size - servingSizeToInt;
     this.currentServingSize = size
     if(this.currentServingSize == parseInt(this.currentRecipe.servingSize)){
       this.setInitialCurrentRecipe = true
@@ -123,13 +125,17 @@ export class MealkitComponent implements OnInit{
       this.convertedRecipeArray = this.currentRecipe
       this.currentRecipe.ingredients.forEach((d,index)=>{
         var x = new Fraction(d.initialQuantity);
-        this.convertedRecipeArray.ingredients[index].quantity = x.mul(size).toFraction(true)
+        this.convertedRecipeArray.ingredients[index].quantity = x.mul(doMath+1).toFraction(true)
+        
+        
       })
     }
     
   }
 
   loadRecipeData(recipe:Recipes){
+    this.setInitialCurrentRecipe = true
+    this.servingSizeArray = []
     this.itemsForCart = []
     this.currentRecipe = recipe
     this.currentRecipe.ingredients.forEach(d=>{
@@ -169,12 +175,18 @@ export class MealkitComponent implements OnInit{
       }
     })
     if(this.hasCurrentOrder && !this.isActive){
-      //this.listService.addFullListToCurrentOrder(filteredList).subscribe(d=>console.log(d))
+      if(filteredList.length){
+        this.listService.addFullListToCurrentOrder(filteredList).subscribe(d=>console.log(d))
+      }
+      
       //this.snackBar.open("Items added")
       //setTimeout(()=>{this.snackBar.dismiss()},2000)
 
     }else{
-      //this.listService.addFullListToActiveOrder(filteredList).subscribe(d=>console.log(d))
+      if(filteredList.length){
+        this.listService.addFullListToActiveOrder(filteredList).subscribe(d=>console.log(d))
+      }
+      console.log("in active")
       
     }
   }
@@ -216,7 +228,6 @@ export class MealkitComponent implements OnInit{
         if(d.name === item){
           itemFound = false;
         }
-        console.log(d)
       })
     }else{
       //active order state

@@ -120,6 +120,18 @@ public class ListController {
 	}
 	
 	@CrossOrigin
+	@PostMapping("/addListToCurrentOrder")
+	public List<ListItemResponse> addListToCurrentOrder(@RequestBody List<ListItemResponse> list, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.addListToCurrentOrder(list,token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/addListToActiveOrder")
+	public CurrentOrderEntity addListToActiveOrder(@RequestBody List<ListItemResponse> list, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.addListToActiveOrder(list,token);
+	}
+	
+	@CrossOrigin
 	@PostMapping("/addItemToCurrentOrder")
 	public List<ListItemResponse> addItemToCurrentOrder(@RequestBody ListItemResponse item, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 		return listService.addItemToCurrentOrder(item,token);
