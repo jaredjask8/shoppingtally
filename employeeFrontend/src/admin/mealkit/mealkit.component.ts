@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MealkitService } from './mealkit.service';
-import { MatInput, MatInputModule } from '@angular/material/input';
 import { IngredientsInterface } from './models/IngredientsInterface';
 import { Ingredients } from './models/Ingredients';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -13,11 +12,15 @@ import { Recipes } from './models/Recipes';
 })
 export class MealkitComponent implements OnInit{
   recipeName:string=""
+  recipeArray:Recipes[] = []
   recipeSteps:string[]=[]
   recipeIngredients:IngredientsInterface[]=[]
   recipeTags:string[]=[];
   recipeServingSize:string=""
   recipeDescription:string=""
+  currentEditRecipe:Recipes
+  isEditRecipeShown:boolean=true
+  isCreateRecipeShown:boolean=true
   units:string[]=[
     "none",
     "tsp",
@@ -44,12 +47,17 @@ export class MealkitComponent implements OnInit{
 
   currentStepsEditString=""
   currentStepsEditIndex:number
+  currentRecipeIndex:number
   quantity:string[]=["1","2","3","4","5","6","7","8","9","10","1/2","1/3","2/3","3/4","1/4","1/8","1 1/2", "1 1/4"]
   showStepsInput:boolean=false
-
   currentIngredientsEditString=""
   currentIngredientsEditIndex:number
+  currentIngredientsFinalEditIndex:number
+  currentStepsFinalEditIndex:number
   showIngredientsInput:boolean=false
+  showIngredientsFinalInput:boolean=false
+  showStepsFinalInput:boolean=false
+  showDescriptionFinalInput:boolean=false
 
   //forms
   ingredientsForm = new FormGroup({
@@ -58,9 +66,14 @@ export class MealkitComponent implements OnInit{
     unitControl: new FormControl(''),
     quantityControl: new FormControl('')
   });
+
+  servingSizeForm = new FormGroup({
+    servingSizeControl: new FormControl('')
+  });
+
   constructor(private mealkitService:MealkitService){}
   ngOnInit(){
-    this.mealkitService.getRecipes().subscribe(d=>console.log(d))
+    this.mealkitService.getRecipes().subscribe(d=>this.recipeArray = d)
   }
 
   setRecipeName(name:string){
@@ -110,6 +123,23 @@ export class MealkitComponent implements OnInit{
     this.currentIngredientsEditIndex = index
   }
 
+  editFinalIngredients(index:number){
+    this.currentIngredientsFinalEditIndex = index
+    this.showIngredientsFinalInput = true
+    //create new ingredient with data
+    //overwrite new data in currentEditRecipe
+
+  }
+
+  editFinalSteps(index:number){
+    this.showStepsFinalInput = true
+    this.currentStepsFinalEditIndex = index
+  }
+
+  editFinalDescription(){
+    this.showDescriptionFinalInput = true
+  }
+
 
   finishIngredientsEdit(quantity,unit,basicIngredient,recipeIngredient){
     if(unit != "none"){
@@ -119,6 +149,29 @@ export class MealkitComponent implements OnInit{
     }
     
     this.showIngredientsInput = false
+  }
+
+  finishFinalIngredientEdit(quantity:string,unit:string,recipeIngredient:string,basicIngredient:string){
+    let newIngredient:Ingredients
+
+    if(unit != "none"){
+      newIngredient= new Ingredients(quantity,unit,basicIngredient,recipeIngredient,quantity)
+    }else{
+      newIngredient= new Ingredients(quantity,"",basicIngredient,recipeIngredient,quantity)
+    }
+    
+    this.currentEditRecipe.ingredients[this.currentIngredientsFinalEditIndex] = newIngredient
+    this.showIngredientsFinalInput = false
+  }
+
+  finishFinalStepEdit(step:string){
+    this.currentEditRecipe.steps[this.currentStepsFinalEditIndex] = step
+    this.showStepsFinalInput = false
+  }
+
+  finishFinalDescriptionEdit(newDescription:string){
+    this.currentEditRecipe.description = newDescription
+    this.showDescriptionFinalInput = false
   }
 
   addRecipe(){
@@ -137,4 +190,32 @@ export class MealkitComponent implements OnInit{
     console.log(finalImage)
     this.mealkitService.addRecipe(new Recipes(this.recipeIngredients,this.recipeSteps,this.recipeName,this.recipeDescription,finalImage,this.recipeTags,this.recipeServingSize)).subscribe(d=>console.log(d))
   }
+
+  loadRecipeData(recipe:Recipes,index:number){
+    //set UI for edit recipe
+    this.showIngredientsFinalInput = false
+    this.isCreateRecipeShown = false
+    this.servingSizeForm.reset()
+    this.currentEditRecipe = recipe
+    this.currentRecipeIndex = index
+    
+  }
+
+  finishRecipeEdit(){
+    this.mealkitService.updateRecipe(this.currentEditRecipe).subscribe(d=>this.recipeArray = d)
+    this.currentEditRecipe = null
+    this.isCreateRecipeShown = true
+  }
+
+  deleteRecipe(){
+    this.mealkitService.deleteRecipe(this.currentEditRecipe).subscribe(d => this.recipeArray = d)
+  }
+
+  changeServingSizeFinal(newServingSize:string){
+    this.currentEditRecipe.servingSize = newServingSize
+    this.servingSizeForm.reset()
+  }
+
+  
+
 }

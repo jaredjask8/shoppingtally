@@ -34,4 +34,16 @@ public class RecipesController {
 		return recipeService.getRecipes();
 		
 	}
+	
+	@PostMapping("/updateRecipes")
+	public List<Recipes> updateRecipes(@RequestBody Recipes recipe){
+		return recipeService.updateRecipes(recipe);
+		
+	}
+	
+	@PostMapping("/deleteRecipes")
+	public List<Recipes> deleteRecipes(@RequestBody Recipes recipe){
+		return recipeService.deleteRecipes(recipe);
+		
+	}
 }

@@ -32,4 +32,14 @@ public class RecipesService {
 	List<Recipes> getRecipes(){
 		return recipesRepo.findAll();
 	}
+	
+	List<Recipes> updateRecipes(Recipes recipe) {
+		recipesRepo.save(recipe);
+		return recipesRepo.findAll();
+	}
+	
+	List<Recipes> deleteRecipes(Recipes recipe) {
+		recipesRepo.delete(recipe);
+		return recipesRepo.findAll();
+	}
 }

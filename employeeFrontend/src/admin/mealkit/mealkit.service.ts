@@ -29,4 +29,12 @@ export class MealkitService implements OnInit{
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
     return this.http.post<Recipes[]>(this.serverUrl+"/api/v1/recipes/getRecipes",null,{headers:headers})
   }
+
+  deleteRecipe(recipe:Recipes):Observable<Recipes[]>{
+    return this.http.post<Recipes[]>(this.serverUrl+"/api/v1/recipes/deleteRecipes",recipe)
+  }
+
+  updateRecipe(recipe:Recipes):Observable<Recipes[]>{
+    return this.http.post<Recipes[]>(this.serverUrl+"/api/v1/recipes/updateRecipes",recipe)
+  }
 }
