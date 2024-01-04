@@ -8,8 +8,9 @@ export class Recipes{
     image:string
     tags:string[]
     servingSize:string
+    featured:boolean
 
-    constructor(ingredients:IngredientsInterface[],steps:string[],name:string,description:string,image:string,tags:string[],servingSize:string){
+    constructor(ingredients:IngredientsInterface[],steps:string[],name:string,description:string,image:string,tags:string[],servingSize:string,featured:boolean){
         this.ingredients = ingredients;
         this.description = description;
         this.name = name;
@@ -17,5 +18,6 @@ export class Recipes{
         this.image = image   
         this.tags = tags
         this.servingSize = servingSize
+        this.featured = featured
     }
 }

@@ -39,8 +39,6 @@ public class SecurityConfiguration {
 			.permitAll()
 			.requestMatchers("/our-websocket/**")
 			.permitAll()
-			.requestMatchers("/recipes/**")
-			.permitAll()
 			.anyRequest()
 			.authenticated()
 			.and()

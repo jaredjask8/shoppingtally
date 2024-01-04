@@ -170,22 +170,21 @@ public class AuthenticationService {
 				.build();
 	}
 	
-	public ListToFrontendWithCount updateQuantity(FullListRequest list) {
-		log.info(list.getToken());
-		User user = repository.findByEmail(jwtService.extractUsername(list.getToken())).get();
+	public ListToFrontendWithCount updateQuantity(List<ListItemResponse> list, String token) {
+		User user = repository.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token))).get();
 		String tempList = "";
 		//passing new array with new quantity
 		//get new array parse into currentlist string
 		//set currentlist to new string
 		//return new list
-		for(ListItemResponse d : list.getList()) {
+		for(ListItemResponse d : list) {
 			tempList+=d.getImage()+"+"+d.getName()+"+"+d.getQuantity()+"~";
 		}
 		
 		user.setCurrentList(tempList);
 		repository.save(user);
 		
-		return getCurrentList(list.getToken());
+		return getCurrentList(jwtService.extractFromBearer(token));
 	}
 	
 	

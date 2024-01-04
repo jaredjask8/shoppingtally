@@ -163,7 +163,7 @@ export class ListService {
         d.quantity = updatedQuantity
       }
     })
-    return this.http.post<List>(this.serverUrl+"/api/v1/auth/updateQuantity",{list:tempList})
+    return this.http.post<List>(this.serverUrl+"/api/v1/auth/updateQuantity",tempList)
   }
 
   increaseQuantity(currentList:ListItem[],itemName:string):Observable<List>{
@@ -180,7 +180,7 @@ export class ListService {
         d.quantity = updatedQuantity;
       }
     })
-    return this.http.post<List>(this.serverUrl+"/api/v1/auth/updateQuantity",{list:tempList})
+    return this.http.post<List>(this.serverUrl+"/api/v1/auth/updateQuantity",tempList)
   }
 
   increaseCurrentOrderQuantity(item:ListItem):Observable<ListItemInterface[]>{

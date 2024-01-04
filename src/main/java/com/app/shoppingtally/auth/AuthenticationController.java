@@ -77,8 +77,8 @@ public class AuthenticationController {
 	
 	@CrossOrigin
 	@PostMapping("/updateQuantity")
-	public ListToFrontendWithCount increaseQuantity(@RequestBody FullListRequest list){
-		return service.updateQuantity(list);
+	public ListToFrontendWithCount increaseQuantity(@RequestBody List<ListItemResponse> list, @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+		return service.updateQuantity(list,token);
 	}
 	
 	@CrossOrigin

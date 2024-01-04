@@ -101,10 +101,21 @@ h5{
    width: 150px;
    padding: 10px;
    line-height: 1;
-   background-color: rgba(5, 5, 5, .3);
+   background-color: rgb(42, 36, 106,.3);
    border-bottom-left-radius: 20px;
    border-bottom-right-radius: 20px;
    transition:  background .4s ease-in-out;
+}
+
+.recipeFeature{
+   text-align: center;
+   position: absolute;
+   color: white;
+   width: 150px;
+   top: 0px;
+   border-top-left-radius: 20px;
+   border-top-right-radius: 20px;
+   background-color: rgb(42, 36, 106);
 }
 
 img{

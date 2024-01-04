@@ -18,6 +18,7 @@ import { List } from 'src/list/models/List';
 })
 export class MealkitComponent implements OnInit{
   recipeArray:Recipes[]=[]
+  recipeArrayFeatures:Recipes[]=[]
   filterByTagsArray:Recipes[]=[]
   filterByNameArray:Recipes[]=[]
   servingSizeArray:number[]=[]
@@ -110,6 +111,7 @@ export class MealkitComponent implements OnInit{
   ngOnInit(): void {
     this.mealkitService.getRecipes().subscribe(d=>{
       this.recipeArray = d
+      this.recipeArrayFeatures = d.filter(e=>e.featured == true)
     })
     
   }
@@ -278,9 +280,6 @@ export class MealkitComponent implements OnInit{
           this.filterByTagsArray.push(this.recipeArray[index])
         }
       })
-
-      
-  
     }else{
       this.isTagActive = false
       this.isNameActive = true

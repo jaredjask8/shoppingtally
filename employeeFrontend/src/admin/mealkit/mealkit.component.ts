@@ -71,6 +71,10 @@ export class MealkitComponent implements OnInit{
     servingSizeControl: new FormControl('')
   });
 
+  featuredForm = new FormGroup({
+    featuredControl: new FormControl('')
+  });
+
   constructor(private mealkitService:MealkitService){}
   ngOnInit(){
     this.mealkitService.getRecipes().subscribe(d=>this.recipeArray = d)
@@ -188,7 +192,7 @@ export class MealkitComponent implements OnInit{
 
     let finalImage:string = "https://shoppingtally.click/images/"+image+".png"
     console.log(finalImage)
-    this.mealkitService.addRecipe(new Recipes(this.recipeIngredients,this.recipeSteps,this.recipeName,this.recipeDescription,finalImage,this.recipeTags,this.recipeServingSize)).subscribe(d=>this.recipeArray = d)
+    this.mealkitService.addRecipe(new Recipes(this.recipeIngredients,this.recipeSteps,this.recipeName,this.recipeDescription,finalImage,this.recipeTags,this.recipeServingSize,false)).subscribe(d=>this.recipeArray = d)
   }
 
   loadRecipeData(recipe:Recipes,index:number){
@@ -221,6 +225,9 @@ export class MealkitComponent implements OnInit{
     this.servingSizeForm.reset()
   }
 
-  
+  changeFeaturedFinal(newChoice:boolean){
+    this.currentEditRecipe.featured = newChoice
+    this.featuredForm.reset()
+  }
 
 }
