@@ -188,7 +188,7 @@ export class MealkitComponent implements OnInit{
 
     let finalImage:string = "https://shoppingtally.click/images/"+image+".png"
     console.log(finalImage)
-    this.mealkitService.addRecipe(new Recipes(this.recipeIngredients,this.recipeSteps,this.recipeName,this.recipeDescription,finalImage,this.recipeTags,this.recipeServingSize)).subscribe(d=>console.log(d))
+    this.mealkitService.addRecipe(new Recipes(this.recipeIngredients,this.recipeSteps,this.recipeName,this.recipeDescription,finalImage,this.recipeTags,this.recipeServingSize)).subscribe(d=>this.recipeArray = d)
   }
 
   loadRecipeData(recipe:Recipes,index:number){
@@ -208,7 +208,12 @@ export class MealkitComponent implements OnInit{
   }
 
   deleteRecipe(){
-    this.mealkitService.deleteRecipe(this.currentEditRecipe).subscribe(d => this.recipeArray = d)
+    this.mealkitService.deleteRecipe(this.currentEditRecipe).subscribe(d => {
+      this.recipeArray = d
+      this.currentEditRecipe = null
+      this.isCreateRecipeShown = true
+      
+    })
   }
 
   changeServingSizeFinal(newServingSize:string){

@@ -18,10 +18,10 @@ export class MealkitService implements OnInit{
     
   }
 
-  addRecipe(recipe:Recipes):Observable<Recipes>{
+  addRecipe(recipe:Recipes):Observable<Recipes[]>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<Recipes>(this.serverUrl+"/api/v1/recipes/addRecipe",recipe,{headers:headers})
+    return this.http.post<Recipes[]>(this.serverUrl+"/api/v1/recipes/addRecipe",recipe,{headers:headers})
   }
 
   getRecipes():Observable<Recipes[]>{

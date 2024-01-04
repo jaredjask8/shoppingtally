@@ -24,8 +24,8 @@ public class RecipesController {
 	
 	
 	@PostMapping("/addRecipe")
-	public void addRecipe(@RequestBody Recipes recipe){
-		recipeService.addRecipe(recipe);
+	public List<Recipes> addRecipe(@RequestBody Recipes recipe){
+		return recipeService.addRecipe(recipe);
 		
 	}
 	

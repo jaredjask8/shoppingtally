@@ -28,4 +28,6 @@ public class Recipes {
 	public String description;
 	public String image;
 	public String servingSize;
+	@Builder.Default
+	public boolean featured = false;
 }

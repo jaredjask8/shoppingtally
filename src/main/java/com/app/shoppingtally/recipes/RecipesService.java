@@ -25,8 +25,9 @@ public class RecipesService {
 	
 	
 	
-	void addRecipe(Recipes recipe){
+	List<Recipes> addRecipe(Recipes recipe){
 		recipesRepo.insert(recipe);
+		return recipesRepo.findAll();
 	}
 	
 	List<Recipes> getRecipes(){
