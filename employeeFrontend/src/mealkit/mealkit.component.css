@@ -5,16 +5,11 @@
     height:200px;
     width: 100%;
     background-color: white;
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
 }
 
-.featuredRecipesContainer{
-    height:200px;
-    width: 100%;
-    background-color: white;
-    
-}
+
 
 .recipeContainer{
     position: relative;

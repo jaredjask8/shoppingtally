@@ -1,12 +1,13 @@
 <div class="mealkitContainer">
     <h1>Featured Recipes</h1>
-    <div class="featuredRecipesContainer container-fluid p-3">
+    <div class="recipesContainer container-fluid p-3">
         <div class="row g-5">
             <div class="col-6 col-sm-4 col-md-3 col-xl-2 recipeContainer" *ngFor="let recipe of recipeArrayFeatures">
                 <img (click)="loadRecipeData(recipe)" class="recipeImage" [src]=recipe.image height="170px" width="150px">
                 <div class="recipeName">{{recipe.name}}</div>
             </div>
         </div>
+    </div>
     <h1 class="mt-5">Recipes</h1>
 <div class="recipesContainer container-fluid p-3">
     <div class="row g-5">
