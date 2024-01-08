@@ -147,7 +147,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.stompClient.disconnect(function () {
-      alert("See you next time!");
+      
     });
   }
 

@@ -70,7 +70,7 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
 
   ngOnDestroy(){
     this.stompClient.disconnect(function() {
-      alert("See you next time!");
+      
     });
   }
 
