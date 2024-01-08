@@ -61,21 +61,21 @@ export class LoginModalComponent implements OnInit{
       },1000)
       this.service.setEnvironment(token);
       this.service.setLogin();
-
+      this.service.userLoggedIn.next(true)
       this.registerService.getUser(this.service.getEnvironment().token).subscribe( (d) => {
         this.service.setUser(d);
         this.registerService.setAdmin(d);
       });
 
       this.listService.getUserHasOrder(token).subscribe(d => {
-        console.log(d)
         this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
       })
 
       this.navService.getCartCount().subscribe(d=>{
         this.navService.cartCount.next(d)
       })
-  
+      
+      
     }
 
   }

@@ -25,6 +25,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { RegisterModalComponent } from 'src/global/bootstrap-components/register-modal/register-modal.component';
 import { OrderModalComponent } from 'src/global/bootstrap-components/order-modal/order-modal.component';
 import { MyInterceptor } from './MyInterceptor';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { MyInterceptor } from './MyInterceptor';
     RouterModule,
     LoginModalComponent,
     RegisterModalComponent,
-    OrderModalComponent
+    OrderModalComponent,
+    MatSnackBarModule
     
   ],
   providers: [EnvironmentService,{ provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true }],

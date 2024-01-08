@@ -179,8 +179,6 @@ export class MealkitComponent implements OnInit{
   }
 
   addRecipe(){
-    //let test:Recipes = new Recipes(this.recipeIngredients,this.recipeSteps,this.recipeName,this.recipeDescription)
-    //console.log(test)
     let image:string = "";
     this.recipeName.split(" ").forEach((d,index)=>{
       if(index == 0){
@@ -191,7 +189,6 @@ export class MealkitComponent implements OnInit{
     })
 
     let finalImage:string = "https://shoppingtally.click/images/"+image+".png"
-    console.log(finalImage)
     this.mealkitService.addRecipe(new Recipes(this.recipeIngredients,this.recipeSteps,this.recipeName,this.recipeDescription,finalImage,this.recipeTags,this.recipeServingSize,false)).subscribe(d=>this.recipeArray = d)
   }
 

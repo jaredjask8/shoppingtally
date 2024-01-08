@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -41,6 +42,16 @@ public class AuthenticationController {
 	@PostMapping("/authenticate")
 	public AuthenticationResponse authenticate(@RequestBody AuthenticationRequest request){
 		return service.authenticate(request);
+	}
+	
+	@GetMapping("/refresh")
+	public AuthenticationResponse refresh(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+		return service.refresh(token);
+	}
+	
+	@GetMapping("/signOut")
+	public AuthenticationResponse signOut(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+		return service.signOut(token);
 	}
 	
 	@PostMapping("/user")

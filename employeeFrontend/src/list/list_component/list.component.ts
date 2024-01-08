@@ -102,7 +102,6 @@ export class ListComponent implements OnInit, OnDestroy {
     })
 
     this.navService.cartVisibility$.subscribe(d => {
-      console.log(d)
       this.isActiveOrder = d.hasActive
       if(!d.hasActive && !d.hasCurrentOrder){
         //get cart
@@ -159,11 +158,7 @@ export class ListComponent implements OnInit, OnDestroy {
     let that = this;
     //this.stompClient.debug = null;
     this.stompClient.connect({ token: this.userService.getEnvironment().token }, function (frame) {
-      //console.log(frame)
       that.stompClient.subscribe("/user/topic/messages", function (message) {
-
-
-        console.log(that.hasCurrentOrder + "      " + that.isActiveOrder)
         if (message.body == "true") {
           that.isActiveOrder = true;
           that.listService.getActiveOrder().subscribe(d => {

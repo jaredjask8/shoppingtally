@@ -16,15 +16,18 @@ export class NavService implements OnInit{
   cartClicked$:Observable<boolean>
   cartVisibility:BehaviorSubject<UserOrderInfo> = new BehaviorSubject<UserOrderInfo>({hasActive:false,hasCurrentOrder:false})
   cartVisibility$:Observable<UserOrderInfo>
+  cartVisibilityFromUser:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true)
+  cartVisibilityFromUser$:Observable<boolean>
   cartCount:BehaviorSubject<string> = new BehaviorSubject<string>("")
   cartCount$:Observable<string>
 
-  constructor(private userService:EnvironmentService, private http:HttpClient) { 
+  constructor(private http:HttpClient) { 
 
     this.loginClicked$ = this.loginClicked.asObservable();
     this.registerClicked$ = this.registerClicked.asObservable();
     this.cartClicked$ = this.cartClicked.asObservable();
     this.cartVisibility$ = this.cartVisibility.asObservable()
+    this.cartVisibilityFromUser$ = this.cartVisibilityFromUser.asObservable()
     this.cartCount$ = this.cartCount.asObservable()
   }
 

@@ -2078,7 +2078,18 @@ public class ListService {
 		if(shopper.get().getShopperId() == 1) {
 			
 			for(List<String> list : listRepo.getJaysFullOrders()) {
-				log.info(list.get(4));
+				log.info(list.toString());
+				
+				Optional<User> user = userRepo.findById(Long.parseLong(list.get(2)));
+				OrderData orderData = OrderData.builder().firstname(user.get().getFirstname()).lastname(user.get().getLastname()).address(user.get().getAddress()).phone(user.get().getPhone()).email(user.get().getEmail()).build();
+				shopperOrdersArray = convertStringListToArray(list.get(1));
+				shopperOrdersFullArray.add(ShopperOrders.builder().list(shopperOrdersArray).date(list.get(0)).data(orderData).isActive(list.get(3)).isCompleted(list.get(4)).build());
+			}
+			
+			return shopperOrdersFullArray;
+		}else if(shopper.get().getShopperId() == 2){
+			for(List<String> list : listRepo.getJoshsFullOrders()) {
+				log.info(list.toString());
 				
 				Optional<User> user = userRepo.findById(Long.parseLong(list.get(2)));
 				OrderData orderData = OrderData.builder().firstname(user.get().getFirstname()).lastname(user.get().getLastname()).address(user.get().getAddress()).phone(user.get().getPhone()).email(user.get().getEmail()).build();

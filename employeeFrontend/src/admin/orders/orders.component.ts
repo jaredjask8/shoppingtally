@@ -29,7 +29,6 @@ export class OrdersComponent implements OnInit{
       this.orders = d.filter(d => d.isCompleted == "false")
       d.forEach(orderData => {
         if(orderData.isActive == "true"){
-          console.log("innnnnn")
           this.orderList = false;
           
         }

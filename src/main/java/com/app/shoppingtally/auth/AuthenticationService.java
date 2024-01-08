@@ -67,7 +67,8 @@ public class AuthenticationService {
 
 	private void saveUserToken(User user, String jwtToken) {
 		var token = Token.builder()
-		        .user(user)
+		        .id(user.getId())
+				.user(user)
 		        .token(jwtToken)
 		        .tokenType(TokenType.BEARER)
 		        .expired(false)
@@ -88,10 +89,25 @@ public class AuthenticationService {
 		}catch(Exception e){
 			return AuthenticationResponse.builder().token(e.getMessage()).build();
 		}
-		
-		
-		
-		
+	}
+	
+	public AuthenticationResponse refresh(String token) {
+		try {
+			var tokenUser = tokenRepository.findByToken(jwtService.extractFromBearer(token)).get();
+			var user = repository.findUserById(Long.valueOf(tokenUser.getUser().getId()) ).get();
+			tokenRepository.delete(tokenUser);
+			var jwtToken = jwtService.generateToken(user);
+			saveUserToken(user, jwtToken);
+			return AuthenticationResponse.builder().token(jwtToken).build();
+		}catch(Exception e){
+			return AuthenticationResponse.builder().token(e.getMessage()).build();
+		}
+	}
+	
+	public AuthenticationResponse signOut(String token) {
+		var tokenUser = tokenRepository.findByToken(jwtService.extractFromBearer(token)).get();
+		tokenRepository.delete(tokenUser);
+		return AuthenticationResponse.builder().token("nice").build();
 	}
 	
 	

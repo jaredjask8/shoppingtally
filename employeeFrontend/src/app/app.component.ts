@@ -1,8 +1,10 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, HostListener, OnInit} from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { NavService } from 'src/global/nav/nav.service';
+import { EnvironmentService } from 'src/global/utility/environment.service';
 import { ListService } from 'src/list/list_component/list.service';
 import { UserOrderInfo } from 'src/list/models/UserOrderInfo';
 import { RegisterService } from 'src/register/register.service';
@@ -17,10 +19,18 @@ export class AppComponent implements OnInit{
   displayLoadingIndicator=false;
   showModal:Observable<boolean>
   closeResult: string;
+  @HostListener('document:click', ['$event'])
+    handlerFunction(e: MouseEvent) {
+      if(this.userService.getEnvironment().log == "1"){
+        this.userService.stopLogoutTimer()
+        this.userService.startLogoutTimer()
+      }
+      
+    }
 
   
 
-  constructor(private router:Router, private registerService: RegisterService, private navService:NavService, private modalService: NgbModal, private listService:ListService){
+  constructor(private router:Router, private navService:NavService, private modalService: NgbModal, private listService:ListService, private userService:EnvironmentService,private snackBar: MatSnackBar){
     
   }
   ngOnInit(): void {
@@ -31,16 +41,26 @@ export class AppComponent implements OnInit{
 
       if(e instanceof NavigationEnd){
         this.displayLoadingIndicator = false;
-        console.log("ended")
       }
     })
 
     this.showModal = this.navService.loginClicked$;
-    this.listService.getUserHasOrder().subscribe(d => {
-      console.log(d)
-      d.hasCurrentOrder
-      this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
+    
+    this.userService.signOutSnackbar$.subscribe(d=>{
+      if(d){
+        this.snackBar.open("You have been signed out","",{duration:10000})
+      }
     })
+
+    //check if user is logged in
+    if(this.userService.getEnvironment().log == "1"){
+      //make an authentication call to refresh the token
+      this.userService.startLoginTimer()
+      this.userService.startLogoutTimer()
+      this.listService.getUserHasOrder().subscribe(d => {
+        this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
+      })
+    }
   }
 
   openBackDropCustomClass(content) {

@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-import { EnvironmentService } from 'src/global/utility/environment.service';
-import { ListService } from 'src/list/list_component/list.service';
-import { RegisterService } from 'src/register/register.service';
 import { PreviousListsFromDB } from '../previousLists/models/PreviousListsFromDB';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -14,7 +11,7 @@ export class ProfileService {
   private signOutClicked: BehaviorSubject<boolean> = new BehaviorSubject(false);
   
   
-  constructor(private registerService:RegisterService, private listService:ListService, private userService:EnvironmentService) { 
+  constructor() { 
     this.signOut$ = this.signOutClicked.asObservable();
   }
 
