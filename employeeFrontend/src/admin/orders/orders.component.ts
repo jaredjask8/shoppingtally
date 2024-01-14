@@ -10,6 +10,8 @@ import { ShopperOrder } from 'src/list/models/ShopperOrder';
 
 
 
+
+
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
@@ -19,6 +21,54 @@ export class OrdersComponent implements OnInit{
   orders:ShopperOrder[]
   orderList:boolean = true;
   activeOrder:ActiveShopperOrder;
+
+  ordersTest =[
+    {
+      "data":{
+        "firstname":"test",
+        "lastname":"test",
+        "email":"test",
+        "phone":"test",
+        "address":"test"
+      },
+      "date":"test",
+      "isActive":"true"
+    },
+    {
+      "data":{
+        "firstname":"test",
+        "lastname":"test",
+        "email":"test",
+        "phone":"test",
+        "address":"test"
+      },
+      "date":"test",
+      "isActive":"true"
+    },
+    {
+      "data":{
+        "firstname":"test",
+        "lastname":"test",
+        "email":"test",
+        "phone":"test",
+        "address":"test"
+      },
+      "date":"test",
+      "isActive":"true"
+    },
+    {
+      "data":{
+        "firstname":"test",
+        "lastname":"test",
+        "email":"test",
+        "phone":"test",
+        "address":"test"
+      },
+      "date":"test",
+      "isActive":"true"
+    }
+
+  ]
 
 
   constructor(private listService:ListService, private router:Router){}

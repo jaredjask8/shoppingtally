@@ -20,8 +20,10 @@ import com.app.shoppingtally.auth.models.ListFromFrontend;
 import com.app.shoppingtally.auth.models.ListItemRequest;
 import com.app.shoppingtally.auth.models.ListItemResponse;
 import com.app.shoppingtally.auth.models.ListToFrontendWithCount;
+import com.app.shoppingtally.auth.models.UserUpdateRequest;
 import com.app.shoppingtally.token.Token;
 import com.app.shoppingtally.user.User;
+import com.app.shoppingtally.user.UserDTO;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,8 +56,8 @@ public class AuthenticationController {
 		return service.signOut(token);
 	}
 	
-	@PostMapping("/user")
-	public User getUser(@RequestBody Token token){
+	@GetMapping("/user")
+	public UserDTO getUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
 		return service.getUser(token);
 	}
 	
@@ -96,5 +98,11 @@ public class AuthenticationController {
 	@PostMapping("/getCartCount")
 	public String getCartCount(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
 		return service.getCartCount(token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/updateUser")
+	public UserDTO updateUser(@RequestBody UserUpdateRequest update, @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+		return service.updateUser(update,token);
 	}
 }

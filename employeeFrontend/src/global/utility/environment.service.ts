@@ -50,7 +50,9 @@ import { Router } from "@angular/router";
       return this.http.get<TokenResponse>(this.serverUrl + "/api/v1/auth/refresh")
     }
 
-    
+    setToken(token:string){
+      sessionStorage.setItem("token",token);
+    }
     
     setEnvironment(token:string){
         sessionStorage.setItem("token",token);
@@ -82,6 +84,7 @@ import { Router } from "@angular/router";
       this.loginTimer = setInterval(()=>{
         this.refreshLogin().subscribe(d=>this.setEnvironment(d.token))
         console.log(this.getEnvironment().token)
+        this.stopLogoutTimer()
       },900000)
     }
 
@@ -100,7 +103,7 @@ import { Router } from "@angular/router";
             this.signOutSnackbar.next(true)
           }
         })
-      },600000)
+      },700000)
     }
 
     stopLogoutTimer(){
@@ -109,5 +112,9 @@ import { Router } from "@angular/router";
 
     stopLoginTimer(){
       clearInterval(this.loginTimer)
+    }
+
+    updateUserData(userData:string,choice:string):Observable<JwtUserResponse>{
+      return this.http.post<JwtUserResponse>(this.serverUrl + "/api/v1/auth/updateUser", {userUpdate:userData,choice:choice})
     }
   }

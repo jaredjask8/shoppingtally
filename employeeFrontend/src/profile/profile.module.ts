@@ -7,6 +7,8 @@ import { RouterModule } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 
 
@@ -21,7 +23,9 @@ import { MatOptionModule } from '@angular/material/core';
     RouterModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatInputModule,
+    MatButtonModule
   ]
 })
 export class ProfileModule { }

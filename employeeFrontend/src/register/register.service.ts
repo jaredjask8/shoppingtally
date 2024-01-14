@@ -41,8 +41,8 @@ export class RegisterService {
 
   
 
-  getUser(token:string):Observable<JwtUserResponse>{
-    return this.http.post<JwtUserResponse>(this.serverUrl + "/api/v1/auth/user", {token:token});
+  getUser():Observable<JwtUserResponse>{
+    return this.http.get<JwtUserResponse>(this.serverUrl + "/api/v1/auth/user");
   }
 
   authLogin(email:string, password:string):Observable<TokenResponse>{

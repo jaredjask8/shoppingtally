@@ -2,17 +2,36 @@
     text-align: center;
 }
 
-.orderContainer{
+.container{
+    padding-top: 70px;
+}
+
+.ordersContainer{
     display: flex;
     flex-direction: column;
 }
 
-.test{
-    background-color: blue;
+.orderContainer{
+    background-color: white;
 }
 
 wee{
     align-self: center;
+}
+
+h1{
+    text-align: center;
+}
+
+.buttonContainer{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+
+div{
+    
 }
 
 

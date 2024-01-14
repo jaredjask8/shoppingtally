@@ -19,6 +19,7 @@ import com.app.shoppingtally.auth.models.FullListRequest;
 import com.app.shoppingtally.auth.models.ListFromFrontend;
 import com.app.shoppingtally.auth.models.ListItemResponse;
 import com.app.shoppingtally.auth.models.ListToFrontendWithCount;
+import com.app.shoppingtally.auth.models.UserUpdateRequest;
 import com.app.shoppingtally.auth.models.ListItemRequest;
 import com.app.shoppingtally.config.JwtService;
 import com.app.shoppingtally.list.ListRepository;
@@ -29,6 +30,7 @@ import com.app.shoppingtally.token.TokenRepository;
 import com.app.shoppingtally.token.TokenType;
 import com.app.shoppingtally.user.Role;
 import com.app.shoppingtally.user.User;
+import com.app.shoppingtally.user.UserDTO;
 import com.app.shoppingtally.user.UserRepo;
 
 
@@ -111,8 +113,41 @@ public class AuthenticationService {
 	}
 	
 	
-	public User getUser(Token token) {
-		return repository.findByEmail(jwtService.extractUsername(token.getToken())).get();
+	public UserDTO getUser(String token) {
+		User user = repository.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token))).get();
+		return UserDTO.builder()
+				.firstname(user.getFirstname())
+				.lastname(user.getLastname())
+				.address(user.getAddress())
+				.email(user.getEmail())
+				.build();
+	}
+	
+	public UserDTO updateUser(UserUpdateRequest update, String token) {
+		User user = repository.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token))).get();
+		switch(update.getChoice()) {
+			case "first name":
+				user.setFirstname(update.getUserUpdate());
+				break;
+			case "last name":
+				user.setLastname(update.getUserUpdate());
+				break;
+			case "email":
+				user.setEmail(update.getUserUpdate());
+				break;
+			case "address":
+				user.setAddress(update.getUserUpdate());
+				break;
+		}
+		
+		repository.save(user);
+		
+		return UserDTO.builder()
+				.firstname(user.getFirstname())
+				.lastname(user.getLastname())
+				.address(user.getAddress())
+				.email(user.getEmail())
+				.build();
 	}
 	
 	public ListToFrontendWithCount updateCurrentList(ListItemRequest item, String token) {

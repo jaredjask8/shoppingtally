@@ -62,7 +62,7 @@ export class LoginModalComponent implements OnInit{
       this.service.setEnvironment(token);
       this.service.setLogin();
       this.service.userLoggedIn.next(true)
-      this.registerService.getUser(this.service.getEnvironment().token).subscribe( (d) => {
+      this.registerService.getUser().subscribe( (d) => {
         this.service.setUser(d);
         this.registerService.setAdmin(d);
       });

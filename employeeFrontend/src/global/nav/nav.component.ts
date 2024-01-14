@@ -25,7 +25,7 @@ export class NavComponent implements OnInit{
   //control nav components on login and logout
   showLogin:boolean=true;
   showAdmin:boolean;
-  username:string="Guest"
+  username:string
   cartVisibility:boolean=false
   userLoggedIn:boolean
  
@@ -63,6 +63,12 @@ export class NavComponent implements OnInit{
 
       this.userService.userLoggedIn$.subscribe(d=>{
         this.userLoggedIn = d
+        if(d){
+          this.registerService.getUser().subscribe(d=>{
+            this.userService.setUser(d)
+            this.username = d.firstname
+          })
+        }
       })
       
     }else{

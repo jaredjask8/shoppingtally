@@ -30,7 +30,7 @@ export class AppComponent implements OnInit{
 
   
 
-  constructor(private router:Router, private navService:NavService, private modalService: NgbModal, private listService:ListService, private userService:EnvironmentService,private snackBar: MatSnackBar){
+  constructor(private router:Router, private navService:NavService, private modalService: NgbModal, private listService:ListService, private userService:EnvironmentService,private snackBar: MatSnackBar, private registerService:RegisterService){
     
   }
   ngOnInit(): void {
@@ -54,12 +54,17 @@ export class AppComponent implements OnInit{
 
     //check if user is logged in
     if(this.userService.getEnvironment().log == "1"){
+      this.userService.stopLoginTimer()
+      this.userService.refreshLogin().subscribe(d=>{
+        this.userService.setToken(d.token)
+      })
       //make an authentication call to refresh the token
       this.userService.startLoginTimer()
       this.userService.startLogoutTimer()
       this.listService.getUserHasOrder().subscribe(d => {
         this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
       })
+      
     }
   }
 

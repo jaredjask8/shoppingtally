@@ -26,7 +26,7 @@
       <h1 class="mb-3">Master List</h1>
       <div class="yes mt-3" *ngIf="!inputUsed else filteredFullList">
         <div class="listContainer" *ngFor="let item of fullList; let i = index">
-          <img *ngIf="item.image != '' && item.image != 'null' else imageTemplate" [src]="item.image" height="40px" width="auto">
+          <img *ngIf="item.image != '' && item.image != 'null' && item.image != 'undefined' else imageTemplate" [src]="item.image" height="40px" width="auto">
           <ng-template #imageTemplate>
             <img src="../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -40,7 +40,10 @@
       <ng-template #filteredFullList>
         <div class="yes">
           <div class="listContainer" *ngFor="let item of filteredList; let i = index">
-            <img [src]="item.image" height="40px" width="auto">
+            <img *ngIf="item.image != '' && item.image != 'null' && item.image != 'undefined' else imageTemplate" [src]="item.image" height="40px" width="auto">
+            <ng-template #imageTemplate>
+              <img src="../assets/img/bag.png" height="auto" width="50px">
+            </ng-template>
             <div class="nameContainer">{{item.name}}</div>
             <button *ngIf="!hasOrder else orderButtonTemplate" mat-raised-button (click)="addItemToCart(i)">Add to cart</button>
             <ng-template #orderButtonTemplate>

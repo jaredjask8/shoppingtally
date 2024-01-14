@@ -1,19 +1,21 @@
-<p>yes</p>
-<p>yes</p>
-<p>yes</p>
+
 <div class="container">
+    <h1>Orders</h1>
     <div class="row g-2">
-        <div class="col-xl-4 col-lg-4 orderContainer" *ngFor="let order of orders">
-            <div class="test">
-                <div class="orders">{{order.data.firstname}} {{order.data.lastname}}</div>
+        <div class="col-xl-4 col-lg-4 ordersContainer" *ngFor="let order of orders">
+            <div class="orderContainer p-2">
+                <h4 class="orders">{{order.data.firstname}} {{order.data.lastname}}</h4>
                 <div>{{order.data.email}}</div>
                 <div>{{order.data.phone}}</div>
                 <div>{{order.data.address}}</div>
                 <div>{{order.date}}</div>
-                <button routerLink="currentOrder" *ngIf="!orderList else test" [attr.hidden]="order.isActive == 'true' ? null : 'disabled'">Continue</button>
-                <ng-template #test>
-                    <button  routerLink="currentOrder" (click)="setCurrentOrder(order.data.email, order.date)" mat-raised-button>Start Order</button>
-                </ng-template>
+                <div class="buttonContainer">
+                    <button routerLink="currentOrder" mat-raised-button *ngIf="!orderList else test" [attr.hidden]="order.isActive == 'true' ? null : 'disabled'">Continue</button>
+                    <ng-template #test>
+                        <button  routerLink="currentOrder" (click)="setCurrentOrder(order.data.email, order.date)" mat-raised-button>Start Order</button>
+                    </ng-template>
+                </div> 
+                
                 
 
             </div>

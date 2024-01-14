@@ -4,6 +4,7 @@ export interface JwtUserResponse{
     email:string;
     firstname:string;
     lastname:string;
+    address:string;
     role:string;
     currentCart:string;
     accountNonLocked:boolean;
