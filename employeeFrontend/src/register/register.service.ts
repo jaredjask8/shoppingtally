@@ -28,11 +28,14 @@ export class RegisterService {
   //const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token).set('Access-Control-Allow-Origin', '*');
   
   setAdmin(user:JwtUserResponse){
+    console.log(user.role)
     if(user.role === "ADMIN"){
       //set session
       sessionStorage.setItem("admin","true")
+      this.isAdmin = true;
       this.userCredentials.next(true);
     }else{
+      this.isAdmin = false;
       this.userCredentials.next(false);
     }
     
