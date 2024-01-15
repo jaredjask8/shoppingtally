@@ -34,6 +34,11 @@ export class AppComponent implements OnInit{
     
   }
   ngOnInit(): void {
+    if(this.registerService.getCredentials()){
+      this.registerService.userCredentials.next(true)
+    }else{
+      this.registerService.userCredentials.next(false)
+    }
     this.router.events.subscribe(e => {
       if(e instanceof NavigationStart){
         this.displayLoadingIndicator = true;

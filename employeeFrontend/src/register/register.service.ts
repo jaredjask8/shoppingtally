@@ -16,27 +16,30 @@ export class RegisterService {
   serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
 
   showBadCredentials: boolean=false;
-  userCredentials$:BehaviorSubject<boolean> = new BehaviorSubject(false);
+  userCredentials:BehaviorSubject<boolean> = new BehaviorSubject(false);
   checkAdmin$: Observable<boolean>;
   isAdmin:boolean=false;
 
 
   constructor(private http:HttpClient) { 
-    this.checkAdmin$ = this.userCredentials$.asObservable();
+    this.checkAdmin$ = this.userCredentials.asObservable();
 
   }
   //const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token).set('Access-Control-Allow-Origin', '*');
   
   setAdmin(user:JwtUserResponse){
-    console.log(user.role)
     if(user.role === "ADMIN"){
-      this.isAdmin = true;
-      this.userCredentials$.next(true);
+      //set session
+      sessionStorage.setItem("admin","true")
+      this.userCredentials.next(true);
     }else{
-      this.isAdmin = false;
-      this.userCredentials$.next(false);
+      this.userCredentials.next(false);
     }
     
+  }
+
+  getCredentials(){
+    return sessionStorage.getItem("admin")
   }
 
   

@@ -120,6 +120,7 @@ public class AuthenticationService {
 				.lastname(user.getLastname())
 				.address(user.getAddress())
 				.email(user.getEmail())
+				.role(user.getRole())
 				.build();
 	}
 	

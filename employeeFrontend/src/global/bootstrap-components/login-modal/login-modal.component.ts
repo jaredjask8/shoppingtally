@@ -63,7 +63,6 @@ export class LoginModalComponent implements OnInit{
       this.service.setLogin();
       this.service.userLoggedIn.next(true)
       this.registerService.getUser().subscribe( (d) => {
-        this.service.setUser(d);
         this.registerService.setAdmin(d);
       });
 
@@ -86,7 +85,7 @@ export class LoginModalComponent implements OnInit{
       this.cdr.detectChanges()
     });
 
-    this.router.navigateByUrl("/home")
+    //this.router.navigateByUrl("/home")
   }
 
   

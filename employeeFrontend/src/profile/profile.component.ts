@@ -33,7 +33,7 @@ export class ProfileComponent implements OnInit{
   
   constructor(private userService:EnvironmentService, private registerService:RegisterService, private profileService:ProfileService, private router:Router, private navService:NavService){}
   ngOnInit(): void {
-    this.userData = this.userService.getUser()
+    this.registerService.getUser().subscribe(d=>this.userData = d)
   }
 
   //signout is clicked on profile component 

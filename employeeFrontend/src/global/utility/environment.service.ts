@@ -57,7 +57,7 @@ import { Router } from "@angular/router";
     setEnvironment(token:string){
         sessionStorage.setItem("token",token);
         sessionStorage.setItem("log", "1");
-        window.location.reload()
+        //window.location.reload()
     }
 
     getEnvironment():Environment{
@@ -71,13 +71,10 @@ import { Router } from "@angular/router";
       this.user = response;
     }
 
-    getUser(){
-      return this.user;
-    }
-
     removeUser(){
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("log");
+      sessionStorage.removeItem("admin")
     }
 
     startLoginTimer(){
