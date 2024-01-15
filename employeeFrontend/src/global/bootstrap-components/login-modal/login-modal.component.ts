@@ -63,10 +63,7 @@ export class LoginModalComponent implements OnInit{
       
       this.service.setLogin();
       this.service.userLoggedIn.next(true)
-      this.registerService.getUser().subscribe( (d) => {
-        this.registerService.setAdmin(d);
-        console.log("hellllp")
-      });
+      
 
       this.listService.getUserHasOrder(token).subscribe(d => {
         this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
