@@ -84,7 +84,7 @@ export class LoginModalComponent implements OnInit{
       this.cdr.detectChanges()
     });
 
-    //this.router.navigateByUrl("/home")
+    this.router.navigateByUrl("/home")
   }
 
   
