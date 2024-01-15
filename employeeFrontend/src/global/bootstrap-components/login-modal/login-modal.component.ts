@@ -54,16 +54,18 @@ export class LoginModalComponent implements OnInit{
       },2000)
       
     }else{
+      this.service.setEnvironment(token);
       this.showLoginSuccess = true;
       setTimeout(() =>{
         this.showLoginSuccess = false;
         this.modalReference.close();
       },1000)
-      this.service.setEnvironment(token);
+      
       this.service.setLogin();
       this.service.userLoggedIn.next(true)
       this.registerService.getUser().subscribe( (d) => {
         this.registerService.setAdmin(d);
+        console.log("hellllp")
       });
 
       this.listService.getUserHasOrder(token).subscribe(d => {

@@ -27,7 +27,7 @@ import { Router } from "@angular/router";
     //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
     serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
 
-    constructor(private http:HttpClient, private navService:NavService, private profileService:ProfileService, private router:Router){
+    constructor(private http:HttpClient, private navService:NavService, private profileService:ProfileService, private router:Router, private registerService:RegisterService){
       this.userLoggedIn$ = this.userLoggedIn.asObservable();
       this.signOutSnackbar$ = this.signOutSnackbar.asObservable();
     }
@@ -57,7 +57,12 @@ import { Router } from "@angular/router";
     setEnvironment(token:string){
         sessionStorage.setItem("token",token);
         sessionStorage.setItem("log", "1");
-        //window.location.reload()
+        this.registerService.getUser().subscribe( (d) => {
+          this.registerService.setAdmin(d);
+          window.location.reload()
+          console.log("hellllp")
+      });
+        
     }
 
     getEnvironment():Environment{
