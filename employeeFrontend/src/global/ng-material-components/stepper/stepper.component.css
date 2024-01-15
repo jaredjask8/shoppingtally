@@ -28,6 +28,9 @@ mat-cell, mat-header-cell, mat-footer-cell {
     
 }
 
+.date-snackbar {
+  z-index: 9000 !important;
+}
 
 ::ngdeep .mat-horizontal-content-container {
   padding: 0 !important;
