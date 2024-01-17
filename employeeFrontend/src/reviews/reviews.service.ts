@@ -17,6 +17,6 @@ export class ReviewsService {
   }
 
   getReviews():Observable<Review[]>{
-    return this.http.get<Review[]>("http://localhost:8080/api/v1/reviews/all");
+    return this.http.get<Review[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/reviews/all");
   }
 }
