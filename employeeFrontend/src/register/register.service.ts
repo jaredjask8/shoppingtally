@@ -13,7 +13,7 @@ export class RegisterService {
 
   //"http://localhost:8080"
   //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
-  serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
+  serverUrl = "http://localhost:8080"
 
   showBadCredentials: boolean=false;
   userCredentials:BehaviorSubject<boolean> = new BehaviorSubject(false);

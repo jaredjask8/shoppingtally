@@ -17,7 +17,6 @@ export class ReviewsService {
   }
 
   getReviews():Observable<Review[]>{
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.userService.getEnvironment().token).set('Access-Control-Allow-Origin', '*');
-    return this.http.post<Review[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/reviews/all", null, {headers});
+    return this.http.get<Review[]>("http://localhost:8080/api/v1/reviews/all");
   }
 }
