@@ -60,7 +60,6 @@ import { Router } from "@angular/router";
         this.registerService.getUser().subscribe( (d) => {
           this.registerService.setAdmin(d);
           window.location.reload()
-          console.log("hellllp")
       });
         
     }
@@ -87,7 +86,7 @@ import { Router } from "@angular/router";
         this.refreshLogin().subscribe(d=>this.setEnvironment(d.token))
         console.log(this.getEnvironment().token)
         this.stopLogoutTimer()
-      },900000) //900000
+      },20000) //900000
     }
 
     startLogoutTimer(){
@@ -105,7 +104,7 @@ import { Router } from "@angular/router";
             this.signOutSnackbar.next(true)
           }
         })
-      },700000) //700000
+      },10000) //700000
     }
 
     stopLogoutTimer(){
