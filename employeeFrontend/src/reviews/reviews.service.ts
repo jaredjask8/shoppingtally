@@ -12,10 +12,12 @@ export class ReviewsService {
   constructor(private http:HttpClient, private userService:EnvironmentService) { }
 
   sendReview(review:Review):Observable<Review[]>{
-    return this.http.post<Review[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/reviews", review);
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.userService.getEnvironment().token).set('Access-Control-Allow-Origin', '*');
+    return this.http.post<Review[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/reviews", review, {headers});
   }
 
   getReviews():Observable<Review[]>{
-    return this.http.get<Review[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/reviews/all");
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + this.userService.getEnvironment().token).set('Access-Control-Allow-Origin', '*');
+    return this.http.post<Review[]>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/reviews/all", null, {headers});
   }
 }

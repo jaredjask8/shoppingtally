@@ -7,8 +7,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -35,10 +33,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 		final String authHeader = request.getHeader("Authorization");
 		final String jwt;
 		final String userEmail;
-		final RequestMatcher ignoredPaths = new AntPathRequestMatcher("/api/v1/reviews/**");
 		
-		if(ignoredPaths.matches(request)) {
+		if(authHeader == null || !authHeader.startsWith("Bearer ")) {
 			filterChain.doFilter(request, response);
+			log.info("not valid");
 			return;
 		}
 		

@@ -60,6 +60,7 @@ import { Router } from "@angular/router";
         this.registerService.getUser().subscribe( (d) => {
           this.registerService.setAdmin(d);
           window.location.reload()
+          console.log("hellllp")
       });
         
     }
