@@ -39,6 +39,8 @@ export class AppComponent implements OnInit{
     }else{
       this.registerService.userCredentials.next(false)
     }
+    
+    
     this.router.events.subscribe(e => {
       if(e instanceof NavigationStart){
         this.displayLoadingIndicator = true;
@@ -59,6 +61,7 @@ export class AppComponent implements OnInit{
 
     //check if user is logged in
     if(this.userService.getEnvironment().log == "1"){
+      console.log("in")
       this.userService.stopLoginTimer()
       this.userService.refreshLogin().subscribe(d=>{
         this.userService.setToken(d.token)

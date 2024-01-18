@@ -82,14 +82,16 @@ import { Router } from "@angular/router";
     }
 
     startLoginTimer(){
+      console.log("in login")
       this.loginTimer = setInterval(()=>{
         this.refreshLogin().subscribe(d=>this.setEnvironment(d.token))
         console.log(this.getEnvironment().token)
         this.stopLogoutTimer()
-      },900000) //900000
+      },15 * 60 * 1000) //900000
     }
 
     startLogoutTimer(){
+      console.log("in logout")
       this.logoutTimer = setTimeout(()=>{
         //if the timer hits sign them out
         this.signOut().subscribe({
@@ -104,7 +106,7 @@ import { Router } from "@angular/router";
             this.signOutSnackbar.next(true)
           }
         })
-      },700000) //700000
+      },10 * 60 * 1000) //700000
     }
 
     stopLogoutTimer(){
