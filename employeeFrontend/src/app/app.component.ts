@@ -19,6 +19,7 @@ export class AppComponent implements OnInit{
   displayLoadingIndicator=false;
   showModal:Observable<boolean>
   closeResult: string;
+  testTimer:string="nope"
   @HostListener('document:click', ['$event'])
     handlerFunction(e: MouseEvent) {
       if(this.userService.getEnvironment().log == "1"){
@@ -64,11 +65,13 @@ export class AppComponent implements OnInit{
     if(this.userService.getEnvironment().log == "1"){
       this.userService.stopLoginTimer()
       this.userService.stopLogoutTimer()
-      // this.userService.refreshLogin().subscribe(d=>{
-      //   this.userService.setToken(d.token)
-      //   
-      // })
-      //make an authentication call to refresh the token
+
+      //for mobile devices on screen lock, refresh token when they come back to the page
+      if(window.matchMedia("(max-width: 500px)").matches){
+        this.userService.refreshLogin().subscribe(d=>this.userService.setToken(d.token))
+        this.testTimer = "sweeeet"
+      }
+      
       this.userService.startLoginTimer()
       this.userService.startLogoutTimer()
       this.listService.getUserHasOrder().subscribe(d => {
