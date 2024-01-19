@@ -36,6 +36,12 @@ import { Router } from "@angular/router";
       return sessionStorage.getItem("log");
     }
 
+    signOut():Observable<TokenResponse>{
+      let token = this.getEnvironment().token
+      const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+      return this.http.get<TokenResponse>(this.serverUrl + "/api/v1/auth/signOut",{headers:headers});
+    }
+
     refreshLogin():Observable<TokenResponse>{
       return this.http.get<TokenResponse>(this.serverUrl + "/api/v1/auth/refresh")
     }
