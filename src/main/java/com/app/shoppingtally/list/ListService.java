@@ -161,6 +161,16 @@ public class ListService {
 		
 	}
 	
+	UserOrderInfo cancelCurrentOrder(String token) {
+		Optional<User> client = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		List<UserList> userList = listRepo.findByCurrentOrder(client.get().getId());
+		listRepo.delete(userList.get(0));
+		
+		return getUserOrderInfo(token);
+				
+		
+	}
+	
 	UserOrderInfo getUserOrderInfo(String token) {
 		Optional<User> client = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
 		List<UserList> userList = listRepo.findByCurrentOrder(client.get().getId());

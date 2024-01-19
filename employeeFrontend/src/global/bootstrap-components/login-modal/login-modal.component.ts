@@ -54,6 +54,7 @@ export class LoginModalComponent implements OnInit{
       },2000)
       
     }else{
+      //user successful login
       this.service.setEnvironment(token);
       this.showLoginSuccess = true;
       setTimeout(() =>{
@@ -61,19 +62,24 @@ export class LoginModalComponent implements OnInit{
         this.modalReference.close();
       },1000)
       
-      this.service.setLogin();
       this.service.userLoggedIn.next(true)
       
-
+      //check if the user has an order
+      //update the cartVisibility observable 
       this.listService.getUserHasOrder(token).subscribe(d => {
         this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
       })
 
+      //////////// fix ///////////
+      //if cart state
+      //get cart count 
       this.navService.getCartCount().subscribe(d=>{
         this.navService.cartCount.next(d)
       })
       
-      
+      //start login timer
+      this.service.startLoginTimer()
+      this.service.startLogoutTimer()
     }
 
   }
@@ -81,9 +87,9 @@ export class LoginModalComponent implements OnInit{
   setEnvironment(email:string,password:string){
     this.registerService.authLogin(email,password).subscribe(d => {
       this.checkToken(d.token)
-      this.cdr.detectChanges()
+      
     });
-
+    
     //this.router.navigateByUrl("/home")
   }
 

@@ -44,7 +44,7 @@ export class ListService {
 
   //"http://localhost:8080"
   //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
-  serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
+  serverUrl = "http://localhost:8080"
 
   postList(list:ListToDB):Observable<List>{
     return this.http.post<List>(this.serverUrl + "/api/v1/list", list)
@@ -72,6 +72,10 @@ export class ListService {
 
   endCurrentOrder(email:string, date:string){
     return this.http.post(this.serverUrl+"/api/v1/list/endCurrentOrder",{email:email,date:date})
+  }
+
+  cancelCurrentOrder():Observable<UserOrderInfo>{
+    return this.http.get<UserOrderInfo>(this.serverUrl+"/api/v1/list/cancelCurrentOrder")
   }
 
   updateCategory(toCategory:string,currentCategoryList:ListItemInterface[],fromCategory:string,previousCategoryList:ListItemInterface[]):Observable<CategoryUpdates>{

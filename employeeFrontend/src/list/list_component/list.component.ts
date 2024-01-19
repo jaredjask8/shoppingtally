@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild, ViewEncapsulation, inject } from '@angular/core';
 import { GroceryService } from 'src/global/grocery_items/grocery.service';
 import { Branded } from '../models/Branded';
 import { ListItem } from '../models/ListItem';
@@ -20,6 +20,7 @@ import { CurrentOrderUserClass } from '../models/CurrentOrderUserClass';
 import { CurrentOrderUser } from '../models/CurrentOrderUser';
 import { CurrentOrderUserClassWithUpdateMessage } from '../models/CurrentOrderUserClassWithUpdateMessage';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -33,6 +34,10 @@ export class ListComponent implements OnInit, OnDestroy {
   title = 'WebSockets chat';
   stompClient;
 
+  //cancel order
+  private cancelOrderModal = inject(NgbModal);
+  cancelFromItem:boolean=false
+  cancelFromUser:boolean=false
 
   list: ListItem[] = [];
   listToDb: ListToDB = new ListToDB;
@@ -248,9 +253,47 @@ export class ListComponent implements OnInit, OnDestroy {
       this.completed
     )))
   }
+  
 
-  deleteCurrentOrderItem(item: ListItem) {
-    this.listService.deleteCurrentOrderItem(item).subscribe(d => this.currentOrderList = d)
+  cancelProcess(content: TemplateRef<any>,choice:string){
+    this.cancelOrderModal.open(content).result.then(
+      (result) => {
+        if(result == "cancel"){
+          //if modal returns exit
+          //then delete the order
+          this.listService.cancelCurrentOrder().subscribe(d => {
+            this.navService.cartVisibility.next(d)
+            this.navService.getCartCount().subscribe(d=>{
+              this.navService.cartCount.next(d)
+            })
+          })
+        }else{
+          if(choice == "user"){
+            this.cancelFromUser = false
+          }else{
+            this.cancelFromItem = false
+          }
+        }
+      })
+  }
+
+  cancelOrder(content: TemplateRef<any>){
+    this.cancelFromUser = true
+    this.cancelProcess(content,"user")
+  }
+
+  deleteCurrentOrderItem(item: ListItem, content: TemplateRef<any>) {
+    //check if last item in order before deleting
+    //if last prompt shown to cancel order
+    //else continue
+    if(this.currentOrderList.length == 1){
+      this.cancelFromItem = true
+      //modal for prompt to cancel order
+      this.cancelProcess(content,"item")
+    }else{
+      this.listService.deleteCurrentOrderItem(item).subscribe(d => this.currentOrderList = d)
+    }
+    
   }
 
   getImages(item:string) {
@@ -359,7 +402,6 @@ export class ListComponent implements OnInit, OnDestroy {
         this.currentOrderList = d
       })
       this.snackBar.open("Item added")
-      console.log(this.currentImage)
       setTimeout(()=>{this.snackBar.dismiss()},2000)
     }
 

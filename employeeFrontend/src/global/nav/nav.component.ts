@@ -30,7 +30,7 @@ export class NavComponent implements OnInit{
   userLoggedIn:boolean
  
 
-	constructor(private offcanvasService: NgbOffcanvas, private registerService:RegisterService, private userService:EnvironmentService, private profileService:ProfileService, private navService:NavService) {
+	constructor(private offcanvasService: NgbOffcanvas, private registerService:RegisterService, private userService:EnvironmentService, private profileService:ProfileService, private navService:NavService, private cdr:ChangeDetectorRef) {
 
 
     // call register service to check if user is admin
@@ -95,13 +95,13 @@ export class NavComponent implements OnInit{
     if(this.userService.getEnvironment().log === "1"){
       this.profileService.signOut$.subscribe(d => this.showLogin = d);
       this.profileService.setSignOut(false);
-      //this.username = this.userService.getUser().firstname
       return true;
     }else{
       this.username = "Guest";
       this.showAdmin = false;
       return false;
     }
+    
   }
 
 

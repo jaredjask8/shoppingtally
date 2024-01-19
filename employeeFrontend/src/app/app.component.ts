@@ -61,14 +61,15 @@ export class AppComponent implements OnInit{
 
     //check if user is logged in
     if(this.userService.getEnvironment().log == "1"){
-      console.log("in")
       this.userService.stopLoginTimer()
+      this.userService.stopLogoutTimer()
       this.userService.refreshLogin().subscribe(d=>{
         this.userService.setToken(d.token)
+        this.userService.startLoginTimer()
+        this.userService.startLogoutTimer()
       })
       //make an authentication call to refresh the token
-      this.userService.startLoginTimer()
-      this.userService.startLogoutTimer()
+      
       this.listService.getUserHasOrder().subscribe(d => {
         this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
       })
