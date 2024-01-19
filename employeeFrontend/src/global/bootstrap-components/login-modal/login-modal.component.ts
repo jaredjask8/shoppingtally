@@ -77,9 +77,7 @@ export class LoginModalComponent implements OnInit{
         this.navService.cartCount.next(d)
       })
       
-      //start login timer
-      this.service.startLoginTimer()
-      this.service.startLogoutTimer()
+      window.location.reload()
     }
 
   }
