@@ -55,6 +55,7 @@ export class ProfileComponent implements OnInit{
         this.navService.cartCount.next("");
         this.userService.userLoggedIn.next(false)
         this.userService.stopLoginTimer()
+        this.userService.stopLogoutTimer()
         this.router.navigate(['/','home']);
   }
 
