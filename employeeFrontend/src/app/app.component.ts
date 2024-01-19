@@ -70,6 +70,9 @@ export class AppComponent implements OnInit{
       if(window.matchMedia("(max-width: 500px)").matches){
         this.userService.refreshLogin().subscribe(d=>this.userService.setToken(d.token))
         this.testTimer = "sweeeet"
+        setTimeout(()=>{
+          this.testTimer = "back to nope"
+        },1000)
       }
       
       this.userService.startLoginTimer()
