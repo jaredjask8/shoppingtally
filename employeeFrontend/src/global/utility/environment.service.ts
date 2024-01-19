@@ -56,6 +56,7 @@ import { Router } from "@angular/router";
         sessionStorage.setItem("token",token);
         sessionStorage.setItem("log", "1");
         this.registerService.getUser().subscribe( (d) => {
+          console.log(d)
           this.registerService.setAdmin(d);
           
       });
