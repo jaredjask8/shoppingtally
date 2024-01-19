@@ -30,7 +30,7 @@ export class NavComponent implements OnInit{
   userLoggedIn:boolean
  
 
-	constructor(private offcanvasService: NgbOffcanvas, private registerService:RegisterService, private userService:EnvironmentService, private profileService:ProfileService, private navService:NavService, private cdr:ChangeDetectorRef) {
+	constructor(private offcanvasService: NgbOffcanvas, private registerService:RegisterService, private userService:EnvironmentService, private profileService:ProfileService, private navService:NavService) {
 
 
     // call register service to check if user is admin
@@ -44,7 +44,14 @@ export class NavComponent implements OnInit{
     
   }
   ngOnInit(): void {
-    
+    this.userService.userLoggedIn$.subscribe(d=>{
+      this.userLoggedIn = d
+      if(d){
+        this.registerService.getUser().subscribe(d=>{
+          this.username = d.firstname
+        })
+      }
+    })
     
     if(this.userService.getEnvironment().log == "1"){
       this.navService.getCartCount().subscribe(d=>{
@@ -61,15 +68,7 @@ export class NavComponent implements OnInit{
         this.cartVisibility = d
       })
 
-      this.userService.userLoggedIn$.subscribe(d=>{
-        this.userLoggedIn = d
-        if(d){
-          this.registerService.getUser().subscribe(d=>{
-            this.userService.setUser(d)
-            this.username = d.firstname
-          })
-        }
-      })
+      
       
     }else{
       this.userLoggedIn = false
@@ -95,13 +94,13 @@ export class NavComponent implements OnInit{
     if(this.userService.getEnvironment().log === "1"){
       this.profileService.signOut$.subscribe(d => this.showLogin = d);
       this.profileService.setSignOut(false);
+      //this.username = this.userService.getUser().firstname
       return true;
     }else{
       this.username = "Guest";
       this.showAdmin = false;
       return false;
     }
-    
   }
 
 
