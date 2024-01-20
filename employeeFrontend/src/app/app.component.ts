@@ -29,14 +29,28 @@ export class AppComponent implements OnInit{
       
     }
 
+    //listens for change in visibility
+    //if the user is signed in call function
+    //function checks when the document is not hidden / its browser use
     @HostListener('document:visibilitychange', ['$event'])
     visibilitychange() {
       if(this.userService.getEnvironment().log == "1"){
-        this.checkHiddenDocument();
+        this.checkHiddenDocumentForMobile();
       }
     }
 
-  
+    checkHiddenDocumentForMobile() {
+      if (!document.hidden && navigator.userAgent.includes("Mobile/")) {
+        this.userService.stopLoginTimer()
+        this.userService.stopLogoutTimer()
+        
+        this.userService.refreshLogin().subscribe(d=>{
+          this.userService.setToken(d.token)
+          this.userService.startLoginTimer()
+          this.userService.startLogoutTimer()
+        })
+      }
+    }
 
   constructor(private router:Router, private navService:NavService, private modalService: NgbModal, private listService:ListService, private userService:EnvironmentService,private snackBar: MatSnackBar, private registerService:RegisterService){
     
@@ -91,14 +105,7 @@ export class AppComponent implements OnInit{
 
 
 
-  checkHiddenDocument() {
-    if (!document.hidden && navigator.userAgent.includes("Mobile/")) {
-      this.userService.refreshLogin().subscribe(d=>{
-        this.userService.setToken(d.token)
-        this.testTimer = navigator.userAgent
-      })
-    }
-  }
+  
 }
 
 
