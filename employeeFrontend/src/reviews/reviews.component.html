@@ -1,36 +1,40 @@
-<div class="body">
-    
-    <div class="createReviewContainer mb-3">
-        <div class="reviewTitle">Leave a review!</div>
-        <mat-form-field>
-            <mat-label>Title</mat-label>
-            <input [(ngModel)]="reviewTitle" matInput>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Review</mat-label>
-            <textarea [(ngModel)]="review" matInput></textarea>
-        </mat-form-field>
-        <mat-label>Rating</mat-label>
-        <ngb-rating 
-        [(rate)]="currentRate"
-        [max]="5"
-        ></ngb-rating>
-        <button  mat-raised-button (click)="createReview()">Send</button>
-        
-    </div>
-    <mat-divider [vertical]="true"></mat-divider>
-    <div class="reviewsContainer">
-        <div class="reviewTitle mt-3">Reviews</div>
-        <div *ngFor="let review of reviews" class="reviewDataContainer">
-            <div>{{review.title}}</div>
-            <div>{{review.review}}</div>
+<div class="bodyReviews">
+    <div class="reviewMainContainer">
+        <div class="createReviewContainer">
+            <div class="reviewTitle">Leave a review!</div>
+            <mat-form-field>
+                <mat-label>Title</mat-label>
+                <input [(ngModel)]="reviewTitle" matInput>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Review</mat-label>
+                <textarea [(ngModel)]="review" matInput></textarea>
+            </mat-form-field>
+            <mat-label>Rating</mat-label>
             <ngb-rating 
-                [(rate)]="review.rating"
-                [readonly]="readonly"
+            [(rate)]="currentRate"
+            [max]="5"
             ></ngb-rating>
+            <button  mat-raised-button (click)="createReview()">Send</button>
+            
         </div>
         
+        <div class="reviewsContainerWithTitle ml-5">
+            <div class="reviewTitle">Reviews</div>
+            <div class="reviewsContainer">
+                <div *ngFor="let review of reviews" class="reviewDataContainer">
+                    <div>{{review.title}}</div>
+                    <div>{{review.review}}</div>
+                    <ngb-rating 
+                        [(rate)]="review.rating"
+                        [readonly]="readonly"
+                    ></ngb-rating>
+                </div>
+            </div>
+        </div>
     </div>
+    
+    
 
     
 </div>
