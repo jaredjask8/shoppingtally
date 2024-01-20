@@ -25,7 +25,7 @@ import { Router } from "@angular/router";
     signOutSnackbar$:Observable<boolean>
     //"http://localhost:8080"
     //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
-    serverUrl = "http://localhost:8080"
+    serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
 
     constructor(private http:HttpClient, private navService:NavService, private profileService:ProfileService, private router:Router, private registerService:RegisterService){
       this.userLoggedIn$ = this.userLoggedIn.asObservable();
