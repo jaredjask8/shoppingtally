@@ -27,6 +27,13 @@ export class ProfileComponent implements OnInit{
   userData:JwtUserResponse;
   _showUpdate: boolean=false;
 
+  //phone number construction
+  phoneFieldShown:boolean=false
+  areaCode:string
+  middleOfNumber:string
+  endOfNumber:string
+
+
   currentData:string
   currentUpdateTitle:string
   
@@ -68,9 +75,18 @@ export class ProfileComponent implements OnInit{
     this._showUpdate = true;
     this.currentUpdateTitle = choice
     this.currentData = data
+    if(choice == "phone"){
+      this.phoneFieldShown = true
+      this.areaCode= data.substring(0,3)
+      this.middleOfNumber = data.substring(3,6)
+      this.endOfNumber = data.substring(6)
+      
+    }
+    
   }
 
   updateUserData(data:string){
+    console.log(data)
     this.userService.updateUserData(data,this.currentUpdateTitle).subscribe(d=>{
       this.userData = d
     })

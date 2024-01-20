@@ -20,6 +20,19 @@ h1{
     
 }
 
+.phoneInput{
+    background-color: white;
+    border: none;
+    width: 35px;
+    margin-left: 5px;
+    margin-right: 5px;
+    background-color: #33FFFF;
+}
+
+.phoneInput:focus{
+    background-color: beige;
+}
+
 .nav-container{
     height: 500px;
     width:20%;

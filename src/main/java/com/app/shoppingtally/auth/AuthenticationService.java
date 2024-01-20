@@ -102,7 +102,7 @@ public class AuthenticationService {
 			saveUserToken(user, jwtToken);
 			return AuthenticationResponse.builder().token(jwtToken).build();
 		}catch(Exception e){
-			return AuthenticationResponse.builder().token(e.getMessage()).build();
+			return AuthenticationResponse.builder().token("expired").build();
 		}
 	}
 	
@@ -120,6 +120,7 @@ public class AuthenticationService {
 				.lastname(user.getLastname())
 				.address(user.getAddress())
 				.email(user.getEmail())
+				.phone(user.getPhone())
 				.role(user.getRole())
 				.build();
 	}
@@ -139,6 +140,9 @@ public class AuthenticationService {
 			case "address":
 				user.setAddress(update.getUserUpdate());
 				break;
+			case "phone":
+				user.setPhone(update.getUserUpdate());
+				break;
 		}
 		
 		repository.save(user);
@@ -148,6 +152,7 @@ public class AuthenticationService {
 				.lastname(user.getLastname())
 				.address(user.getAddress())
 				.email(user.getEmail())
+				.phone(user.getPhone())
 				.build();
 	}
 	

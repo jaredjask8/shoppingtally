@@ -25,7 +25,7 @@ import { Router } from "@angular/router";
     signOutSnackbar$:Observable<boolean>
     //"http://localhost:8080"
     //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
-    serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
+    serverUrl = "http://localhost:8080"
 
     constructor(private http:HttpClient, private navService:NavService, private profileService:ProfileService, private router:Router, private registerService:RegisterService){
       this.userLoggedIn$ = this.userLoggedIn.asObservable();
@@ -36,10 +36,16 @@ import { Router } from "@angular/router";
       return sessionStorage.getItem("log");
     }
 
-    signOut():Observable<TokenResponse>{
-      let token = this.getEnvironment().token
-      const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-      return this.http.get<TokenResponse>(this.serverUrl + "/api/v1/auth/signOut",{headers:headers});
+    signOut(){
+      this.navService.cartVisibilityFromUser.next(false)
+      this.profileService.setSignOut(true);
+      this.removeUser();
+      this.navService.cartCount.next("");
+      this.userLoggedIn.next(false)
+      this.stopLoginTimer()
+      this.stopLogoutTimer()
+      this.router.navigate(['/','home']);
+      this.signOutSnackbar.next(true)
     }
 
     refreshLogin():Observable<TokenResponse>{
@@ -87,34 +93,31 @@ import { Router } from "@angular/router";
         //stop logout timer
         //after 15 min
         //logout timer starts when refresh happens
-        this.refreshLogin().subscribe(d=>this.setToken(d.token))
-      },15 * 60 * 1000) //900000 //2 * 60 * 1000
+        this.refreshLogin().subscribe(d=>{
+          if(d.token == "expired"){
+            this.signOut()
+          }else{
+            this.setToken(d.token)
+          }
+        })
+      },3 * 60 * 1000) //900000 //2 * 60 * 1000
     }
 
     startLogoutTimer(){
       console.log("in logout")
       this.logoutTimer = setTimeout(()=>{
         //if the timer hits sign them out
-        this.signOut().subscribe({
-          complete:()=>{
-            this.navService.cartVisibilityFromUser.next(false)
-            this.profileService.setSignOut(true);
-            this.removeUser();
-            this.navService.cartCount.next("");
-            this.userLoggedIn.next(false)
-            this.stopLoginTimer()
-            this.router.navigate(['/','home']);
-            this.signOutSnackbar.next(true)
-          }
-        })
-      },10 * 60 * 1000) //700000
+        this.signOut()
+      },2 * 60 * 1000)
     }
 
     stopLogoutTimer(){
+      console.log("stopped logout")
       clearTimeout(this.logoutTimer)
     }
 
     stopLoginTimer(){
+      console.log("stopped login")
       clearInterval(this.loginTimer)
     }
 

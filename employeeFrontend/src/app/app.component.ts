@@ -45,9 +45,14 @@ export class AppComponent implements OnInit{
         this.userService.stopLogoutTimer()
         
         this.userService.refreshLogin().subscribe(d=>{
-          this.userService.setToken(d.token)
-          this.userService.startLoginTimer()
-          this.userService.startLogoutTimer()
+          if(d.token == "expired"){
+            this.userService.signOut()
+          }else{
+            this.userService.setToken(d.token)
+            this.userService.startLoginTimer()
+            this.userService.startLogoutTimer()
+          }
+          
         })
       }
     }
