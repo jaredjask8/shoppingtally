@@ -19,12 +19,20 @@ export class AppComponent implements OnInit{
   displayLoadingIndicator=false;
   showModal:Observable<boolean>
   closeResult: string;
-  testTimer:string="nope"
+  testTimer:string
   @HostListener('document:click', ['$event'])
     handlerFunction(e: MouseEvent) {
       if(this.userService.getEnvironment().log == "1"){
         this.userService.stopLogoutTimer()
         this.userService.startLogoutTimer()
+      }
+      
+    }
+
+    @HostListener('document:visibilitychange', ['$event'])
+    visibilitychange() {
+      if(this.userService.getEnvironment().log == "1"){
+        this.checkHiddenDocument();
       }
       
     }
@@ -40,6 +48,7 @@ export class AppComponent implements OnInit{
     }else{
       this.registerService.userCredentials.next(false)
     }
+    
     
     
     this.router.events.subscribe(e => {
@@ -67,13 +76,6 @@ export class AppComponent implements OnInit{
       this.userService.stopLogoutTimer()
 
       //for mobile devices on screen lock, refresh token when they come back to the page
-      if(window.matchMedia("(max-width: 500px)").matches){
-        this.userService.refreshLogin().subscribe(d=>this.userService.setToken(d.token))
-        this.testTimer = "sweeeet"
-        setTimeout(()=>{
-          this.testTimer = "back to nope"
-        },1000)
-      }
       
       this.userService.startLoginTimer()
       this.userService.startLogoutTimer()
@@ -88,5 +90,16 @@ export class AppComponent implements OnInit{
 		this.modalService.open(content, { backdropClass: 'light-blue-backdrop' });
 	}
 
-  
+
+
+  checkHiddenDocument() {
+    if (!document.hidden) {
+      this.userService.refreshLogin().subscribe(d=>{
+        this.userService.setToken(d.token)
+        this.testTimer = d.token
+      })
+    }
+  }
 }
+
+
