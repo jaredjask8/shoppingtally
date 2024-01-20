@@ -34,7 +34,6 @@ export class AppComponent implements OnInit{
       if(this.userService.getEnvironment().log == "1"){
         this.checkHiddenDocument();
       }
-      
     }
 
   
@@ -96,7 +95,7 @@ export class AppComponent implements OnInit{
     if (!document.hidden) {
       this.userService.refreshLogin().subscribe(d=>{
         this.userService.setToken(d.token)
-        this.testTimer = d.token
+        this.testTimer = navigator.userAgent
       })
     }
   }
