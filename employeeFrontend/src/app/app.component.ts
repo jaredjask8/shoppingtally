@@ -19,7 +19,7 @@ export class AppComponent implements OnInit{
   displayLoadingIndicator=false;
   showModal:Observable<boolean>
   closeResult: string;
-  testTimer:string
+
   @HostListener('document:click', ['$event'])
     handlerFunction(e: MouseEvent) {
       if(this.userService.getEnvironment().log == "1"){
