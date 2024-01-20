@@ -310,8 +310,7 @@ export class ListComponent implements OnInit, OnDestroy {
       }else{
         //hide button and display message
         this.isItemValid = false;
-        this.snackBar.open("Item already in current order")
-        setTimeout(()=>{this.snackBar.dismiss()},2000)
+        this.snackBar.open("Item already in current order","",{panelClass:"light-blue-backdrop",duration:2000})
       }
   }
 
@@ -327,8 +326,7 @@ export class ListComponent implements OnInit, OnDestroy {
       this.navService.cartCount.next(count);
     })
     
-    this.snackBar.open("Item added")
-    setTimeout(()=>{this.snackBar.dismiss()},2000)
+    this.snackBar.open("Item added","",{panelClass:"light-blue-backdrop",duration:2000})
     //this.list.push(item)
     //this.table.renderRows();
     this.resetItem()
@@ -394,15 +392,13 @@ export class ListComponent implements OnInit, OnDestroy {
 
       let newItem:ListItem = new ListItem(this.currentItem,this.currentQuantity,this.currentImage);
       this.updateActiveOrderFrontend('todo',newItem,'added');
-      this.snackBar.open("Item added")
-      setTimeout(()=>{this.snackBar.dismiss()},2000)
+      this.snackBar.open("Item added","",{panelClass:"light-blue-backdrop",duration:2000})
     } else {
       //send to currentOrder
       this.listService.addItemToCurrentOrder(new ListItem(this.currentItem, this.currentQuantity, this.currentImage)).subscribe(d => {
         this.currentOrderList = d
       })
-      this.snackBar.open("Item added")
-      setTimeout(()=>{this.snackBar.dismiss()},2000)
+      this.snackBar.open("Item added","",{panelClass:"light-blue-backdrop",duration:2000})
     }
 
     this.resetItem()

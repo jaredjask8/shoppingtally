@@ -100,7 +100,7 @@ import { Router } from "@angular/router";
             this.setToken(d.token)
           }
         })
-      },3 * 60 * 1000) //900000 //2 * 60 * 1000
+      },15 * 60 * 1000) //900000 //2 * 60 * 1000
     }
 
     startLogoutTimer(){
@@ -108,7 +108,7 @@ import { Router } from "@angular/router";
       this.logoutTimer = setTimeout(()=>{
         //if the timer hits sign them out
         this.signOut()
-      },2 * 60 * 1000)
+      },10 * 60 * 1000)
     }
 
     stopLogoutTimer(){

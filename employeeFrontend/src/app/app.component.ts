@@ -83,7 +83,7 @@ export class AppComponent implements OnInit{
     
     this.userService.signOutSnackbar$.subscribe(d=>{
       if(d){
-        this.snackBar.open("You have been signed out","",{duration:10000})
+        this.snackBar.open("You have been signed out","",{duration:10000,panelClass:'light-blue-backdrop'})
       }
     })
 
