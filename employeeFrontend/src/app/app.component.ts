@@ -83,13 +83,9 @@ export class AppComponent implements OnInit{
     })
 
 
-    //check if user is logged in
+    //check if user is logged in on refresh
+    //when refreshed start timers again
     if(this.userService.getEnvironment().log == "1"){
-      this.userService.stopLoginTimer()
-      this.userService.stopLogoutTimer()
-
-      //for mobile devices on screen lock, refresh token when they come back to the page
-      
       this.userService.startLoginTimer()
       this.userService.startLogoutTimer()
       this.listService.getUserHasOrder().subscribe(d => {
