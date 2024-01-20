@@ -88,7 +88,7 @@ import { Router } from "@angular/router";
         //after 15 min
         //logout timer starts when refresh happens
         this.refreshLogin().subscribe(d=>this.setToken(d.token))
-      },4 * 60 * 1000) //900000 //2 * 60 * 1000
+      },2 * 60 * 1000) //900000 //2 * 60 * 1000
     }
 
     startLogoutTimer(){
