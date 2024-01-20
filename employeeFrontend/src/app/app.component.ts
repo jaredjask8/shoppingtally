@@ -92,7 +92,7 @@ export class AppComponent implements OnInit{
 
 
   checkHiddenDocument() {
-    if (!document.hidden) {
+    if (!document.hidden && navigator.userAgent.includes("Mobile/")) {
       this.userService.refreshLogin().subscribe(d=>{
         this.userService.setToken(d.token)
         this.testTimer = navigator.userAgent
