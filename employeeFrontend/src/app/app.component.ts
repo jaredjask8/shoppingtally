@@ -91,8 +91,12 @@ export class AppComponent implements OnInit{
     //check if user is logged in on refresh
     //when refreshed start timers again
     if(this.userService.getEnvironment().log == "1"){
-      this.userService.startLoginTimer()
-      this.userService.startLogoutTimer()
+      this.userService.refreshLogin().subscribe(d=>{
+        this.userService.setToken(d.token)
+        this.userService.startLoginTimer()
+        this.userService.startLogoutTimer()
+      })
+      
       this.listService.getUserHasOrder().subscribe(d => {
         this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
       })

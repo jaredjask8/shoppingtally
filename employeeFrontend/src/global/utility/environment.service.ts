@@ -62,7 +62,6 @@ import { Router } from "@angular/router";
         sessionStorage.setItem("token",token);
         sessionStorage.setItem("log", "1");
         this.registerService.getUser().subscribe( (d) => {
-          console.log(d)
           this.registerService.setAdmin(d);
           
       });
@@ -88,6 +87,7 @@ import { Router } from "@angular/router";
 
     startLoginTimer(){
       console.log("in login")
+      setInterval(()=>{console.log("there")},2 * 60 * 1000)
       this.loginTimer = setInterval(()=>{
         //get new token
         //stop logout timer
@@ -100,7 +100,7 @@ import { Router } from "@angular/router";
             this.setToken(d.token)
           }
         })
-      },15 * 60 * 1000) //900000 //2 * 60 * 1000
+      },10 * 60 * 1000) //900000 //2 * 60 * 1000
     }
 
     startLogoutTimer(){
