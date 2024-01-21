@@ -44,6 +44,7 @@ export class AppComponent implements OnInit{
         this.userService.stopLoginTimer()
         this.userService.stopLogoutTimer()
         
+        
         this.userService.refreshLogin().subscribe(d=>{
           if(d.token == "expired"){
             this.userService.signOut()
@@ -54,7 +55,7 @@ export class AppComponent implements OnInit{
           }
           
         })
-      }else{
+      }else if(document.hidden && navigator.userAgent.includes("Mobile/")){
         this.userService.stopLoginTimer()
         this.userService.stopLogoutTimer()
       }
@@ -94,6 +95,7 @@ export class AppComponent implements OnInit{
     //check if user is logged in on refresh
     //when refreshed start timers again
     if(this.userService.getEnvironment().log == "1"){
+      
       this.userService.refreshLogin().subscribe(d=>{
         this.userService.setToken(d.token)
         this.userService.startLoginTimer()

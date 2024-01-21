@@ -100,7 +100,7 @@ import { Router } from "@angular/router";
             this.setToken(d.token)
           }
         })
-      },10 * 60 * 1000) //900000 //2 * 60 * 1000
+      },15 * 60 * 1000) //900000 //2 * 60 * 1000
     }
 
     startLogoutTimer(){
@@ -112,7 +112,7 @@ import { Router } from "@angular/router";
     }
 
     stopLogoutTimer(){
-      console.log("stopped logout")
+      console.log("stopped logout "+new Date().toLocaleString("en-US", {timeZone: "EST"}))
       clearTimeout(this.logoutTimer)
     }
 
