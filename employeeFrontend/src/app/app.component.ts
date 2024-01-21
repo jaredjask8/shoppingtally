@@ -54,6 +54,9 @@ export class AppComponent implements OnInit{
           }
           
         })
+      }else{
+        this.userService.stopLoginTimer()
+        this.userService.stopLogoutTimer()
       }
     }
 
