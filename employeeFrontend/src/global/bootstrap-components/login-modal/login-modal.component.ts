@@ -55,7 +55,7 @@ export class LoginModalComponent implements OnInit{
       
     }else{
       //user successful login
-      this.service.setEnvironment(token);
+      this.service.setToken(token);
       this.showLoginSuccess = true;
       setTimeout(() =>{
         this.showLoginSuccess = false;
@@ -76,8 +76,7 @@ export class LoginModalComponent implements OnInit{
       this.navService.getCartCount().subscribe(d=>{
         this.navService.cartCount.next(d)
       })
-      
-      window.location.reload()
+      this.service.setEnvironment()
     }
 
   }

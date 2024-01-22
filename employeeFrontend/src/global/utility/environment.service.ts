@@ -58,12 +58,11 @@ import { Router } from "@angular/router";
       //window.location.reload()
     }
     
-    setEnvironment(token:string){
-        sessionStorage.setItem("token",token);
+    setEnvironment(){
         sessionStorage.setItem("log", "1");
         this.registerService.getUser().subscribe( (d) => {
           this.registerService.setAdmin(d);
-          
+          window.location.reload()
       });
         
     }

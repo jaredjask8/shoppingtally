@@ -13,7 +13,12 @@ public class WhatsNewService {
 	private WhatsNewRepo whatsNewRepo;
 	
 	public void upload(WhatsNew whatsNewData) {
-		whatsNewRepo.save(whatsNewData);
+		try {
+			whatsNewRepo.save(whatsNewData);
+		}catch(Exception e) {
+			e.getMessage();
+		}
+		
 	}
 	
 	public List<WhatsNew> download() {
