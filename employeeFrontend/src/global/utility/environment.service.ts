@@ -86,8 +86,6 @@ import { Router } from "@angular/router";
     }
 
     startLoginTimer(){
-      console.log("in login")
-      setInterval(()=>{console.log("there")},2 * 60 * 1000)
       this.loginTimer = setInterval(()=>{
         //get new token
         //stop logout timer
@@ -102,7 +100,7 @@ import { Router } from "@angular/router";
             console.log(d.token)
           }
         })
-      },2 * 60 * 1000) //900000 //2 * 60 * 1000
+      },20 * 60 * 1000) //900000 //2 * 60 * 1000
     }
 
     startLogoutTimer(){
@@ -110,7 +108,7 @@ import { Router } from "@angular/router";
       this.logoutTimer = setTimeout(()=>{
         //if the timer hits sign them out
         this.signOut()
-      },1 * 60 * 1000)
+      },10 * 60 * 1000)
     }
 
     stopLogoutTimer(){
