@@ -95,15 +95,17 @@ public class AuthenticationService {
 	
 	public AuthenticationResponse refresh(String token) {
 		try {
-			var tokenUser = tokenRepository.findByToken(jwtService.extractFromBearer(token)).get();
-			var user = repository.findUserById(Long.valueOf(tokenUser.getUser().getId()) ).get();
-			tokenRepository.delete(tokenUser);
-			var jwtToken = jwtService.generateToken(user);
-			saveUserToken(user, jwtToken);
-			return AuthenticationResponse.builder().token(jwtToken).build();
-		}catch(Exception e){
+			jwtService.isTokenExpired(jwtService.extractFromBearer(token));
+		}catch(Exception e) {
 			return AuthenticationResponse.builder().token("expired").build();
 		}
+		
+		var tokenUser = tokenRepository.findByToken(jwtService.extractFromBearer(token)).get();
+		var user = repository.findUserById(Long.valueOf(tokenUser.getUser().getId()) ).get();
+		tokenRepository.delete(tokenUser);
+		var jwtToken = jwtService.generateToken(user);
+		saveUserToken(user, jwtToken);
+		return AuthenticationResponse.builder().token(jwtToken).build();
 	}
 	
 	public AuthenticationResponse signOut(String token) {

@@ -96,11 +96,13 @@ import { Router } from "@angular/router";
         this.refreshLogin().subscribe(d=>{
           if(d.token == "expired"){
             this.signOut()
+            console.log(d.token)
           }else{
             this.setToken(d.token)
+            console.log(d.token)
           }
         })
-      },15 * 60 * 1000) //900000 //2 * 60 * 1000
+      },2 * 60 * 1000) //900000 //2 * 60 * 1000
     }
 
     startLogoutTimer(){
@@ -108,7 +110,7 @@ import { Router } from "@angular/router";
       this.logoutTimer = setTimeout(()=>{
         //if the timer hits sign them out
         this.signOut()
-      },10 * 60 * 1000)
+      },1 * 60 * 1000)
     }
 
     stopLogoutTimer(){

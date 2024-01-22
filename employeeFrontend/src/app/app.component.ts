@@ -41,10 +41,6 @@ export class AppComponent implements OnInit{
 
     checkHiddenDocumentForMobile() {
       if (!document.hidden && navigator.userAgent.includes("Mobile/")) {
-        this.userService.stopLoginTimer()
-        this.userService.stopLogoutTimer()
-        
-        
         this.userService.refreshLogin().subscribe(d=>{
           if(d.token == "expired"){
             this.userService.signOut()
@@ -97,9 +93,13 @@ export class AppComponent implements OnInit{
     if(this.userService.getEnvironment().log == "1"){
       
       this.userService.refreshLogin().subscribe(d=>{
-        this.userService.setToken(d.token)
-        this.userService.startLoginTimer()
-        this.userService.startLogoutTimer()
+        if(d.token == "expired"){
+          this.userService.signOut()
+        }else{
+          this.userService.setToken(d.token)
+          this.userService.startLoginTimer()
+          this.userService.startLogoutTimer()
+        }
       })
       
       this.listService.getUserHasOrder().subscribe(d => {
