@@ -38,7 +38,7 @@ export class RegisterService {
       this.isAdmin = false;
       this.userCredentials.next(false);
     }
-    window.location.reload()
+    
   }
 
   getCredentials(){
