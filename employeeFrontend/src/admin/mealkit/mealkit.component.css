@@ -6,6 +6,13 @@
     background-color: beige;
 }
 
+::ng-deep .mat-mdc-snack-bar-container {
+   --mdc-snackbar-container-color:#F7F603 !important;
+ }
+::ng-deep .mat-mdc-snack-bar-container .mdc-snackbar__label{
+   color: #2a246a !important;
+}
+
 h2{
     text-align: center;
 }

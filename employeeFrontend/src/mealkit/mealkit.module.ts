@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
+import { LoaderComponent } from 'src/global/components/loader.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { MatSelectModule } from '@angular/material/select';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    LoaderComponent
   ]
 })
 export class MealkitModule { }

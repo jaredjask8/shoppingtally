@@ -1,12 +1,11 @@
 
 
-
-
 .bodyReviews{
-    height: 100vh;
-    overflow: hidden;
+    padding-top: 100px;
     width: 100%;
+    overflow:hidden;
     display: flex;
+    z-index: 1;
 }
 
 .reviewMainContainer{
@@ -15,7 +14,7 @@
     align-self: center;
     width: 100%;
     justify-content: center;
-
+    z-index: inherit;
 }
 
 .createReviewContainer{
@@ -33,8 +32,8 @@
 .reviewsContainer{
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
-    height: 100%;
+    overflow-y: auto;
+    height: 300px;
     width: 400px;
 }
 
@@ -54,14 +53,8 @@ ngb-rating{
     text-align: center;
 }
 
-mat-divider{
-    height: 70%;
-    border-right-color: rgb(7, 34, 62);
-}
 
-#map {
-    height: 400px;
-}
+
 
 @media (max-width:850px) {
     mat-divider{
@@ -89,7 +82,6 @@ mat-divider{
         width: 100%;
         display: flex;
         flex-direction: column;
-        overflow-y: scroll;
         padding: 20px;
     }
 }

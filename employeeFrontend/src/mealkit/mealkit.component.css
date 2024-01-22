@@ -9,7 +9,12 @@
     overflow-x: hidden;
 }
 
-
+::ng-deep .mat-mdc-snack-bar-container {
+    --mdc-snackbar-container-color:#F7F603 !important;
+  }
+ ::ng-deep .mat-mdc-snack-bar-container .mdc-snackbar__label{
+    color: #2a246a !important;
+ }
 
 .recipeContainer{
     position: relative;

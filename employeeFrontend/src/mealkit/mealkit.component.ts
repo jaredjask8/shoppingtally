@@ -9,6 +9,8 @@ import { ListItemInterface } from 'src/list/models/ListItemInterface';
 import Fraction from 'fraction.js';
 import { CurrentOrderUser } from 'src/list/models/CurrentOrderUser';
 import { List } from 'src/list/models/List';
+import { LoaderService } from 'src/global/components/loader.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -63,7 +65,7 @@ export class MealkitComponent implements OnInit{
   currentOrderDate:string
   
   
-  constructor(private mealkitService : MealkitService, private navService:NavService, private listService:ListService){
+  constructor(private mealkitService : MealkitService, private navService:NavService, private listService:ListService, private loaderService:LoaderService, private recipeNotification:MatSnackBar){
     this.navService.cartVisibility$.subscribe(d => {
       if(!d.hasActive && !d.hasCurrentOrder){
         this.listService.getCurrentList().subscribe(d=>this.currentCartItems = d.list)
@@ -151,6 +153,7 @@ export class MealkitComponent implements OnInit{
   }
 
   addRecipeToCart(){
+    this.loaderService.isLoading.next(true)
     let filteredList:ListItem[]=[]
     this.listService.getCurrentList().subscribe(d=>{
       this.currentCartItems = d.list
@@ -160,9 +163,20 @@ export class MealkitComponent implements OnInit{
           filteredList.push(e)
         }
       })
-      this.listService.addFullList(filteredList).subscribe(d=>{
-        this.navService.cartCount.next(d.itemCount.toString())
-        this.currentCartItems = d.list
+      this.listService.addFullList(filteredList).subscribe({
+        next:d=>{
+          this.navService.cartCount.next(d.itemCount.toString())
+          this.currentCartItems = d.list
+        },
+        error:err=>{
+          this.loaderService.isLoading.next(false)
+          console.error(err)
+        },
+        complete:()=>{
+          this.recipeNotification.open("Recipe added","",{duration:1000})
+          this.loaderService.isLoading.next(false)
+        }
+
       })
 
     })

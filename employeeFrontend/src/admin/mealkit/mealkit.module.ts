@@ -7,6 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoaderComponent } from 'src/global/components/loader.component';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatButtonModule,
     MatSelectModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LoaderComponent,
+    MatSnackBarModule
   ]
 })
 export class MealkitModule { }

@@ -4,6 +4,8 @@ import { IngredientsInterface } from './models/IngredientsInterface';
 import { Ingredients } from './models/Ingredients';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Recipes } from './models/Recipes';
+import { LoaderService } from 'src/global/components/loader.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-mealkit',
@@ -42,7 +44,13 @@ export class MealkitComponent implements OnInit{
     "vegetarian",
     "gluten free",
     "keto",
-    "healthy"
+    "healthy",
+    "italian",
+    "mexican",
+    "pasta",
+    "seafood",
+    "dessert",
+    "spicy"
   ]
 
   currentStepsEditString=""
@@ -75,7 +83,7 @@ export class MealkitComponent implements OnInit{
     featuredControl: new FormControl('')
   });
 
-  constructor(private mealkitService:MealkitService){}
+  constructor(private mealkitService:MealkitService, private loaderService : LoaderService, private recipeNotification:MatSnackBar){}
   ngOnInit(){
     this.mealkitService.getRecipes().subscribe(d=>this.recipeArray = d)
   }
@@ -179,6 +187,7 @@ export class MealkitComponent implements OnInit{
   }
 
   addRecipe(){
+    this.loaderService.isLoading.next(true)
     let image:string = "";
     this.recipeName.split(" ").forEach((d,index)=>{
       if(index == 0){
@@ -189,7 +198,14 @@ export class MealkitComponent implements OnInit{
     })
 
     let finalImage:string = "https://shoppingtally.click/images/"+image+".png"
-    this.mealkitService.addRecipe(new Recipes(this.recipeIngredients,this.recipeSteps,this.recipeName,this.recipeDescription,finalImage,this.recipeTags,this.recipeServingSize,false)).subscribe(d=>this.recipeArray = d)
+    this.mealkitService.addRecipe(new Recipes(this.recipeIngredients,this.recipeSteps,this.recipeName,this.recipeDescription,finalImage,this.recipeTags,this.recipeServingSize,false)).subscribe({
+      next:d=>this.recipeArray = d,
+      error:err=>console.error(err),
+      complete:()=>{
+        this.recipeNotification.open("Recipe added","",{duration:1000})
+        this.loaderService.isLoading.next(false)
+      }
+    })
   }
 
   loadRecipeData(recipe:Recipes,index:number){

@@ -10,6 +10,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { LoaderComponent } from 'src/global/components/loader.component';
+import { LoaderService } from 'src/global/components/loader.service';
 
 @Component({
   selector: 'app-whats-new',
@@ -24,7 +26,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    LoaderComponent,
+
   ]
 })
 export class WhatsNewComponent implements OnInit{
@@ -38,7 +42,7 @@ export class WhatsNewComponent implements OnInit{
   description2:string='';
   whatsNewArray:WhatsNew[]
 
-  constructor(private adminService:AdminService, private cdr: ChangeDetectorRef, private uploadMessage:MatSnackBar){}
+  constructor(private adminService:AdminService, private cdr: ChangeDetectorRef, private uploadMessage:MatSnackBar, private loaderService:LoaderService){}
   ngOnInit(): void {
     this.adminService.getWhatsNew().subscribe(d => {
       this.whatsNewArray = d;
@@ -60,11 +64,19 @@ export class WhatsNewComponent implements OnInit{
    }
 
   onSubmit(index){
+    this.loaderService.isLoading.next(true)
     if(index == 0){
       this.adminService.submitWhatsNew(new WhatsNew(1,this.title1,this.description1,this.imgUrl)).subscribe({
-        next:data => console.log(data),
-        error:err=>this.uploadMessage.open("Failed to upload : " +err,"",{duration:1000}),
-        complete:()=>this.uploadMessage.open("Uploaded successfully","",{duration:1000})
+        next:data => {
+          console.log(data)
+        },
+        error:err=>{
+          this.uploadMessage.open("Failed to upload : " +err,"",{duration:1000})
+        },
+        complete:()=>{
+          this.loaderService.isLoading.next(false)
+          this.uploadMessage.open("Uploaded successfully","",{duration:1000})
+        }
       })
     }else{
       this.adminService.submitWhatsNew(new WhatsNew(2,this.title2,this.description2,this.imgUrl2)).subscribe(d => console.log(d))
