@@ -9,7 +9,7 @@ import { WhatsNew } from 'src/models/WhatsNew';
 export class AdminService {
   //"http://localhost:8080"
   //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
-  serverUrl = "http://localhost:8080"
+  serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
   getWhatsNew() {
     return this.http.get<WhatsNew[]>(this.serverUrl+"/api/v1/admin/whatsNew/list")
   }

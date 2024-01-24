@@ -119,8 +119,9 @@ export class MealkitComponent implements OnInit{
   }
 
   convert(size:number){
+    //take ingredients and divide it by the original serving size
+    //multiply ingredients by the new serving size
     let servingSizeToInt = parseInt(this.currentRecipe.servingSize)
-    let doMath = size - servingSizeToInt;
     this.currentServingSize = size
     if(this.currentServingSize == parseInt(this.currentRecipe.servingSize)){
       this.setInitialCurrentRecipe = true
@@ -128,12 +129,19 @@ export class MealkitComponent implements OnInit{
       this.setInitialCurrentRecipe = false
       this.convertedRecipeArray = this.currentRecipe
       this.currentRecipe.ingredients.forEach((d,index)=>{
+        //take ingredients and divide it by the original serving size
+        //multiply ingredients by the new serving size
         var x = new Fraction(d.initialQuantity);
-        this.convertedRecipeArray.ingredients[index].quantity = x.mul(doMath+1).toFraction(true)
-        
-        
+        //this.convertedRecipeArray.ingredients[index].quantity = 
+        let test = x.div(servingSizeToInt).toFraction(true)
+  
+        let t = new Fraction(test);
+        let test2 = t.mul(size).toFraction(true)
+        this.convertedRecipeArray.ingredients[index].quantity = test2
+        console.log(test2)
       })
     }
+    
     
   }
 
