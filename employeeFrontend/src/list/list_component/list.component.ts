@@ -21,6 +21,7 @@ import { CurrentOrderUser } from '../models/CurrentOrderUser';
 import { CurrentOrderUserClassWithUpdateMessage } from '../models/CurrentOrderUserClassWithUpdateMessage';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormControl } from '@angular/forms';
 
 
 @Component({
@@ -33,6 +34,8 @@ export class ListComponent implements OnInit, OnDestroy {
   serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket"
   title = 'WebSockets chat';
   stompClient;
+
+  itemFormControl = new FormControl('')
 
   //cancel order
   private cancelOrderModal = inject(NgbModal);
@@ -307,9 +310,11 @@ export class ListComponent implements OnInit, OnDestroy {
       if(this.checkItemValidity(item)){
         this.isItemValid = true;
         this.currentItem = item;
+        this.itemFormControl.reset()
       }else{
         //hide button and display message
         this.isItemValid = false;
+        this.itemFormControl.reset()
         this.snackBar.open("Item already in current order","",{panelClass:"light-blue-backdrop",duration:2000})
       }
   }

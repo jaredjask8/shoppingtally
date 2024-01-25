@@ -37,6 +37,7 @@ import { Router } from "@angular/router";
     }
 
     signOut(){
+      this.router.navigate(['/','home']);
       this.navService.cartVisibilityFromUser.next(false)
       this.profileService.setSignOut(true);
       this.removeUser();
@@ -44,7 +45,6 @@ import { Router } from "@angular/router";
       this.userLoggedIn.next(false)
       this.stopLoginTimer()
       this.stopLogoutTimer()
-      this.router.navigate(['/','home']);
       this.signOutSnackbar.next(true)
     }
 

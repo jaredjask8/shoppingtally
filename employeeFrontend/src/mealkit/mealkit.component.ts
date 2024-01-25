@@ -65,7 +65,7 @@ export class MealkitComponent implements OnInit{
   currentOrderDate:string
   
   
-  constructor(private mealkitService : MealkitService, private navService:NavService, private listService:ListService, private loaderService:LoaderService, private recipeNotification:MatSnackBar){
+  constructor(private mealkitService : MealkitService, private navService:NavService, private listService:ListService, private loaderService:LoaderService, private recipeNotification:MatSnackBar, private recipeLoadedNotification:MatSnackBar){
     this.navService.cartVisibility$.subscribe(d => {
       if(!d.hasActive && !d.hasCurrentOrder){
         this.listService.getCurrentList().subscribe(d=>this.currentCartItems = d.list)
@@ -123,24 +123,18 @@ export class MealkitComponent implements OnInit{
     //multiply ingredients by the new serving size
     let servingSizeToInt = parseInt(this.currentRecipe.servingSize)
     this.currentServingSize = size
-    if(this.currentServingSize == parseInt(this.currentRecipe.servingSize)){
-      this.setInitialCurrentRecipe = true
-    }else{
+    
       this.setInitialCurrentRecipe = false
       this.convertedRecipeArray = this.currentRecipe
       this.currentRecipe.ingredients.forEach((d,index)=>{
         //take ingredients and divide it by the original serving size
         //multiply ingredients by the new serving size
-        var x = new Fraction(d.initialQuantity);
-        //this.convertedRecipeArray.ingredients[index].quantity = 
-        let test = x.div(servingSizeToInt).toFraction(true)
-  
-        let t = new Fraction(test);
-        let test2 = t.mul(size).toFraction(true)
-        this.convertedRecipeArray.ingredients[index].quantity = test2
-        console.log(test2)
+        var quantityToFraction = new Fraction(d.initialQuantity);
+        let quantityToFractionMath = quantityToFraction.div(servingSizeToInt).toFraction(true)
+        let newFraction = new Fraction(quantityToFractionMath);
+        let newFractionMath = newFraction.mul(size).toFraction(true)
+        this.convertedRecipeArray.ingredients[index].quantity = newFractionMath
       })
-    }
     
     
   }
@@ -154,10 +148,10 @@ export class MealkitComponent implements OnInit{
       this.itemsForCart.push(new ListItem(d.basicIngredient,"1",null))
     })
     this.currentServingSize = parseInt(this.currentRecipe.servingSize)
-    for(let i = this.currentServingSize; i <= 10; i++){
+    for(let i = 1; i <= 10; i++){
       this.servingSizeArray.push(i)
     }
-    
+    this.recipeLoadedNotification.open(recipe.name + " has been loaded below","",{duration:1000})
   }
 
   addRecipeToCart(){

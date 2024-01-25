@@ -20,7 +20,7 @@
           <div class="input-container">
             <mat-form-field class="itemInput" appearance="fill" >
               <mat-label>Enter item</mat-label>
-              <input matInput #input placeholder="Ex. Nougat" (input)="resetItem()">  <!-- (keyup)="getItems($event)" -->
+              <input matInput #input placeholder="Ex. Nougat" (input)="resetItem()" [formControl]="itemFormControl">  <!-- (keyup)="getItems($event)" -->
             </mat-form-field>
             <button mat-raised-button (click)="setItemName(input.value)">Search</button> <!-- getImages(input.value); -->
           </div>      

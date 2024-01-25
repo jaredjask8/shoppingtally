@@ -5,8 +5,10 @@
     <div class="recipesContainer container-fluid p-3">
         <div class="row g-5">
             <div class="col-6 col-sm-4 col-md-3 col-xl-2 recipeContainer" *ngFor="let recipe of recipeArrayFeatures">
-                <img (click)="loadRecipeData(recipe)" class="recipeImage" [src]=recipe.image height="170px" width="150px">
-                <div class="recipeName">{{recipe.name}}</div>
+                <div (click)="loadRecipeData(recipe)">
+                    <img class="recipeImage" [src]=recipe.image height="170px" width="150px">
+                    <div class="recipeName">{{recipe.name}}</div>
+                </div>
             </div>
         </div>
     </div>
@@ -15,20 +17,26 @@
     <div class="row g-5">
         <ng-container *ngIf="!isTagActive && !isNameActive">
             <div class="col-6 col-sm-4 col-md-3 col-xl-2 recipeContainer" *ngFor="let recipe of recipeArray">
-                <img (click)="loadRecipeData(recipe)" class="recipeImage" [src]=recipe.image height="170px" width="150px">
-                <div class="recipeName">{{recipe.name}}</div>
+                <div (click)="loadRecipeData(recipe)">
+                    <img class="recipeImage" [src]=recipe.image height="170px" width="150px">
+                    <div class="recipeName">{{recipe.name}}</div>
+                </div>
             </div>
         </ng-container>
         <ng-container *ngIf="isTagActive">
             <div class="col-6 col-sm-4 col-md-3 col-xl-2 recipeContainer" *ngFor="let recipe of filterByTagsArray">
-                <img (click)="loadRecipeData(recipe)" class="recipeImage" [src]=recipe.image height="170px" width="150px">
-                <div class="recipeName">{{recipe.name}}</div>
+                <div (click)="loadRecipeData(recipe)">
+                    <img class="recipeImage" [src]=recipe.image height="170px" width="150px">
+                    <div class="recipeName">{{recipe.name}}</div>
+                </div>
             </div>
         </ng-container>
         <ng-container *ngIf="isNameActive">
             <div class="col-6 col-sm-4 col-md-3 col-xl-2 recipeContainer" *ngFor="let recipe of filterByNameArray">
-                <img (click)="loadRecipeData(recipe)" class="recipeImage" [src]=recipe.image height="170px" width="150px">
-                <div class="recipeName">{{recipe.name}}</div>
+                <div (click)="loadRecipeData(recipe)">
+                    <img class="recipeImage" [src]=recipe.image height="170px" width="150px">
+                    <div class="recipeName">{{recipe.name}}</div>
+                </div>
             </div>
         </ng-container>
     </div>
@@ -74,7 +82,7 @@
                   </mat-option>
             </mat-select>
         </mat-form-field>
-        <h4 class="mt-3">Tags</h4>
+        <h4 class="mt-2">Tags</h4>
         <div class="tagsContainer">
             <div *ngFor="let tag of currentRecipe.tags; let i = index">
                 <button mat-raised-button class="ml-3">{{tag}}</button>
@@ -82,7 +90,7 @@
         </div>
         <button *ngIf="hasCartOrder else orderButtonTemplate" (click)="addRecipeToCart()" class="mt-3" mat-raised-button>Add recipe to cart</button>
         <ng-template #orderButtonTemplate>
-            <button mat-raised-button (click)="addRecipeToOrderState()">Add to order</button>
+            <button class="mt-4" mat-raised-button (click)="addRecipeToOrderState()">Add to order</button>
         </ng-template>
     
     </div>
