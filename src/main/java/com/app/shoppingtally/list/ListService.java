@@ -22,6 +22,7 @@ import com.app.shoppingtally.auth.AuthenticationService;
 import com.app.shoppingtally.auth.models.FullListRequest;
 import com.app.shoppingtally.auth.models.ListItemResponse;
 import com.app.shoppingtally.auth.models.ListToFrontendWithCount;
+import com.app.shoppingtally.config.EmailSenderService;
 import com.app.shoppingtally.config.JwtService;
 import com.app.shoppingtally.list.models.CategoryUpdateRequest;
 import com.app.shoppingtally.list.models.CompleteItemRequest;
@@ -59,6 +60,7 @@ public class ListService {
 	private final CurrentOrderRepo currentOrderRepo;
 	private String setList = null;
 	private final SimpMessagingTemplate messagingTemplate;
+	private final EmailSenderService emailSender;
 	
 	//////////////////CLIENT///////////////////
 	
@@ -69,7 +71,24 @@ public class ListService {
 		listRepo.save(list);
 		user.get().setCurrentList("");
 		userRepo.save(user.get());
+		if(list.getShopperId() == 1) {
+			emailSender.sendEmail("jayshoppingtally@gmail.com", "Order placed by " + list.getUser().getFirstname()+ " " + list.getUser().getLastname().substring(0,1)+". : "+ dateConversion(list.getDate()));
+		}else if(list.getShopperId() == 2) {
+			emailSender.sendEmail("joshshoppingtally@gmail.com", "Order placed by " + list.getUser().getFirstname()+ " " + list.getUser().getLastname().substring(0,1)+". : "+ dateConversion(list.getDate()));
+		}
+		
 		return authService.getCurrentList(list.getToken());
+	}
+	
+	String dateConversion(String date){
+		String month = date.substring(5,7);
+		String day = date.substring(8,10);
+		String time = date.substring(date.indexOf("T")+1);
+		if(time.equals("10") || time.equals("11")) {
+			return time+"am on "+month+"-"+day;
+		}else {
+			return time+"pm on "+month+"-"+day;
+		}
 	}
 	
 	List<ListDTO> getUserListData(Token token){
