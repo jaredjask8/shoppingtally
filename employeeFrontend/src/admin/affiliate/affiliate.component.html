@@ -1,0 +1,57 @@
+
+<app-loader></app-loader>
+<div class="d-flex flex-column w-100 affiliateBody justify-content-center align-items-center">
+    
+    <div class="affiliateContainer">
+        <form [formGroup]="affiliateForm"  class="d-flex flex-column affiliateForm p-5 ">
+            <h1 class="text-white text-center">Amazon Affiliate</h1>
+            <mat-form-field >
+                <mat-label>Name of item</mat-label>
+                <input #name matInput formControlName="name" (ngModelChange)="checkFormStatus()" required>
+            </mat-form-field>
+            <mat-form-field >
+                <mat-label>Link</mat-label>
+                <input #link matInput formControlName="link" (ngModelChange)="checkFormStatus()" required>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Image</mat-label>
+                <input #image matInput formControlName="image" (ngModelChange)="checkFormStatus()" required>
+            </mat-form-field>
+            <button mat-raised-button [disabled]="!formStatus" (click)="addAffiliateData()">Add</button>
+        </form>
+    
+        <div class="container-fluid affiliateDataContainer p-3">
+            <div class="row g-3">
+                <div class="col-xxl-4 col-xl-6 col-lg-3 col-md-4 col-6 d-flex justify-content-center" *ngFor="let affiliateData of affiliateArray">
+                    <div class="d-flex flex-column justify-content-center position-relative">
+                        <img class="rounded-top" [src]=affiliateData.image height="150px" width="auto" [title]=affiliateData.name>
+                        <div class="d-flex flex-column align-items-center bottom-0 w-100 bg-black rounded-bottom">
+                            <div class="text-decoration-none text-white text-center">{{affiliateData.name}}</div>
+                            <a class="mt-2" [href]=affiliateData.link target="_blank"><button mat-raised-button>Site</button></a>
+                            <button class="my-2" mat-raised-button (click)="deleteAffiliateData(affiliateData)">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="affiliateEditContainer mt-3" *ngIf="editShown">
+        <h1>Edit</h1>
+        <form [formGroup]="affiliateEditForm"  class="d-flex flex-column affiliateForm p-5">
+            <mat-form-field>
+                <input #name matInput formControlName="name" (ngModelChange)="checkFormStatus()" required>
+            </mat-form-field>
+            <mat-form-field >
+                <mat-label>Link</mat-label>
+                <input #link matInput formControlName="link" (ngModelChange)="checkFormStatus()" required>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Image</mat-label>
+                <input #image matInput formControlName="image" (ngModelChange)="checkFormStatus()" required>
+            </mat-form-field>
+            <button mat-raised-button [disabled]="!formEditStatus" (click)="finishAffiliateEdit()">Finish edit</button>
+            
+        </form>
+    </div> -->
+    
+</div>

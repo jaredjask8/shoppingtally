@@ -1,0 +1,70 @@
+.affiliateForm{
+    background-color: #2a246a;
+    width: 50%;
+}
+
+.affiliateBody{
+    padding-top: 100px;
+}
+
+.affiliateContainer{
+    width: 75%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.affiliateDataContainer{
+    width: 50%;
+}
+
+.affiliateDataContainer{
+    background-color: #2a246a;
+    height: 430px;
+    overflow-y: scroll;
+}
+
+.affiliateEditContainer{
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.editIcon{
+    border-top-right-radius: 6px;
+}
+
+@media(max-width:1200px){
+    .affiliateContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 75%;
+    }
+
+    .affiliateDataContainer{
+        width: 100%;
+        height: 500px;
+    }
+
+    .affiliateForm{
+        min-width: none !important;
+        width: 100%;
+    }
+}
+
+@media(max-width:600px){
+    .affiliateContainer{
+        width: 100%;
+    }
+
+    .affiliateBody{
+        padding-top: 40px;
+    }
+
+    .affiliateEditContainer{
+        width: 100%;
+    }
+
+}

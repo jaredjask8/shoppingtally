@@ -310,12 +310,10 @@ export class ListComponent implements OnInit, OnDestroy {
       if(this.checkItemValidity(item)){
         this.isItemValid = true;
         this.currentItem = item;
-        this.itemFormControl.reset()
       }else{
         //hide button and display message
         this.isItemValid = false;
-        this.itemFormControl.reset()
-        this.snackBar.open("Item already in current order","",{panelClass:"light-blue-backdrop",duration:2000})
+        this.snackBar.open("Item already in current order","",{duration:1000})
       }
   }
 
@@ -331,7 +329,7 @@ export class ListComponent implements OnInit, OnDestroy {
       this.navService.cartCount.next(count);
     })
     
-    this.snackBar.open("Item added","",{panelClass:"light-blue-backdrop",duration:2000})
+    this.snackBar.open("Item added","",{duration:1000})
     //this.list.push(item)
     //this.table.renderRows();
     this.resetItem()
@@ -342,6 +340,7 @@ export class ListComponent implements OnInit, OnDestroy {
     this.currentQuantity = "";
     this.googleImageArray = null;
     this.isItemValid = false;
+    this.itemFormControl.reset()
   }
 
 

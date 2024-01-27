@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.app.shoppingtally.affiliate.AffiliateWebDriver;
 import com.app.shoppingtally.auth.AuthenticationService;
 import com.app.shoppingtally.auth.models.FullListRequest;
 import com.app.shoppingtally.auth.models.ListItemResponse;
@@ -61,6 +62,8 @@ public class ListService {
 	private String setList = null;
 	private final SimpMessagingTemplate messagingTemplate;
 	private final EmailSenderService emailSender;
+	private final AffiliateWebDriver affiliateDriver;
+	
 	
 	//////////////////CLIENT///////////////////
 	
@@ -191,6 +194,7 @@ public class ListService {
 	}
 	
 	UserOrderInfo getUserOrderInfo(String token) {
+		//affiliateDriver.startDriver();
 		Optional<User> client = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
 		List<UserList> userList = listRepo.findByCurrentOrder(client.get().getId());
 		if(userList.isEmpty()) {

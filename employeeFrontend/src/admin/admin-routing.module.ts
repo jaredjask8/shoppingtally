@@ -10,6 +10,7 @@ const routes: Routes = [
   {path:"whatsNew", component:WhatsNewComponent},
   {path:"orders", loadChildren: () => import('../admin/orders/orders.module').then(m => m.OrdersModule)},
   {path:"mealkit", loadChildren: () => import('../admin/mealkit/mealkit.module').then(m => m.MealkitModule)},
+  {path:"affiliate",loadChildren:() => import('../admin/affiliate/affiliate.module').then(m => m.AffiliateModule)}
 ];
 
 @NgModule({

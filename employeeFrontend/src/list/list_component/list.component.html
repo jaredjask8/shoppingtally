@@ -14,13 +14,22 @@
 		<button type="button" class="btn btn-outline-dark" (click)="modal.close('cancel')">Cancel order</button>
 	</div>
 </ng-template>
+<div class="affiliateContainer">
+  <img class="affiliateLogo" src="../../assets/img/amazon-associates-square .png">
+  <a href="https://amzn.to/3u9a5mq"><img height="60px" width="60px" title="Cutting board" src="https://m.media-amazon.com/images/I/71nXnil07qL.__AC_SX300_SY300_QL70_FMwebp_.jpg"></a>
+  <a href="https://amzn.to/3u9a5mq"><img height="60px" width="60px" title="Cutting board" src="https://m.media-amazon.com/images/I/71nXnil07qL.__AC_SX300_SY300_QL70_FMwebp_.jpg"></a>
+  <a href="https://amzn.to/3u9a5mq"><img height="60px" width="60px" title="Cutting board" src="https://m.media-amazon.com/images/I/71nXnil07qL.__AC_SX300_SY300_QL70_FMwebp_.jpg"></a>
+  <a href="https://amzn.to/3u9a5mq"><img height="60px" width="60px" title="Cutting board" src="https://m.media-amazon.com/images/I/71nXnil07qL.__AC_SX300_SY300_QL70_FMwebp_.jpg"></a>
+  <a href="https://amzn.to/3u9a5mq"><img height="60px" width="60px" title="Cutting board" src="https://m.media-amazon.com/images/I/71nXnil07qL.__AC_SX300_SY300_QL70_FMwebp_.jpg"></a>
+</div>
     <div class="listBody">
+      
       <div class="list-container">
         <div class="data-container">
           <div class="input-container">
             <mat-form-field class="itemInput" appearance="fill" >
               <mat-label>Enter item</mat-label>
-              <input matInput #input placeholder="Ex. Nougat" (input)="resetItem()" [formControl]="itemFormControl">  <!-- (keyup)="getItems($event)" -->
+              <input matInput #input placeholder="Ex. Nougat" [formControl]="itemFormControl">  <!-- (keyup)="getItems($event)" -->
             </mat-form-field>
             <button mat-raised-button (click)="setItemName(input.value)">Search</button> <!-- getImages(input.value); -->
           </div>      
@@ -67,6 +76,7 @@
           </ng-template>
         </div>
       </div>
+      
   
       <ng-container *ngIf="hasCurrentOrder && !isActiveOrder">
         <div class="activeOrderContainer">

@@ -61,21 +61,18 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-mail</artifactId>
 </dependency>
-
-
-		
+	<dependency>
+	<groupId>org.seleniumhq.selenium</groupId>
+	<artifactId>selenium-java</artifactId>
+	</dependency>
 <dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-configuration-processor</artifactId>
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-configuration-processor</artifactId>
 </dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-core -->
 <dependency>
     <groupId>org.springframework.integration</groupId>
     <artifactId>spring-integration-core</artifactId>
 </dependency>
-
-
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
@@ -106,7 +103,6 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
-		
 	</dependencies>
 	<build>
 		<plugins>

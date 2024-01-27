@@ -44,7 +44,7 @@ export class ListService {
 
   //"http://localhost:8080"
   //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
-  serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
+  serverUrl = "http://localhost:8080"
 
   postList(list:ListToDB):Observable<List>{
     return this.http.post<List>(this.serverUrl + "/api/v1/list", list)
