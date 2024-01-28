@@ -33,7 +33,8 @@ export class MealkitComponent implements OnInit{
     "gal",
     "oz",
     "fl oz",
-    "lb"
+    "lb",
+    "can"
   ]
 
   tags:string[]=[
@@ -50,7 +51,8 @@ export class MealkitComponent implements OnInit{
     "pasta",
     "seafood",
     "dessert",
-    "spicy"
+    "spicy",
+    "soup"
   ]
 
   currentStepsEditString=""

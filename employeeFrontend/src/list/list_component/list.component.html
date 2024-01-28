@@ -15,12 +15,11 @@
 	</div>
 </ng-template>
 <div class="affiliateContainer">
+  
   <img class="affiliateLogo" src="../../assets/img/amazon-associates-square .png">
-  <a href="https://amzn.to/3u9a5mq"><img height="60px" width="60px" title="Cutting board" src="https://m.media-amazon.com/images/I/71nXnil07qL.__AC_SX300_SY300_QL70_FMwebp_.jpg"></a>
-  <a href="https://amzn.to/3u9a5mq"><img height="60px" width="60px" title="Cutting board" src="https://m.media-amazon.com/images/I/71nXnil07qL.__AC_SX300_SY300_QL70_FMwebp_.jpg"></a>
-  <a href="https://amzn.to/3u9a5mq"><img height="60px" width="60px" title="Cutting board" src="https://m.media-amazon.com/images/I/71nXnil07qL.__AC_SX300_SY300_QL70_FMwebp_.jpg"></a>
-  <a href="https://amzn.to/3u9a5mq"><img height="60px" width="60px" title="Cutting board" src="https://m.media-amazon.com/images/I/71nXnil07qL.__AC_SX300_SY300_QL70_FMwebp_.jpg"></a>
-  <a href="https://amzn.to/3u9a5mq"><img height="60px" width="60px" title="Cutting board" src="https://m.media-amazon.com/images/I/71nXnil07qL.__AC_SX300_SY300_QL70_FMwebp_.jpg"></a>
+  <div *ngFor="let affiliateData of (affiliateDataArray|async)">
+    <a  [href]=affiliateData.link><img class="mt-3" height="70px" width="70px" [title]="affiliateData.name" [src]="affiliateData.image"></a>
+  </div>
 </div>
     <div class="listBody">
       

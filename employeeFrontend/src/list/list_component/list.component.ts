@@ -22,6 +22,8 @@ import { CurrentOrderUserClassWithUpdateMessage } from '../models/CurrentOrderUs
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl } from '@angular/forms';
+import { AffiliateData } from 'src/admin/affiliate/models/AffiliateData';
+import { AffiliateService } from 'src/admin/affiliate/affiliate.service';
 
 
 @Component({
@@ -98,12 +100,14 @@ export class ListComponent implements OnInit, OnDestroy {
   componentInstance = this;
   isItemValid:boolean = false;
 
-  constructor(private service: GroceryService, private userService: EnvironmentService, private listService: ListService, private dateService: DatepickerService, private elem: ElementRef, private renderer: Renderer2, private navService: NavService,private snackBar: MatSnackBar) {
+  affiliateDataArray:Observable<AffiliateData[]>
+
+  constructor(private service: GroceryService, private userService: EnvironmentService, private listService: ListService, private dateService: DatepickerService, private elem: ElementRef, private renderer: Renderer2, private navService: NavService,private snackBar: MatSnackBar, private affiliateService :AffiliateService) {
     this.previousImage = elem.nativeElement
     this.initializeWebSocketConnection();
   }
   ngOnInit(): void {
-
+    this.affiliateDataArray = this.affiliateService.getAffiliateData()
 
     this.navService.cartVisibility$.subscribe(d => {
       this.hasCurrentOrder = d.hasCurrentOrder;
