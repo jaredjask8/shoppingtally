@@ -18,7 +18,7 @@
   
   <img class="affiliateLogo" src="../../assets/img/amazon-associates-square .png">
   <div *ngFor="let affiliateData of (affiliateDataArray|async)">
-    <a  [href]=affiliateData.link><img class="mt-3" height="70px" width="70px" [title]="affiliateData.name" [src]="affiliateData.image"></a>
+    <a [href]=affiliateData.link><img class="affiliateImage" height="70px" width="70px" [title]="affiliateData.name" [src]="affiliateData.image"></a>
   </div>
 </div>
     <div class="listBody">

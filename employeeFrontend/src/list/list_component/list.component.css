@@ -133,6 +133,10 @@
     overflow-y: auto;
   }
 
+  .affiliateImage{
+    margin: 20px;
+  }
+
   .affiliateLogo{
     height: auto;
     width: 100%;
