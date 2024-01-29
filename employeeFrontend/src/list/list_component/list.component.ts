@@ -30,6 +30,7 @@ import { AffiliateService } from 'src/admin/affiliate/affiliate.service';
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css'],
+  
 })
 export class ListComponent implements OnInit, OnDestroy {
   //socket
@@ -107,6 +108,7 @@ export class ListComponent implements OnInit, OnDestroy {
     this.initializeWebSocketConnection();
   }
   ngOnInit(): void {
+    
     this.affiliateDataArray = this.affiliateService.getAffiliateData()
 
     this.navService.cartVisibility$.subscribe(d => {

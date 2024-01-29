@@ -1,8 +1,14 @@
+
+
 ::ng-deep .mat-mdc-snack-bar-container {
   --mdc-snackbar-container-color:#F7F603 !important;
 }
 ::ng-deep .mat-mdc-snack-bar-container .mdc-snackbar__label{
   color: #2a246a !important;
+}
+
+::ng-deep body{
+  background-color: #2A246A;
 }
 
 .activeOrderContainer{
@@ -103,9 +109,7 @@
   }
 
   .listBody{
-    position: fixed;
     width: 100%;
-    height: 1000px;
     display:flex;
     flex-direction: column;
     flex-grow: 1;
@@ -113,8 +117,8 @@
     overflow: scroll;
     padding: 0;
     margin: 0;
-    background: #2A246A;
   }
+
 
   
 
@@ -300,6 +304,10 @@
     .affiliateLogo{
       height: 100%;
       width: auto;
+    }
+
+    .list-container{
+      margin-bottom: 100px;
     }
 
     

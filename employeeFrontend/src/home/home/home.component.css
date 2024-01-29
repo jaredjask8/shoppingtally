@@ -1,7 +1,7 @@
 
-  body{
-    background: #33FFFF;
-  }
+::ng-deep body{
+  background-color:#33FFFF;
+}
   
   #map {
     height: 400px;

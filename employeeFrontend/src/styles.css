@@ -9,14 +9,15 @@ html, body {
 }
 body { 
     margin: 0; 
-    background: #33FFFF; 
     user-select: none;
+    background-color: #33FFFF;
 }
 
 @font-face {
     font-family: 'MyFont';
     src: url('assets/fonts/coolvetica.OTF');
 }
+
 
 
 

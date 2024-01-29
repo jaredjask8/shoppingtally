@@ -1,707 +1,844 @@
-
 <ng-template #content let-modal>
-	<div class="modal-header">
-		<h4 class="modal-title" id="modal-basic-title">Cancel order</h4>
-		<button type="button" class="btn-close" aria-label="Close" (click)="modal.close('exit')"></button>
-	</div>
-	<div *ngIf="cancelFromItem" class="modal-body">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Cancel order</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.close('exit')"></button>
+  </div>
+  <div *ngIf="cancelFromItem" class="modal-body">
     <div class="w-100 text-center">This is the last item in your order, deleting this item will cancel this order.</div>
-	</div>
+  </div>
   <div *ngIf="cancelFromUser" class="modal-body">
     <div class="w-100 text-center">Are you sure you want to cancel this order?</div>
-	</div>
-	<div class="modal-footer">
-		<button type="button" class="btn btn-outline-dark" (click)="modal.close('cancel')">Cancel order</button>
-	</div>
-</ng-template>
-<div class="affiliateContainer">
-  
-  <img class="affiliateLogo" src="../../assets/img/amazon-associates-square .png">
-  <div *ngFor="let affiliateData of (affiliateDataArray|async)">
-    <a [href]=affiliateData.link><img class="affiliateImage" height="70px" width="70px" [title]="affiliateData.name" [src]="affiliateData.image"></a>
   </div>
-</div>
-    <div class="listBody">
-      
-      <div class="list-container">
-        <div class="data-container">
-          <div class="input-container">
-            <mat-form-field class="itemInput" appearance="fill" >
-              <mat-label>Enter item</mat-label>
-              <input matInput #input placeholder="Ex. Nougat" [formControl]="itemFormControl">  <!-- (keyup)="getItems($event)" -->
-            </mat-form-field>
-            <button mat-raised-button (click)="setItemName(input.value)">Search</button> <!-- getImages(input.value); -->
-          </div>      
-    
-          <div class="finalizedItemContainer mt-3 mb-3">
-              <div class="images" *ngIf="googleImageArray;else imageArrayTemplate">
-                <div (click)="isImageClicked(image)" *ngFor="let value of googleImageArray | async" class="image-container">
-                  <img #image src={{value.image.thumbnailLink}}>
-                </div>
-              </div>
-              <ng-template #imageArrayTemplate>
-                <div class="images">
-                  <div class="image-container-template">
-                    <button mat-raised-button class="imageBtnTemplate"></button>
-                  </div>
-                </div>
-              </ng-template>
-            
-            <div class="selectedItemContainer">
-              <div>Selected item: {{currentItem}}</div>
-              <div *ngIf="currentItem == '' ? false : true" (click)="isEditClicked()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                  <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
-                </svg>
-              </div>
-            </div>
-            <input *ngIf="editClicked" [(ngModel)]="currentItem" value={{currentItem}}>
-            <mat-form-field appearance="fill">
-              <mat-label>Quantity</mat-label>
-              <mat-select>
-                <mat-option [value]=num *ngFor="let num of [1,2,3,4,5,6,7,8,9,10]; let i = index" (click)="setQuantity(num)">
-                  {{num}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('cancel')">Cancel order</button>
+  </div>
+</ng-template>
+<div class="listBody">
+
+  <div class="list-container">
+    <div class="data-container">
+      <div class="input-container">
+        <mat-form-field class="itemInput" appearance="fill">
+          <mat-label>Enter item</mat-label>
+          <input matInput #input placeholder="Ex. Nougat" [formControl]="itemFormControl">
+          <!-- (keyup)="getItems($event)" -->
+        </mat-form-field>
+        <button mat-raised-button (click)="setItemName(input.value)">Search</button> <!-- getImages(input.value); -->
+      </div>
+
+      <div class="finalizedItemContainer mb-2">
+        <div class="images" *ngIf="googleImageArray;else imageArrayTemplate">
+          <div (click)="isImageClicked(image)" *ngFor="let value of googleImageArray | async" class="image-container">
+            <img #image src={{value.image.thumbnailLink}}>
           </div>
-          
-    
-          
-    
-          <button *ngIf="!hasCurrentOrder else currentOrderButton" mat-raised-button [disabled]="currentItem == '' || currentQuantity == '' || !isItemValid"  (click)="addToList()">Add to cart</button>
-          <ng-template #currentOrderButton>
-            <button mat-raised-button (click)="addToOrder()" [disabled]="currentItem == '' || currentQuantity == '' || !isItemValid">Add to current order</button>
+        </div>
+        <ng-template #imageArrayTemplate>
+          <div class="images">
+            <div class="image-container-template">
+              <button mat-raised-button class="imageBtnTemplate"></button>
+            </div>
+          </div>
+        </ng-template>
+
+        <div class="selectedItemContainer">
+          <div>Selected item: {{currentItem}}</div>
+          <div *ngIf="currentItem == '' ? false : true" (click)="isEditClicked()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill"
+              viewBox="0 0 16 16">
+              <path
+                d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+            </svg>
+          </div>
+        </div>
+        <input *ngIf="editClicked" [(ngModel)]="currentItem" value={{currentItem}}>
+        <mat-form-field appearance="fill">
+          <mat-label>Quantity</mat-label>
+          <mat-select>
+            <mat-option [value]=num *ngFor="let num of [1,2,3,4,5,6,7,8,9,10]; let i = index"
+              (click)="setQuantity(num)">
+              {{num}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button *ngIf="!hasCurrentOrder else currentOrderButton" mat-raised-button
+        [disabled]="currentItem == '' || currentQuantity == '' || !isItemValid" (click)="addToList()">Add to
+        cart</button>
+      <ng-template #currentOrderButton>
+        <button mat-raised-button (click)="addToOrder()"
+          [disabled]="currentItem == '' || currentQuantity == '' || !isItemValid">Add to current order</button>
+      </ng-template>
+      </div>
+
+
+
+
+      
+    </div>
+  </div>
+
+
+  <ng-container *ngIf="hasCurrentOrder && !isActiveOrder">
+    <div class="activeOrderContainer">
+      <div class="activeOrderTitle">Current Order</div>
+      <div class="activeOrderScrollContainer">
+        <div class="activeOrderItemContainer" *ngFor="let item of currentOrderList">
+          <img *ngIf="item.image != '' &&  item.image != 'null' && item.image != 'undefined' else imageTemplate"
+            [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseCurrentOrderQuantity(item)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseCurrentOrderQuantity(item)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteCurrentOrderItem(item,content)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
         </div>
       </div>
-      
-  
-      <ng-container *ngIf="hasCurrentOrder && !isActiveOrder">
-        <div class="activeOrderContainer">
-          <div class="activeOrderTitle">Current Order</div>
-          <div class="activeOrderScrollContainer">
-            <div class="activeOrderItemContainer" *ngFor="let item of currentOrderList">
-              <img *ngIf="item.image != '' &&  item.image != 'null' && item.image != 'undefined' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseCurrentOrderQuantity(item)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseCurrentOrderQuantity(item)"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteCurrentOrderItem(item,content)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-          </div>
-          <div class="w-100 d-flex justify-content-center">
-            <button mat-raised-button class="" (click)="cancelOrder(content)">Cancel order</button>
-          </div>
-          
-        </div>
-        
-      </ng-container> 
+      <div class="w-100 d-flex justify-content-center">
+        <button mat-raised-button class="" (click)="cancelOrder(content)">Cancel order</button>
+      </div>
 
-      <ng-container *ngIf="hasCurrentOrder && isActiveOrder">
-        <div class="activeOrderContainer">
-          <div class="activeOrderTitle">Current Order</div>
-          <div class="activeOrderScrollContainer">
-            <div class="categoryTitle">Todo</div>
-            <div class="activeOrderItemContainer" *ngFor="let item of todo">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'todo','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'todo','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of health">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'health','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'health','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of dairy">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'dairy','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'dairy','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of breakfast">
-              <img *ngIf=" item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'breakfast','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'breakfast','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of international">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'international','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'international','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of baking">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'baking','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'baking','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of grains">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'grains','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'grains','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of snacks">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'snacks','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'snacks','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of pet">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'pet','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'pet','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of household">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'household','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'household','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')"> 
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of beverages">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'beverages','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'beverages','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of bread">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'bread','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'bread','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of frozen">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'frozen','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'frozen','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of meat">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'meat','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'meat','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of produce">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'produce','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'produce','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of bakery">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'bakery','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'bakery','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="activeOrderItemContainer" *ngFor="let item of deli">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'deli','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'deli','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="categoryTitle">Completed</div>
-            <div class="activeOrderItemContainer" *ngFor="let item of completed">
-              <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
-              <ng-template #imageTemplate>
-                <img src="../../assets/img/bag.png" height="auto" width="50px">
-              </ng-template>
-              <div class="orderNameContainer">{{item.name}}</div>
-              <div class="quantityContainer">
-                <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'completed','increased')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                    <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                  </svg>
-                </div>
-                
-                <div style="padding: 0; margin: 0;text-align: center;">
-                  {{item.quantity}}
-                </div>
-                <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'completed','decreased')"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                  </svg>
-                </div>
-                
-                
-              </div>
-              <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-                </svg>
-              </div>
-            </div>
-          </div>
-          
-          
-        </div>
-        
-      </ng-container> 
-
-
-      <ng-template #activeOrder>
-        
-        
-      </ng-template>
-      
-      
-  
     </div>
 
+  </ng-container>
+
+  <ng-container *ngIf="hasCurrentOrder && isActiveOrder">
+    <div class="activeOrderContainer">
+      <div class="activeOrderTitle">Current Order</div>
+      <div class="activeOrderScrollContainer">
+        <div class="categoryTitle">Todo</div>
+        <div class="activeOrderItemContainer" *ngFor="let item of todo">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'todo','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'todo','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
 
 
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of health">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'health','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
 
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'health','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of dairy">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'dairy','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'dairy','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of breakfast">
+          <img *ngIf=" item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'breakfast','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'breakfast','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of international">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'international','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'international','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of baking">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'baking','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'baking','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of grains">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'grains','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'grains','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of snacks">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'snacks','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'snacks','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of pet">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'pet','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'pet','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of household">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'household','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'household','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of beverages">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'beverages','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'beverages','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of bread">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'bread','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'bread','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of frozen">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'frozen','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'frozen','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of meat">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'meat','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'meat','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of produce">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'produce','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'produce','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of bakery">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'bakery','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'bakery','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="activeOrderItemContainer" *ngFor="let item of deli">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'deli','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'deli','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+        <div class="categoryTitle">Completed</div>
+        <div class="activeOrderItemContainer" *ngFor="let item of completed">
+          <img *ngIf="item.image != 'null' else imageTemplate" [src]=item.image height="auto" width="50px">
+          <ng-template #imageTemplate>
+            <img src="../../assets/img/bag.png" height="auto" width="50px">
+          </ng-template>
+          <div class="orderNameContainer">{{item.name}}</div>
+          <div class="quantityContainer">
+            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'completed','increased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
+                viewBox="0 0 16 16">
+                <path
+                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
+              </svg>
+            </div>
+
+            <div style="padding: 0; margin: 0;text-align: center;">
+              {{item.quantity}}
+            </div>
+            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'completed','decreased')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path
+                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
+              </svg>
+            </div>
+
+
+          </div>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+  </ng-container>
+
+
+  <ng-template #activeOrder>
+
+
+  </ng-template>
+
+
+  <div class="affiliateContainer">
+  
+    <img class="affiliateLogo" src="../../assets/img/amazon-associates-square .png">
+    <div *ngFor="let affiliateData of (affiliateDataArray|async)">
+      <a [href]=affiliateData.link><img class="affiliateImage" height="70px" width="70px" [title]="affiliateData.name" [src]="affiliateData.image"></a>
+    </div>
+  </div>
+</div>
