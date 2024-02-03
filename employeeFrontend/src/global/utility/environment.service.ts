@@ -8,6 +8,7 @@ import { TokenResponse } from "src/models/TokenResponse";
 import { NavService } from "../nav/nav.service";
 import { ProfileService } from "src/profile/profile.service";
 import { Router } from "@angular/router";
+import { environment } from "src/environments/environment";
 
 
 @Injectable({
@@ -23,9 +24,7 @@ import { Router } from "@angular/router";
     userLoggedIn$:Observable<boolean>
     signOutSnackbar:BehaviorSubject<boolean>=new BehaviorSubject(false);
     signOutSnackbar$:Observable<boolean>
-    //"http://localhost:8080"
-    //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
-    serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
+  
 
     constructor(private http:HttpClient, private navService:NavService, private profileService:ProfileService, private router:Router, private registerService:RegisterService){
       this.userLoggedIn$ = this.userLoggedIn.asObservable();
@@ -49,7 +48,7 @@ import { Router } from "@angular/router";
     }
 
     refreshLogin():Observable<TokenResponse>{
-      return this.http.get<TokenResponse>(this.serverUrl + "/api/v1/auth/refresh")
+      return this.http.get<TokenResponse>(environment.apiUrl + "/api/v1/auth/refresh")
     }
 
     setToken(token:string){
@@ -121,6 +120,6 @@ import { Router } from "@angular/router";
     }
 
     updateUserData(userData:string,choice:string):Observable<JwtUserResponse>{
-      return this.http.post<JwtUserResponse>(this.serverUrl + "/api/v1/auth/updateUser", {userUpdate:userData,choice:choice})
+      return this.http.post<JwtUserResponse>(environment.apiUrl + "/api/v1/auth/updateUser", {userUpdate:userData,choice:choice})
     }
   }

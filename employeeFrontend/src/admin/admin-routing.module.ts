@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin.component';
 import { WhatsNewComponent } from './whats-new/whats-new.component';
-import { OrdersComponent } from './orders/orders.component';
-import { MealkitComponent } from './mealkit/mealkit.component';
 
 const routes: Routes = [
   {path:"", component:AdminComponent},

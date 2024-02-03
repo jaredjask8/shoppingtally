@@ -4,9 +4,6 @@
     flex-direction: column;
 }
 
-::ng-deep body{
-    background-color:#33FFFF;
-}
 
 .bioContainer{
     display: flex;

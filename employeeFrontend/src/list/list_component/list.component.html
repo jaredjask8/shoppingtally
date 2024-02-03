@@ -69,11 +69,6 @@
           [disabled]="currentItem == '' || currentQuantity == '' || !isItemValid">Add to current order</button>
       </ng-template>
       </div>
-
-
-
-
-      
     </div>
   </div>
 
@@ -834,10 +829,9 @@
   </ng-template>
 
 
-  <div class="affiliateContainer">
-  
+  <div class="affiliateContainer" *ngIf="hasCurrentOrder">
     <img class="affiliateLogo" src="../../assets/img/amazon-associates-square .png">
-    <div *ngFor="let affiliateData of (affiliateDataArray|async)">
+    <div *ngFor="let affiliateData of fullAffiliateDataArray">
       <a [href]=affiliateData.link><img class="affiliateImage" height="70px" width="70px" [title]="affiliateData.name" [src]="affiliateData.image"></a>
     </div>
   </div>

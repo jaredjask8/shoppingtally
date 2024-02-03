@@ -17,6 +17,7 @@ import { CategoryUpdates } from '../models/CategoryUpdates';
 import { CompleteItemResponse } from '../models/CompleteItemResponse';
 import { CurrentOrderUser } from '../models/CurrentOrderUser';
 import { UserOrderInfo } from '../models/UserOrderInfo';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -28,6 +29,8 @@ export class ListService {
   list$:Observable<ListItem[]>
   cartHasItems:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
   cartHasItems$:Observable<boolean>
+  updateOrderScreen:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
+  updateOrderScreen$:Observable<boolean>
 
   modalAfterOrderCreated:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
   modalAfterOrderCreated$:Observable<boolean>
@@ -40,64 +43,62 @@ export class ListService {
     this.list$ = this.list.asObservable();
     this.cartHasItems$ = this.cartHasItems.asObservable();
     this.modalAfterOrderCreated$ = this.modalAfterOrderCreated.asObservable()
+    this.updateOrderScreen$ = this.updateOrderScreen.asObservable()
   }
 
-  //"http://localhost:8080"
-  //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
-  serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT"
 
   postList(list:ListToDB):Observable<List>{
-    return this.http.post<List>(this.serverUrl + "/api/v1/list", list)
+    return this.http.post<List>(environment.apiUrl + "/api/v1/list", list)
   }
 
   getDates(token:string):Observable<PreviousListsFromDB[]>{
-    return this.http.post<PreviousListsFromDB[]>(this.serverUrl+"/api/v1/list/user", {token:token})
+    return this.http.post<PreviousListsFromDB[]>(environment.apiUrl+"/api/v1/list/user", {token:token})
   }
 
   getShopperDates(token:string,shopperId:number):Observable<string[]>{
-    return this.http.post<string[]>(this.serverUrl+"/api/v1/list/dates",{token:token,shopperId:shopperId})
+    return this.http.post<string[]>(environment.apiUrl+"/api/v1/list/dates",{token:token,shopperId:shopperId})
   }
 
   getShopperOrders():Observable<ShopperOrder[]>{
-    return this.http.post<ShopperOrder[]>(this.serverUrl+"/api/v1/list/getOrders",null)
+    return this.http.post<ShopperOrder[]>(environment.apiUrl+"/api/v1/list/getOrders",null)
   }
 
   startOrder(email,date):Observable<ActiveShopperOrder>{
-    return this.http.post<ActiveShopperOrder>(this.serverUrl+"/api/v1/list/startOrder",{email:email,date:date})
+    return this.http.post<ActiveShopperOrder>(environment.apiUrl+"/api/v1/list/startOrder",{email:email,date:date})
   }
 
   getCurrentOrder():Observable<CurrentOrderShopper>{
-    return this.http.post<CurrentOrderShopper>(this.serverUrl+"/api/v1/list/getCurrentOrder",null)
+    return this.http.post<CurrentOrderShopper>(environment.apiUrl+"/api/v1/list/getCurrentOrder",null)
   }
 
   endCurrentOrder(email:string, date:string){
-    return this.http.post(this.serverUrl+"/api/v1/list/endCurrentOrder",{email:email,date:date})
+    return this.http.post(environment.apiUrl+"/api/v1/list/endCurrentOrder",{email:email,date:date})
   }
 
   cancelCurrentOrder():Observable<UserOrderInfo>{
-    return this.http.get<UserOrderInfo>(this.serverUrl+"/api/v1/list/cancelCurrentOrder")
+    return this.http.get<UserOrderInfo>(environment.apiUrl+"/api/v1/list/cancelCurrentOrder")
   }
 
   updateCategory(toCategory:string,currentCategoryList:ListItemInterface[],fromCategory:string,previousCategoryList:ListItemInterface[]):Observable<CategoryUpdates>{
-    return this.http.post<CategoryUpdates>(this.serverUrl+"/api/v1/list/updateCategories",new CategoryUpdates(toCategory,currentCategoryList,fromCategory,previousCategoryList))
+    return this.http.post<CategoryUpdates>(environment.apiUrl+"/api/v1/list/updateCategories",new CategoryUpdates(toCategory,currentCategoryList,fromCategory,previousCategoryList))
   }
 
   completeItem(updateCategory:string,itemName:string):Observable<CompleteItemResponse>{
-    return this.http.post<CompleteItemResponse>(this.serverUrl+"/api/v1/list/completeItem",{updateCategory:updateCategory,itemName:itemName})
+    return this.http.post<CompleteItemResponse>(environment.apiUrl+"/api/v1/list/completeItem",{updateCategory:updateCategory,itemName:itemName})
   }
 
   getActiveOrder():Observable<CurrentOrderUser>{
-    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/getActiveOrder",null)
+    return this.http.post<CurrentOrderUser>(environment.apiUrl+"/api/v1/list/getActiveOrder",null)
   }
 
   getUserHasOrder(token?:string):Observable<UserOrderInfo>{
-    return this.http.post<UserOrderInfo>(this.serverUrl+"/api/v1/list/hasCurrentOrder",null)
+    return this.http.post<UserOrderInfo>(environment.apiUrl+"/api/v1/list/hasCurrentOrder",null)
   }
 
   deleteCurrentOrderItem(item:ListItem):Observable<ListItemInterface[]>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/deleteCurrentOrderItem",item,{headers:headers})
+    return this.http.post<ListItemInterface[]>(environment.apiUrl+"/api/v1/list/deleteCurrentOrderItem",item,{headers:headers})
   }
 
 
@@ -109,43 +110,43 @@ export class ListService {
 
     //update list and send to server everytime
     let currentItem = item.image+"+"+item.name+"+"+item.quantity+"~";
-    return this.http.post<List>(this.serverUrl+"/api/v1/auth/addToList",{currentItem:currentItem})
+    return this.http.post<List>(environment.apiUrl+"/api/v1/auth/addToList",{currentItem:currentItem})
   }
 
   addItemToActiveOrder(item:ListItem):Observable<CurrentOrderUser>{
-    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/addItemToActiveOrder",item)
+    return this.http.post<CurrentOrderUser>(environment.apiUrl+"/api/v1/list/addItemToActiveOrder",item)
   }
 
   addItemToCurrentOrder(item:ListItem):Observable<ListItemInterface[]>{
-    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/addItemToCurrentOrder",item)
+    return this.http.post<ListItemInterface[]>(environment.apiUrl+"/api/v1/list/addItemToCurrentOrder",item)
   }
 
   addFullList(list:ListItem[]):Observable<List>{
-    return this.http.post<List>(this.serverUrl+"/api/v1/auth/addFullList",list)
+    return this.http.post<List>(environment.apiUrl+"/api/v1/auth/addFullList",list)
   }
 
   addFullListToCurrentOrder(list:ListItemInterface[]):Observable<ListItemInterface[]>{
-    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/addListToCurrentOrder",list)
+    return this.http.post<ListItemInterface[]>(environment.apiUrl+"/api/v1/list/addListToCurrentOrder",list)
   }
 
   addFullListToActiveOrder(list:ListItemInterface[]):Observable<CurrentOrderUser>{
-    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/addListToActiveOrder",list)
+    return this.http.post<CurrentOrderUser>(environment.apiUrl+"/api/v1/list/addListToActiveOrder",list)
   }
 
   getCurrentList():Observable<List>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<List>(this.serverUrl+"/api/v1/auth/getUserList",token,{headers:headers})
+    return this.http.post<List>(environment.apiUrl+"/api/v1/auth/getUserList",token,{headers:headers})
   }
 
   getUserList():Observable<List>{
-    return this.http.post<List>(this.serverUrl+"/api/v1/list/getUserList",null)
+    return this.http.post<List>(environment.apiUrl+"/api/v1/list/getUserList",null)
   }
 
   removeListItem(list:string):Observable<List>{
     let token = this.userService.getEnvironment().token
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<List>(this.serverUrl+"/api/v1/auth/deleteListItem",new ListItemToDb(token,list),{headers:headers})
+    return this.http.post<List>(environment.apiUrl+"/api/v1/auth/deleteListItem",new ListItemToDb(token,list),{headers:headers})
   }
 
   resetStepper(){
@@ -167,7 +168,7 @@ export class ListService {
         d.quantity = updatedQuantity
       }
     })
-    return this.http.post<List>(this.serverUrl+"/api/v1/auth/updateQuantity",tempList)
+    return this.http.post<List>(environment.apiUrl+"/api/v1/auth/updateQuantity",tempList)
   }
 
   increaseQuantity(currentList:ListItem[],itemName:string):Observable<List>{
@@ -184,27 +185,27 @@ export class ListService {
         d.quantity = updatedQuantity;
       }
     })
-    return this.http.post<List>(this.serverUrl+"/api/v1/auth/updateQuantity",tempList)
+    return this.http.post<List>(environment.apiUrl+"/api/v1/auth/updateQuantity",tempList)
   }
 
   increaseCurrentOrderQuantity(item:ListItem):Observable<ListItemInterface[]>{
-    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/increaseCurrentOrderQuantity",item)
+    return this.http.post<ListItemInterface[]>(environment.apiUrl+"/api/v1/list/increaseCurrentOrderQuantity",item)
   }
 
   decreaseCurrentOrderQuantity(item:ListItem):Observable<ListItemInterface[]>{
-    return this.http.post<ListItemInterface[]>(this.serverUrl+"/api/v1/list/decreaseCurrentOrderQuantity",item)
+    return this.http.post<ListItemInterface[]>(environment.apiUrl+"/api/v1/list/decreaseCurrentOrderQuantity",item)
   }
 
   increaseActiveOrderQuantity(item, category):Observable<CurrentOrderUser>{
-    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/increaseActiveOrderQuantity",{item,category})
+    return this.http.post<CurrentOrderUser>(environment.apiUrl+"/api/v1/list/increaseActiveOrderQuantity",{item,category})
   }
 
   decreaseActiveOrderQuantity(item, category):Observable<CurrentOrderUser>{
-    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/decreaseActiveOrderQuantity",{item,category})
+    return this.http.post<CurrentOrderUser>(environment.apiUrl+"/api/v1/list/decreaseActiveOrderQuantity",{item,category})
   }
 
   deleteActiveOrderItem(item, category):Observable<CurrentOrderUser>{
-    return this.http.post<CurrentOrderUser>(this.serverUrl+"/api/v1/list/deleteActiveOrderItem",{item,category})
+    return this.http.post<CurrentOrderUser>(environment.apiUrl+"/api/v1/list/deleteActiveOrderItem",{item,category})
   }
 
 

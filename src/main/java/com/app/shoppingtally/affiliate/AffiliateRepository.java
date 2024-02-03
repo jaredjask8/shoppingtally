@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface AffiliateRepository extends MongoRepository<AffiliateData,String>{
+public interface AffiliateRepository extends MongoRepository<AffiliateAdminData,String>{
 	
 }

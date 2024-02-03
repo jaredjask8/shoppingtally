@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.tomcat.util.json.JSONParser;
+import org.springframework.ai.chat.ChatClient;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.app.shoppingtally.affiliate.AffiliateRepository;
+import com.app.shoppingtally.affiliate.AffiliateThread;
 import com.app.shoppingtally.affiliate.AffiliateWebDriver;
 import com.app.shoppingtally.auth.AuthenticationService;
+import com.app.shoppingtally.auth.ListUtils;
 import com.app.shoppingtally.auth.models.FullListRequest;
 import com.app.shoppingtally.auth.models.ListItemResponse;
 import com.app.shoppingtally.auth.models.ListToFrontendWithCount;
@@ -62,7 +66,9 @@ public class ListService {
 	private String setList = null;
 	private final SimpMessagingTemplate messagingTemplate;
 	private final EmailSenderService emailSender;
-	private final AffiliateWebDriver affiliateDriver;
+	private final ListUtils listUtils;
+	private final AffiliateRepository affiliateRepo;
+	private final ChatClient chatClient;
 	
 	
 	//////////////////CLIENT///////////////////
@@ -79,6 +85,12 @@ public class ListService {
 		}else if(list.getShopperId() == 2) {
 			emailSender.sendEmail("joshshoppingtally@gmail.com", "Order placed by " + list.getUser().getFirstname()+ " " + list.getUser().getLastname().substring(0,1)+". : "+ dateConversion(list.getDate()));
 		}
+		
+		//start affiliate thread
+		
+		AffiliateWebDriver affiliateDriver = new AffiliateWebDriver(listRepo, userRepo, jwtService, listUtils,affiliateRepo,chatClient);
+		AffiliateThread affiliateThread = new AffiliateThread(affiliateDriver,list.getToken(), list, listRepo, user.get(), messagingTemplate);
+		affiliateThread.start();
 		
 		return authService.getCurrentList(list.getToken());
 	}
@@ -227,6 +239,7 @@ public class ListService {
 					.list(convertStringListToArray(userList.get(0).getList()))
 					.itemCount(userList.size())
 					.date(userList.get(0).getDate())
+					.affiliateData(listUtils.convertAffiliateStringToArray(userList.get(0).getAffiliateData()))
 					.build();
 		}
 		

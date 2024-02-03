@@ -131,6 +131,8 @@ export class StepperComponent implements OnInit, AfterViewInit{
     });
     
     this.stepCounter = 1;
+
+    console.log(this.router.url)
   }
 
 
@@ -400,8 +402,12 @@ export class StepperComponent implements OnInit, AfterViewInit{
       this.showStepper = true
       this.renderer2.setStyle(this.we.nativeElement,'display','none')
       this.listService.resetStepper()
-      this.router.navigateByUrl("/home")
+      //this.router.navigateByUrl("/home")
       this.listService.modalAfterOrderCreated.next(true)
+      if(this.router.url == "/list"){
+        //send observable
+        this.listService.updateOrderScreen.next(true)
+      }
     },4000)
 
 

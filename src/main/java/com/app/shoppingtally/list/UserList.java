@@ -14,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,6 +41,9 @@ public class UserList {
 	public String isActive = "false";
 	public String isCompleted = "false";
 	public String isCurrentOrder = "false";
+	@Lob
+	@Column(columnDefinition="LONGTEXT")
+	public String affiliateData;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")

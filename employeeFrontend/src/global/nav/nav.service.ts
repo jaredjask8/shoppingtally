@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { UserOrderInfo } from 'src/list/models/UserOrderInfo';
 import { EnvironmentService } from '../utility/environment.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,7 @@ export class NavService implements OnInit{
   }
 
   getCartCount():Observable<string>{
-    return this.http.post<string>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/getCartCount",null)
+    return this.http.post<string>(environment.apiUrl+"/api/v1/auth/getCartCount",null)
   }
 
 

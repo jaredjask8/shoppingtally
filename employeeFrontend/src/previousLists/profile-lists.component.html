@@ -23,8 +23,8 @@
     </div> -->
     
     <div class="masterListContainer">
-      <h1 class="mb-3">Master List</h1>
-      <div class="yes mt-3" *ngIf="!inputUsed else filteredFullList">
+      <h1>Master List</h1>
+      <div class="yes" *ngIf="!inputUsed else filteredFullList">
         <div class="listContainer" *ngFor="let item of fullList; let i = index">
           <img *ngIf="item.image != '' && item.image != 'null' && item.image != 'undefined' else imageTemplate" [src]="item.image" height="40px" width="auto">
           <ng-template #imageTemplate>

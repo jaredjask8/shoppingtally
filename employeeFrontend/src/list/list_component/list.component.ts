@@ -20,7 +20,7 @@ import { CurrentOrderUserClass } from '../models/CurrentOrderUserClass';
 import { CurrentOrderUser } from '../models/CurrentOrderUser';
 import { CurrentOrderUserClassWithUpdateMessage } from '../models/CurrentOrderUserClassWithUpdateMessage';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCollapseModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl } from '@angular/forms';
 import { AffiliateData } from 'src/admin/affiliate/models/AffiliateData';
 import { AffiliateService } from 'src/admin/affiliate/affiliate.service';
@@ -34,7 +34,9 @@ import { AffiliateService } from 'src/admin/affiliate/affiliate.service';
 })
 export class ListComponent implements OnInit, OnDestroy {
   //socket
-  serverUrl = "https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket"
+  //"http://localhost/test/our-websocket"
+  //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket"
+  serverUrl = "http://localhost/test/our-websocket"
   title = 'WebSockets chat';
   stompClient;
 
@@ -100,16 +102,36 @@ export class ListComponent implements OnInit, OnDestroy {
   stringArray: any[] = []
   componentInstance = this;
   isItemValid:boolean = false;
+  
 
-  affiliateDataArray:Observable<AffiliateData[]>
+  affiliateDataArray:AffiliateData[] = []
+  fullAffiliateDataArray:AffiliateData[]=[]
 
   constructor(private service: GroceryService, private userService: EnvironmentService, private listService: ListService, private dateService: DatepickerService, private elem: ElementRef, private renderer: Renderer2, private navService: NavService,private snackBar: MatSnackBar, private affiliateService :AffiliateService) {
     this.previousImage = elem.nativeElement
     this.initializeWebSocketConnection();
   }
   ngOnInit(): void {
-    
-    this.affiliateDataArray = this.affiliateService.getAffiliateData()
+    //after the user clicks the order 
+    let that = this
+    this.listService.updateOrderScreen$.subscribe(d=>{
+      if(d){
+        this.affiliateService.getAffiliateData().subscribe(j=>{
+          if(j.length){
+            that.fullAffiliateDataArray = that.affiliateDataArray.concat(j)
+          }
+        })
+        this.listService.getUserList().subscribe(e=>{
+          this.currentOrderList = e.list
+          this.currentOrderDate = e.date
+          if(e.affiliateData.length){
+            that.fullAffiliateDataArray = that.affiliateDataArray.concat(e.affiliateData)
+            console.log("in")
+          }
+          
+        })
+      }
+    })
 
     this.navService.cartVisibility$.subscribe(d => {
       this.hasCurrentOrder = d.hasCurrentOrder;
@@ -124,9 +146,19 @@ export class ListComponent implements OnInit, OnDestroy {
         })
       }else if(d.hasCurrentOrder && !d.hasActive){
         //get current order
+        //when page loads check for order status
         this.listService.getUserList().subscribe(e => {
           this.currentOrderList = e.list
           this.currentOrderDate = e.date;
+          if(e.affiliateData.length){
+            this.affiliateDataArray = e.affiliateData
+          }
+          this.affiliateService.getAffiliateData().subscribe(j=>{
+            if(j.length){
+              this.fullAffiliateDataArray = this.affiliateDataArray.concat(j)
+            }
+            
+          })
         })
       }else{
         //get active order
@@ -157,6 +189,7 @@ export class ListComponent implements OnInit, OnDestroy {
     //this.listService.getUserHasOrder().subscribe(d=>console.log(d))
 
     //this.listService.getUserList().subscribe(d=>this.currentOrderList = d.list)
+    
   }
 
   ngOnDestroy() {
@@ -228,11 +261,16 @@ export class ListComponent implements OnInit, OnDestroy {
 
         console.log(that.produce)
       })
+      that.stompClient.subscribe("/user/topic/affiliate", function (message) {
+        that.fullAffiliateDataArray = that.affiliateDataArray.concat(JSON.parse(message.body))
+      })
 
 
     }, function(message){
       console.log(message)
     });
+
+    
   }
 
   sendActiveOrderMessage(updateMessage:string) {

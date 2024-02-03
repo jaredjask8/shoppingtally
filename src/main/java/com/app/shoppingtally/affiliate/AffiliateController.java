@@ -25,17 +25,17 @@ public class AffiliateController {
 	
 	
 	@PostMapping("/add")
-	public List<AffiliateData> addAffiliateData(@RequestBody AffiliateData affiliateRequest) {
+	public List<AffiliateAdminData> addAffiliateData(@RequestBody AffiliateAdminData affiliateRequest) {
 		return affiliateService.addAffiliateData(affiliateRequest);
 	}
 	
 	@GetMapping("/get")
-	public List<AffiliateData> getAffiliateData() {
+	public List<AffiliateAdminData> getAffiliateData() {
 		return affiliateService.getAffiliateData();
 	}
 	
 	@PostMapping("/delete")
-	public List<AffiliateData> deleteAffiliateData(@RequestBody AffiliateData affiliateRequest) {
+	public List<AffiliateAdminData> deleteAffiliateData(@RequestBody AffiliateAdminData affiliateRequest) {
 		return affiliateService.deleteAffiliateData(affiliateRequest);
 	}
 }

@@ -7,16 +7,12 @@
   color: #2a246a !important;
 }
 
-::ng-deep body{
-  background-color: #2A246A;
-}
-
 .activeOrderContainer{
   background-color: white;
   width: 90%;
-  margin-top: 50px;
+  margin-top: 20px;
   border-radius: 20px;
-  
+  margin-bottom: 100px;
 }
 .activeOrderScrollContainer{
   height: 500px;
@@ -304,10 +300,6 @@
     .affiliateLogo{
       height: 100%;
       width: auto;
-    }
-
-    .list-container{
-      margin-bottom: 100px;
     }
 
     

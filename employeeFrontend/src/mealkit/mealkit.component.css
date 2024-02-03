@@ -9,9 +9,6 @@
     overflow-x: hidden;
 }
 
-::ng-deep body{
-    background-color:#33FFFF;
-}
 
 ::ng-deep .mat-mdc-snack-bar-container {
     --mdc-snackbar-container-color:#F7F603 !important;

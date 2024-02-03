@@ -14,16 +14,18 @@ public class AffiliateService {
 	@Autowired
 	private final AffiliateRepository affiliateRepo;
 	
-	public List<AffiliateData> addAffiliateData(AffiliateData affiliateRequest){
+	public List<AffiliateAdminData> addAffiliateData(AffiliateAdminData affiliateRequest){
 		affiliateRepo.save(affiliateRequest);
 		return affiliateRepo.findAll();
 	}
 	
-	public List<AffiliateData> getAffiliateData(){
+	public List<AffiliateAdminData> getAffiliateData(){
+		//AffiliateData data = webDriver.startDriver();
+		//affiliateRepo.save(data);
 		return affiliateRepo.findAll();
 	}
 	
-	public List<AffiliateData> deleteAffiliateData(AffiliateData affiliateRequest){
+	public List<AffiliateAdminData> deleteAffiliateData(AffiliateAdminData affiliateRequest){
 		affiliateRepo.delete(affiliateRequest);
 		return affiliateRepo.findAll();
 	}
