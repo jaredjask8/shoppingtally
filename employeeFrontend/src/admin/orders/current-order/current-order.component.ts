@@ -13,6 +13,7 @@ import { EnvironmentService } from 'src/global/utility/environment.service';
 import { CurrentOrderUser } from 'src/list/models/CurrentOrderUser';
 import { CurrentOrderUserClassWithUpdateMessage } from 'src/list/models/CurrentOrderUserClassWithUpdateMessage';
 import { MatButtonModule } from '@angular/material/button';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-current-order',
@@ -31,7 +32,7 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
   currentOrder:CurrentOrderShopper;
   //'http://localhost/test/our-websocket'
   //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket"
-  serverUrl = 'http://localhost/test/our-websocket'
+  serverUrl = environment.apiUrl+'/our-websocket'
   title = 'WebSockets chat';
   stompClient;
   updateLog:string[]=[]

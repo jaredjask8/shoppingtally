@@ -24,6 +24,7 @@ import { NgbCollapseModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl } from '@angular/forms';
 import { AffiliateData } from 'src/admin/affiliate/models/AffiliateData';
 import { AffiliateService } from 'src/admin/affiliate/affiliate.service';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -36,7 +37,7 @@ export class ListComponent implements OnInit, OnDestroy {
   //socket
   //"http://localhost/test/our-websocket"
   //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket"
-  serverUrl = "http://localhost/test/our-websocket"
+  serverUrl = environment.apiUrl+"/our-websocket"
   title = 'WebSockets chat';
   stompClient;
 
