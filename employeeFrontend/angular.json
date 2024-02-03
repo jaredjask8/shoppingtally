@@ -48,7 +48,8 @@
                   "maximumError": "20mb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "outputPath": "/opt/prod/employee-frontend"
             },
             "development": {
               "buildOptimizer": false,
@@ -57,6 +58,7 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true,
+              "outputPath": "/opt/dev/employee-frontend",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
