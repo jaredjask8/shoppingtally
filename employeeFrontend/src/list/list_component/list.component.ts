@@ -384,7 +384,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
   resetItem(){
     this.currentItem = "";
-    this.currentQuantity = "";
+    //this.currentQuantity = "";
     this.googleImageArray = null;
     this.isItemValid = false;
     this.itemFormControl.reset()
