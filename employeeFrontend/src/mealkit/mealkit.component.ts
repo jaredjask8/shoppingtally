@@ -11,6 +11,7 @@ import { CurrentOrderUser } from 'src/list/models/CurrentOrderUser';
 import { List } from 'src/list/models/List';
 import { LoaderService } from 'src/global/components/loader.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { EnvironmentService } from 'src/global/utility/environment.service';
 
 
 @Component({
@@ -65,7 +66,7 @@ export class MealkitComponent implements OnInit{
   currentOrderDate:string
   
   
-  constructor(private mealkitService : MealkitService, private navService:NavService, private listService:ListService, private loaderService:LoaderService, private recipeNotification:MatSnackBar, private recipeLoadedNotification:MatSnackBar){
+  constructor(private mealkitService : MealkitService, private navService:NavService, private listService:ListService, private loaderService:LoaderService, private recipeNotification:MatSnackBar, private recipeLoadedNotification:MatSnackBar, private userService:EnvironmentService){
     this.navService.cartVisibility$.subscribe(d => {
       if(!d.hasActive && !d.hasCurrentOrder){
         this.listService.getCurrentList().subscribe(d=>this.currentCartItems = d.list)
@@ -111,6 +112,8 @@ export class MealkitComponent implements OnInit{
   
   
   ngOnInit(): void {
+    this.userService.initializeWebSocketConnection()
+
     this.mealkitService.getRecipes().subscribe(d=>{
       this.recipeArray = d
       this.recipeArrayFeatures = d.filter(e=>e.featured == true)

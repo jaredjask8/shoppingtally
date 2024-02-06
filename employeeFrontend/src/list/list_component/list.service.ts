@@ -52,7 +52,7 @@ export class ListService {
   }
 
   getDates(token:string):Observable<PreviousListsFromDB[]>{
-    return this.http.post<PreviousListsFromDB[]>(environment.apiUrl+"/api/v1/list/user", {token:token})
+    return this.http.post<PreviousListsFromDB[]>("http://localhost:8080/api/v1/list/user", {token:token})
   }
 
   getShopperDates(token:string,shopperId:number):Observable<string[]>{

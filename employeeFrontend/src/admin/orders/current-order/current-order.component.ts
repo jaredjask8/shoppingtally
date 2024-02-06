@@ -32,7 +32,7 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
   currentOrder:CurrentOrderShopper;
   //'http://localhost/test/our-websocket'
   //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket"
-  serverUrl = environment.apiUrl+'/our-websocket'
+  serverUrl = environment.socketUrl+'/our-websocket'
   title = 'WebSockets chat';
   stompClient;
   updateLog:string[]=[]
@@ -76,11 +76,14 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
   }
 
   endCurrentOrder(){
-    this.listService.endCurrentOrder(this.currentOrder.customer_email, this.currentOrder.date).subscribe(d=>console.log(d));
-    let that = this;
-    setTimeout(() => {
-      that.router.navigate(["/admin/orders"])
-    },1000)
+    this.listService.endCurrentOrder(this.currentOrder.customer_email, this.currentOrder.date).subscribe({
+      next:d=>console.log("next"),
+      error:d=>console.log("nice"),
+      complete:()=>{
+        this.router.navigate(["/admin/orders"])
+        console.log("wtf")
+      }
+    });
     
   }
 

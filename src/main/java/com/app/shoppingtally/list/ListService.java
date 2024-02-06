@@ -63,7 +63,7 @@ public class ListService {
 	private final UserRepo userRepo;
 	private final AuthenticationService authService;
 	private final CurrentOrderRepo currentOrderRepo;
-	private String setList = null;
+	private String setList = "";
 	private final SimpMessagingTemplate messagingTemplate;
 	private final EmailSenderService emailSender;
 	private final ListUtils listUtils;
@@ -86,11 +86,10 @@ public class ListService {
 			emailSender.sendEmail("joshshoppingtally@gmail.com", "Order placed by " + list.getUser().getFirstname()+ " " + list.getUser().getLastname().substring(0,1)+". : "+ dateConversion(list.getDate()));
 		}
 		
-		//start affiliate thread
-		
-		AffiliateWebDriver affiliateDriver = new AffiliateWebDriver(listRepo, userRepo, jwtService, listUtils,affiliateRepo,chatClient);
-		AffiliateThread affiliateThread = new AffiliateThread(affiliateDriver,list.getToken(), list, listRepo, user.get(), messagingTemplate);
-		affiliateThread.start();
+//		//start affiliate thread
+//		AffiliateWebDriver affiliateDriver = new AffiliateWebDriver(listRepo, userRepo, jwtService, listUtils,affiliateRepo,chatClient);
+//		AffiliateThread affiliateThread = new AffiliateThread(affiliateDriver,list.getToken(), list, listRepo, user.get(), messagingTemplate);
+//		affiliateThread.start();
 		
 		return authService.getCurrentList(list.getToken());
 	}
@@ -152,7 +151,8 @@ public class ListService {
 	}
 	
 	public List<ListItemResponse> convertStringListToArray(String list){
-		if( list != null) {
+		log.info(list);
+		if(!list.isEmpty()) {
 			List<ListItemResponse> listArray = new ArrayList<ListItemResponse>();
 			var tempArray = list.split("~");
 			
@@ -210,7 +210,6 @@ public class ListService {
 		Optional<User> client = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
 		List<UserList> userList = listRepo.findByCurrentOrder(client.get().getId());
 		if(userList.isEmpty()) {
-			log.info(userList.toString());
 			return UserOrderInfo.builder()
 					.hasActive(false)
 					.hasCurrentOrder(false)
@@ -234,7 +233,6 @@ public class ListService {
 		if(userList.isEmpty()) {
 			return new ListToFrontendWithCount();
 		}else {
-			log.info(userList.toString());
 			return ListToFrontendWithCount.builder()
 					.list(convertStringListToArray(userList.get(0).getList()))
 					.itemCount(userList.size())
@@ -335,7 +333,6 @@ public class ListService {
 			
 		}else {
 			return new CurrentOrderEntityUserResponse();
-			//log.info("sweeet");
 		}
 		
 	}
@@ -365,13 +362,11 @@ public class ListService {
 		String newList = "";
 		for(ListItemResponse currentOrderItem : convertStringListToArray(list.getList())) {
 			if(!currentOrderItem.getName().equals(item.getName())) {
-				log.info(currentOrderItem.getName() + "   " + item.getName());
 				newList+=currentOrderItem.getImage()+"+"+currentOrderItem.getName()+"+"+currentOrderItem.getQuantity()+"~";
 			}else {
 				//get item quantity and increase it
 				int oldQuantity = Integer.parseInt(currentOrderItem.getQuantity());
 				int newQuantity = ++oldQuantity;
-				log.info(String.valueOf(newQuantity));
 				newList+=currentOrderItem.getImage()+"+"+currentOrderItem.getName()+"+"+newQuantity+"~";
 			}
 		}
@@ -387,13 +382,11 @@ public class ListService {
 		String newList = "";
 		for(ListItemResponse currentOrderItem : convertStringListToArray(list.getList())) {
 			if(!currentOrderItem.getName().equals(item.getName())) {
-				log.info(currentOrderItem.getName() + "   " + item.getName());
 				newList+=currentOrderItem.getImage()+"+"+currentOrderItem.getName()+"+"+currentOrderItem.getQuantity()+"~";
 			}else {
 				//get item quantity and increase it
 				int oldQuantity = Integer.parseInt(currentOrderItem.getQuantity());
 				int newQuantity = --oldQuantity;
-				log.info(String.valueOf(newQuantity));
 				newList+=currentOrderItem.getImage()+"+"+currentOrderItem.getName()+"+"+newQuantity+"~";
 			}
 		}
@@ -407,9 +400,8 @@ public class ListService {
 		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
 		CurrentOrderEntity activeOrder = currentOrderRepo.findByDate(listRepo.getCurrentList(user.get().getId()));
 		String newList = "";
-		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate());
+		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate(),user.get().getId());
 		String socketKey = userRepo.getSocketKeyByShopperId(shopperId);
-		log.info(user.get().getEmail());
 		switch(itemWithCategory.getCategory()) {
 			case "todo":
 				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getTodoList())) {
@@ -989,7 +981,6 @@ public class ListService {
 						.completed(convertStringListToArray(newList))
 						.build();
 			default:
-				log.info("hit default");
 				return new CurrentOrderEntityUserResponse();
 		}
 	}
@@ -998,9 +989,8 @@ public class ListService {
 		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
 		CurrentOrderEntity activeOrder = currentOrderRepo.findByDate(listRepo.getCurrentList(user.get().getId()));
 		String newList = "";
-		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate());
+		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate(),user.get().getId());
 		String socketKey = userRepo.getSocketKeyByShopperId(shopperId);
-		log.info(user.get().getEmail());
 		switch(itemWithCategory.getCategory()) {
 			case "todo":
 				for(ListItemResponse activeOrderItem : convertStringListToArray(activeOrder.getTodoList())) {
@@ -1580,7 +1570,6 @@ public class ListService {
 						.completed(convertStringListToArray(newList))
 						.build();
 			default:
-				log.info("hit default");
 				return new CurrentOrderEntityUserResponse();
 		}
 	}
@@ -1589,7 +1578,7 @@ public class ListService {
 		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
 		CurrentOrderEntity activeOrder = currentOrderRepo.findByDate(listRepo.getCurrentList(user.get().getId()));
 		String newList = "";
-		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate());
+		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate(),user.get().getId());
 		String socketKey = userRepo.getSocketKeyByShopperId(shopperId);
 		
 		switch(itemWithCategory.getCategory()) {
@@ -2099,7 +2088,6 @@ public class ListService {
 					.completed(convertStringListToArray(newList))
 					.build();
 		default:
-			log.info("hit default");
 			return new CurrentOrderEntityUserResponse();
 	}
 	}
@@ -2124,7 +2112,6 @@ public class ListService {
 		if(shopper.get().getShopperId() == 1) {
 			
 			for(List<String> list : listRepo.getJaysFullOrders()) {
-				log.info(list.toString());
 				
 				Optional<User> user = userRepo.findById(Long.parseLong(list.get(2)));
 				OrderData orderData = OrderData.builder().firstname(user.get().getFirstname()).lastname(user.get().getLastname()).address(user.get().getAddress()).phone(user.get().getPhone()).email(user.get().getEmail()).build();
@@ -2135,7 +2122,6 @@ public class ListService {
 			return shopperOrdersFullArray;
 		}else if(shopper.get().getShopperId() == 2){
 			for(List<String> list : listRepo.getJoshsFullOrders()) {
-				log.info(list.toString());
 				
 				Optional<User> user = userRepo.findById(Long.parseLong(list.get(2)));
 				OrderData orderData = OrderData.builder().firstname(user.get().getFirstname()).lastname(user.get().getLastname()).address(user.get().getAddress()).phone(user.get().getPhone()).email(user.get().getEmail()).build();
@@ -2163,7 +2149,6 @@ public class ListService {
 		//find date and email in user_list
 		UserList list = listRepo.getOrderList(currentOrder.getDate(),client.get().getId(),shopperId);
 		list.setIsActive("true");
-		log.info(client.get().getSocketKey());
 		listRepo.save(list);
 		CurrentOrderEntity createFullOrder = CurrentOrderEntity.builder()
 				.date(currentOrder.getDate())
@@ -2173,6 +2158,23 @@ public class ListService {
 				.customer_address(client.get().getAddress())
 				.id(Long.valueOf(shopperId))
 				.todoList(list.getList())
+				.bakeryList("")
+				.bakingList("")
+				.beveragesList("")
+				.breadList("")
+				.breakfastList("")
+				.completedList("")
+				.dairyList("")
+				.deliList("")
+				.frozenList("")
+				.healthList("")
+				.householdList("")
+				.internationalList("")
+				.meatList("")
+				.pastaGrainsList("")
+				.petList("")
+				.produceList("")
+				.snacksList("")
 				.build();
 		
 		currentOrderRepo.save(createFullOrder);
@@ -2182,7 +2184,6 @@ public class ListService {
 		
 		
 		messagingTemplate.convertAndSendToUser(client.get().getSocketKey(), "/topic/messages", "true");
-		log.info(client.get().getSocketKey());
 		return ListToFrontendWithCount.builder()
 				.itemCount(formattedList.size())
 				.list(formattedList)
@@ -2378,7 +2379,7 @@ public class ListService {
 				.build();
 	}
 	
-	String endCurrentOrder(CurrentOrder currentOrder, String token) {
+	void endCurrentOrder(CurrentOrder currentOrder, String token) {
 		//reset current order back to inactive
 		Optional<User> client = userRepo.findByEmail(currentOrder.getEmail());
 		
@@ -2393,7 +2394,6 @@ public class ListService {
 		list.setIsCurrentOrder("false");
 		//list.setList(null);
 		listRepo.save(list);
-		return "success";
 	}
 	
 	
@@ -2402,10 +2402,9 @@ public class ListService {
 		
 		CurrentOrderEntity currentOrder = currentOrderRepo.findUserById(Long.valueOf(shopper.get().getShopperId()));
 		//get user by date
-		Long userId = listRepo.getUserByDate(currentOrder.getDate());
-		log.info(userId.toString());
+		Optional<User> client = userRepo.findByEmail(currentOrder.getCustomer_email());
 		//get socket key by user
-		String socketKey = userRepo.getSocketKeyById(userId);
+		String socketKey = userRepo.getSocketKeyById(client.get().getId());
 		log.info(socketKey);
 		if(update.getFromCategory().contains(update.getToCategory())) {
 			switch(update.getToCategory()) {
@@ -4685,8 +4684,7 @@ public class ListService {
 		String updatedList="";
 		List<ListItemResponse> newFromListArray = new ArrayList<ListItemResponse>();
 		CurrentOrderEntity currentOrder = currentOrderRepo.findUserById(Long.valueOf(user.get().getShopperId()));
-		Long userId = listRepo.getUserByDate(currentOrder.getDate());
-		String socketKey = userRepo.getSocketKeyById(userId);
+		String socketKey = userRepo.getSocketKeyById(userRepo.findByEmail(currentOrder.getCustomer_email()).get().getId());
 		switch(update.getUpdateCategory()) {
 			case "todo":
 				for(ListItemResponse list : convertStringListToArray(currentOrder.getTodoList())) {
@@ -4697,7 +4695,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -4705,7 +4703,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getTodoList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setTodoList(null);
+					currentOrder.setTodoList(setList);
 				}else {
 					currentOrder.setTodoList(newFromList);
 				}
@@ -4727,7 +4725,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -4735,7 +4733,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getHealthList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setHealthList(null);
+					currentOrder.setHealthList(setList);
 				}else {
 					currentOrder.setHealthList(newFromList);
 				}
@@ -4756,7 +4754,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -4764,7 +4762,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getDairyList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setDairyList(null);
+					currentOrder.setDairyList(setList);
 				}else {
 					currentOrder.setDairyList(newFromList);
 				}
@@ -4785,7 +4783,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -4793,7 +4791,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getBreakfastList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setBreakfastList(null);
+					currentOrder.setBreakfastList(setList);
 				}else {
 					currentOrder.setBreakfastList(newFromList);
 				}
@@ -4814,7 +4812,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -4822,7 +4820,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getInternationalList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setInternationalList(null);
+					currentOrder.setInternationalList(setList);
 				}else {
 					currentOrder.setInternationalList(newFromList);
 				}
@@ -4843,7 +4841,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -4851,7 +4849,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getBakingList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setBakingList(null);
+					currentOrder.setBakingList(setList);
 				}else {
 					currentOrder.setBakingList(newFromList);
 				}
@@ -4872,7 +4870,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -4880,7 +4878,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getPastaGrainsList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setPastaGrainsList(null);
+					currentOrder.setPastaGrainsList(setList);
 				}else {
 					currentOrder.setPastaGrainsList(newFromList);
 				}
@@ -4901,7 +4899,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -4909,7 +4907,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getSnacksList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setSnacksList(null);
+					currentOrder.setSnacksList(setList);
 				}else {
 					currentOrder.setSnacksList(newFromList);
 				}
@@ -4930,7 +4928,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -4938,7 +4936,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getPetList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setPetList(null);
+					currentOrder.setPetList(setList);
 				}else {
 					currentOrder.setPetList(newFromList);
 				}
@@ -4959,7 +4957,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -4967,7 +4965,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getHouseholdList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setHouseholdList(null);
+					currentOrder.setHouseholdList(setList);
 				}else {
 					currentOrder.setHouseholdList(newFromList);
 				}
@@ -4988,7 +4986,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -4996,7 +4994,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getBeveragesList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setBeveragesList(null);
+					currentOrder.setBeveragesList(setList);
 				}else {
 					currentOrder.setBeveragesList(newFromList);
 				}
@@ -5017,7 +5015,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -5025,7 +5023,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getBreadList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setBreadList(null);
+					currentOrder.setBreadList(setList);
 				}else {
 					currentOrder.setBreadList(newFromList);
 				}
@@ -5046,7 +5044,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -5054,7 +5052,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getFrozenList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setFrozenList(null);
+					currentOrder.setFrozenList(setList);
 				}else {
 					currentOrder.setFrozenList(newFromList);
 				}
@@ -5075,7 +5073,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -5083,7 +5081,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getMeatList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setMeatList(null);
+					currentOrder.setMeatList(setList);
 				}else {
 					currentOrder.setMeatList(newFromList);
 				}
@@ -5104,7 +5102,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -5112,7 +5110,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getProduceList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setProduceList(null);
+					currentOrder.setProduceList(setList);
 				}else {
 					currentOrder.setProduceList(newFromList);
 				}
@@ -5133,7 +5131,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -5141,7 +5139,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getBakeryList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setBakeryList(null);
+					currentOrder.setBakeryList(setList);
 				}else {
 					currentOrder.setBakeryList(newFromList);
 				}
@@ -5162,7 +5160,7 @@ public class ListService {
 					}
 				}
 
-				if(currentOrder.getCompletedList() == null) {
+				if(currentOrder.getCompletedList() == setList) {
 					updatedList = completedItem;
 				}else {
 					updatedList = completedItem+=currentOrder.getCompletedList();
@@ -5170,7 +5168,7 @@ public class ListService {
 				
 				newFromListArray = convertStringListToArray(currentOrder.getDeliList()).stream().filter(d -> !update.getItemName().equals(d.getName())).collect(Collectors.toList());
 				if(newFromList=="") {
-					currentOrder.setDeliList(null);
+					currentOrder.setDeliList(setList);
 				}else {
 					currentOrder.setDeliList(newFromList);
 				}
@@ -5191,8 +5189,11 @@ public class ListService {
 	
 	CurrentOrderEntityUserResponse getActiveOrder(String token){
 		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
-		CurrentOrderEntity currentOrder = currentOrderRepo.findByDate(listRepo.getCurrentList(user.get().getId()));
-
+		//client above
+		//get shopperid from user
+		UserList list = listRepo.getUserListByCurrentOrder(user.get().getId());
+		CurrentOrderEntity currentOrder = currentOrderRepo.findById(Long.valueOf(list.getShopperId())).get();
+		log.info(currentOrder.toString());
 		return CurrentOrderEntityUserResponse.builder()
 				.todo(convertStringListToArray(currentOrder.getTodoList()))
 				.breakfast(convertStringListToArray(currentOrder.getBreakfastList()))
@@ -5221,8 +5222,9 @@ public class ListService {
 		ObjectMapper objectMapper = new ObjectMapper();
 		CurrentOrderEntityUserResponseWithUpdateMessage activeOrder = objectMapper.readValue(message, CurrentOrderEntityUserResponseWithUpdateMessage.class);
 		//get shopperId from date of order
-		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate().toString());
-		log.info(message);
+		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(activeOrder.getToken()));
+		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate(), user.get().getId()); 
+		log.info(String.valueOf(shopperId));
 		String socketKey = userRepo.getSocketKeyByShopperId(shopperId);
 		messagingTemplate.convertAndSendToUser(socketKey,"/topic/activeOrder", message);
 	}

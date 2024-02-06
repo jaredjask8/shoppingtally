@@ -28,30 +28,43 @@ public class SecurityConfiguration {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-			.csrf()
-			.disable()
-			.cors()
-			.and()
-			.authorizeHttpRequests()
-			.requestMatchers("/api/v1/admin/whatsNew/**")
-			.permitAll()
-			.requestMatchers("/api/v1/auth/**")
-			.permitAll()
-			.requestMatchers("/api/v1/reviews/**")
-			.permitAll()
-			.requestMatchers("/our-websocket/**")
-			.permitAll()
-			.anyRequest()
-			.authenticated()
-			.and()
-			.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
+			.csrf(csrf -> csrf.disable())
+			.cors(Customizer.withDefaults())
+			.authorizeHttpRequests((authorize) -> {
+				authorize.requestMatchers("/api/v1/admin/whatsNew/**").permitAll();
+				authorize.requestMatchers("/api/v1/auth/**").permitAll();
+				authorize.requestMatchers("/api/v1/reviews/**").permitAll();
+				authorize.requestMatchers("/our-websocket/**").permitAll();
+				authorize.anyRequest().authenticated();
+			})
+			.sessionManagement(test -> test.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authenticationProvider(authenticationProvider)
 			.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 		
 		return http.build();
 	}
+	
+//	.csrf()
+//	.disable()
+//	.cors()
+//	.and()
+//	.authorizeHttpRequests()
+//	.requestMatchers("/api/v1/admin/whatsNew/**")
+//	.permitAll()
+//	.requestMatchers("/api/v1/auth/**")
+//	.permitAll()
+//	.requestMatchers("/api/v1/reviews/**")
+//	.permitAll()
+//	.requestMatchers("/our-websocket/**")
+//	.permitAll()
+//	.anyRequest()
+//	.authenticated()
+//	.and()
+//	.sessionManagement()
+//	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//	.and()
+//	.authenticationProvider(authenticationProvider)
+//	.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 	
 	
 	@Bean

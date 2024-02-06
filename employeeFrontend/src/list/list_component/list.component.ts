@@ -25,6 +25,7 @@ import { FormControl } from '@angular/forms';
 import { AffiliateData } from 'src/admin/affiliate/models/AffiliateData';
 import { AffiliateService } from 'src/admin/affiliate/affiliate.service';
 import { environment } from '../../environments/environment';
+import { UserOrderInfo } from '../models/UserOrderInfo';
 
 
 @Component({
@@ -37,7 +38,7 @@ export class ListComponent implements OnInit, OnDestroy {
   //socket
   //"http://localhost/test/our-websocket"
   //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket"
-  serverUrl = environment.apiUrl+"/our-websocket"
+  serverUrl = environment.socketUrl+"/our-websocket"
   title = 'WebSockets chat';
   stompClient;
 
@@ -113,22 +114,26 @@ export class ListComponent implements OnInit, OnDestroy {
     this.initializeWebSocketConnection();
   }
   ngOnInit(): void {
-    //after the user clicks the order 
+
     let that = this
+    //oninit call get order status
+    this.listService.getUserHasOrder().subscribe(d => {
+      this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
+    })
     this.listService.updateOrderScreen$.subscribe(d=>{
       if(d){
-        this.affiliateService.getAffiliateData().subscribe(j=>{
-          if(j.length){
-            that.fullAffiliateDataArray = that.affiliateDataArray.concat(j)
-          }
-        })
+        // this.affiliateService.getAffiliateData().subscribe(j=>{
+        //   if(j.length){
+        //     that.fullAffiliateDataArray = that.affiliateDataArray.concat(j)
+        //   }
+        // })
         this.listService.getUserList().subscribe(e=>{
           this.currentOrderList = e.list
           this.currentOrderDate = e.date
-          if(e.affiliateData.length){
-            that.fullAffiliateDataArray = that.affiliateDataArray.concat(e.affiliateData)
-            console.log("in")
-          }
+          // if(e.affiliateData.length){
+          //   that.fullAffiliateDataArray = that.affiliateDataArray.concat(e.affiliateData)
+          //   console.log("in")
+          // }
           
         })
       }
@@ -146,6 +151,7 @@ export class ListComponent implements OnInit, OnDestroy {
           this.cart = e.list
         })
       }else if(d.hasCurrentOrder && !d.hasActive){
+        
         //get current order
         //when page loads check for order status
         this.listService.getUserList().subscribe(e => {
@@ -259,8 +265,6 @@ export class ListComponent implements OnInit, OnDestroy {
         that.produce = activeOrderUpdate.produce
         that.bakery = activeOrderUpdate.bakery
         that.completed = activeOrderUpdate.completed
-
-        console.log(that.produce)
       })
       that.stompClient.subscribe("/user/topic/affiliate", function (message) {
         that.fullAffiliateDataArray = that.affiliateDataArray.concat(JSON.parse(message.body))
@@ -276,9 +280,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
   sendActiveOrderMessage(updateMessage:string) {
     this.stompClient.send('/ws/test', {}, JSON.stringify(new CurrentOrderUserClassWithUpdateMessage(
-      "",
-      "",
-      "",
+      this.userService.getEnvironment().token,
       this.currentOrderDate,
       updateMessage,
       this.todo,

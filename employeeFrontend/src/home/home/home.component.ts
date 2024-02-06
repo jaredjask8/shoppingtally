@@ -158,6 +158,11 @@ export class HomeComponent implements OnInit,AfterViewInit{
       this.mobileResolution.next(false)
     }
 
+    if(this.userService.getEnvironment().log == "1"){
+      this.userService.initializeWebSocketConnection()
+    }
+    
+
     this.adminService.getWhatsNew().subscribe(d => {
       this.array = d;
       

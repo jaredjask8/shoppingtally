@@ -40,6 +40,9 @@ export class ProfileListsComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    this.userService.initializeWebSocketConnection()
+    
+    
     this.listService.getDates(this.userService.getEnvironment().token).subscribe(d => { 
       //console.log(d)
       //this.fullList = d;

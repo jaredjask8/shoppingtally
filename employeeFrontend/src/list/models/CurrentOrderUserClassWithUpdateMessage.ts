@@ -2,9 +2,7 @@ import { CurrentOrderUserClass } from "./CurrentOrderUserClass";
 import { ListItemInterface } from "./ListItemInterface";
 
 export class CurrentOrderUserClassWithUpdateMessage{
-    shopper_firstname:string;
-    shopper_lastname:string;
-    shopper_phone:string;
+    token:string;
     date:string;
     updateMessage:string;
 
@@ -28,9 +26,7 @@ export class CurrentOrderUserClassWithUpdateMessage{
     completed:ListItemInterface[]= [];
 
     constructor(
-        shopper_firstname:string,
-        shopper_lastname:string,
-        shopper_phone:string,
+        token:string,
         date:string,
         updateMessage:string,
         todo:ListItemInterface[],
@@ -52,9 +48,7 @@ export class CurrentOrderUserClassWithUpdateMessage{
         dairy:ListItemInterface[],
         completed:ListItemInterface[]
     ){
-        this.shopper_firstname = shopper_firstname;
-        this.shopper_lastname = shopper_lastname;
-        this.shopper_phone = shopper_phone;
+        this.token = token
         this.date = date;
         this.updateMessage = updateMessage;
         this.todo = todo;

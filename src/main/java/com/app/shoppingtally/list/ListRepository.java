@@ -48,9 +48,6 @@ public interface ListRepository extends JpaRepository<UserList,Long>{
 	@Query(value="SELECT date FROM user_list WHERE is_active='true' AND user_id=:id", nativeQuery=true)
 	String getCurrentList(@Param("id")Long id);
 	
-	@Query(value="SELECT user_id FROM user_list WHERE date=:date", nativeQuery=true)
-	Long getUserByDate(@Param("date")String date);
-	
-	@Query(value="SELECT shopper_id FROM user_list WHERE date=:date", nativeQuery=true)
-	Integer getShopperIdFromDateOfOrder(@Param("date")String date);
+	@Query(value="SELECT shopper_id FROM user_list WHERE date=:date AND user_id=:id", nativeQuery=true)
+	Integer getShopperIdFromDateOfOrder(@Param("date")String date,@Param("id")Long id);
 }

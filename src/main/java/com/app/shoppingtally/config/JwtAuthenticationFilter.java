@@ -39,6 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 		final String userEmail;
 		final List<RequestMatcher> ignoredPaths = Arrays.asList(new AntPathRequestMatcher("/api/v1/reviews/**"), new AntPathRequestMatcher("/api/v1/auth/**"),new AntPathRequestMatcher("/api/v1/admin/whatsNew/**"),new AntPathRequestMatcher("/our-websocket/**")) ;
 		for(RequestMatcher path : ignoredPaths) {
+			log.info(path.toString() + "   " +request.getRequestURI());
 			if(path.matches(request)) { 
 	            filterChain.doFilter(request, response);
 	            return;

@@ -86,8 +86,8 @@ public class ListController {
 	
 	@CrossOrigin
 	@PostMapping("/endCurrentOrder")
-	public String endCurrentOrder(@RequestBody CurrentOrder currentOrder, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-		return listService.endCurrentOrder(currentOrder,token);
+	public void endCurrentOrder(@RequestBody CurrentOrder currentOrder, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		listService.endCurrentOrder(currentOrder,token);
 	}
 	
 	@CrossOrigin

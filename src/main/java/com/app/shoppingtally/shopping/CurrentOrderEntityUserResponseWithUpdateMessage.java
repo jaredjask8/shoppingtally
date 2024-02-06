@@ -14,9 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CurrentOrderEntityUserResponseWithUpdateMessage {
-	String shopper_firstname;
-	String shopper_lastname;
-	String shopper_phone;
+	String token;
 	String date;
 	String updateMessage;
 	

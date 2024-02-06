@@ -9,6 +9,8 @@ import { ListService } from 'src/list/list_component/list.service';
 import { UserOrderInfo } from 'src/list/models/UserOrderInfo';
 import { RegisterService } from 'src/register/register.service';
 
+import { environment } from 'src/environments/environment';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -19,6 +21,7 @@ export class AppComponent implements OnInit{
   displayLoadingIndicator=false;
   showModal:Observable<boolean>
   closeResult: string;
+  
 
   @HostListener('document:click', ['$event'])
     handlerFunction(e: MouseEvent) {
@@ -67,7 +70,7 @@ export class AppComponent implements OnInit{
       this.registerService.userCredentials.next(false)
     }
     
-    
+    //this.userService.initializeWebSocketConnection()
     
     this.router.events.subscribe(e => {
       if(e instanceof NavigationStart){
@@ -113,8 +116,7 @@ export class AppComponent implements OnInit{
 		this.modalService.open(content, { backdropClass: 'light-blue-backdrop' });
 	}
 
-
-
+  
   
 }
 

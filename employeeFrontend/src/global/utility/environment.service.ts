@@ -9,7 +9,8 @@ import { NavService } from "../nav/nav.service";
 import { ProfileService } from "src/profile/profile.service";
 import { Router } from "@angular/router";
 import { environment } from "src/environments/environment";
-
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
 
 @Injectable({
     providedIn: 'root'
@@ -24,6 +25,8 @@ import { environment } from "src/environments/environment";
     userLoggedIn$:Observable<boolean>
     signOutSnackbar:BehaviorSubject<boolean>=new BehaviorSubject(false);
     signOutSnackbar$:Observable<boolean>
+    serverUrl = environment.socketUrl+"/our-websocket"
+  stompClient;
   
 
     constructor(private http:HttpClient, private navService:NavService, private profileService:ProfileService, private router:Router, private registerService:RegisterService){
@@ -121,5 +124,24 @@ import { environment } from "src/environments/environment";
 
     updateUserData(userData:string,choice:string):Observable<JwtUserResponse>{
       return this.http.post<JwtUserResponse>(environment.apiUrl + "/api/v1/auth/updateUser", {userUpdate:userData,choice:choice})
+    }
+
+    initializeWebSocketConnection() {
+
+      let ws = new SockJS(this.serverUrl);
+      this.stompClient = Stomp.over(ws);
+      let that = this;
+      //this.stompClient.debug = null;
+      this.stompClient.connect({ token: this.getEnvironment().token }, function (frame) {
+        that.stompClient.subscribe("/user/topic/messages", function (message) {
+          if (message.body == "false") {
+            that.navService.cartVisibility.next({ hasActive: false, hasCurrentOrder: false })
+  
+          }
+  
+  
+        });
+  
+    })
     }
   }
