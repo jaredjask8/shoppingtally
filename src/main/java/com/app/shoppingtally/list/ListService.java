@@ -397,8 +397,15 @@ public class ListService {
 	}
 	
 	CurrentOrderEntityUserResponse increaseActiveOrderQuantity(ListItemWithCategoryRequest itemWithCategory, String token) {
+//		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+//		//client above
+//		//get shopperid from user
+//		UserList list = listRepo.getUserListByCurrentOrder(user.get().getId());
+//		CurrentOrderEntity currentOrder = currentOrderRepo.findById(Long.valueOf(list.getShopperId())).get();
+		
 		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
-		CurrentOrderEntity activeOrder = currentOrderRepo.findByDate(listRepo.getCurrentList(user.get().getId()));
+		UserList list = listRepo.getUserListByCurrentOrder(user.get().getId());
+		CurrentOrderEntity activeOrder = currentOrderRepo.findById(Long.valueOf(list.getShopperId())).get();
 		String newList = "";
 		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate(),user.get().getId());
 		String socketKey = userRepo.getSocketKeyByShopperId(shopperId);
@@ -987,7 +994,8 @@ public class ListService {
 	
 	CurrentOrderEntityUserResponse decreaseActiveOrderQuantity(ListItemWithCategoryRequest itemWithCategory, String token) {
 		Optional<User> user = userRepo.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
-		CurrentOrderEntity activeOrder = currentOrderRepo.findByDate(listRepo.getCurrentList(user.get().getId()));
+		UserList list = listRepo.getUserListByCurrentOrder(user.get().getId());
+		CurrentOrderEntity activeOrder = currentOrderRepo.findById(Long.valueOf(list.getShopperId())).get();
 		String newList = "";
 		int shopperId = listRepo.getShopperIdFromDateOfOrder(activeOrder.getDate(),user.get().getId());
 		String socketKey = userRepo.getSocketKeyByShopperId(shopperId);
