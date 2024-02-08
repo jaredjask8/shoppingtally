@@ -527,7 +527,26 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   deleteActiveOrderItem(item: ListItem, category: string, choice: string) {
-    this.listService.deleteActiveOrderItem(item, category).subscribe(d=>console.log(d));
+    this.listService.deleteActiveOrderItem(item, category).subscribe(d=>{
+      this.todo = d.todo
+        this.deli = d.deli
+        this.health = d.health
+        this.dairy = d.dairy
+        this.breakfast = d.breakfast
+        this.international = d.international
+        this.baking = d.baking;
+        this.grains = d.grains
+        this.snacks = d.snacks
+        this.pet = d.pet
+        this.household = d.household
+        this.beverages = d.beverages
+        this.bread = d.bread
+        this.frozen = d.frozen
+        this.meat = d.meat
+        this.produce = d.produce
+        this.bakery = d.bakery
+        this.completed = d.completed
+    });
     this.updateActiveOrderFrontend(category,item,choice);
   }
 
