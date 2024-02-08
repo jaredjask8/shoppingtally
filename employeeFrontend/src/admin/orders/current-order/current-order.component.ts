@@ -269,6 +269,9 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
         case 'bread':
           this.bread = d.list
           break;
+        case 'frozen':
+          this.frozen = d.list
+          break;
       }
 
       this.completed = d.completed

@@ -5,6 +5,7 @@ import { OrdersRoutingModule } from './orders-routing.module';
 import { OrdersComponent } from './orders.component';
 import { CurrentOrderComponent } from './current-order/current-order.component';
 import { MatButtonModule } from '@angular/material/button';
+import { LoaderComponent } from 'src/global/components/loader.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     CommonModule,
     OrdersRoutingModule,
-    MatButtonModule
+    MatButtonModule,
+    LoaderComponent
   ]
 })
 export class OrdersModule { }
