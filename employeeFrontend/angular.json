@@ -13,6 +13,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "stompjs",
+              "sockjs-client"
+           ],
             "outputPath": "/opt/dev/employee-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -31,8 +35,7 @@
             ],
             "scripts": [
       
-            ],
-            "webWorkerTsConfig": "tsconfig.worker.json"
+            ]
           },
           "configurations": {
             "production": {
@@ -67,6 +70,12 @@
               ]
             },
             "local":{
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -113,8 +122,7 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": [],
-            "webWorkerTsConfig": "tsconfig.worker.json"
+            "scripts": []
           }
         }
       }

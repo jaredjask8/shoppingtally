@@ -1,12 +1,14 @@
 <ng-container (window:resize)="onResize($event)"></ng-container>
-<ngb-datepicker
+<ngb-datepicker #test
 	[displayMonths]="displayMonths"
 	[showWeekNumbers]="showWeekNumbers"
 	[outsideDays]="outsideDays"
 	#dp 
 	[(ngModel)]="model" 
-	(navigate)="date = $event.next"
-	(click)="setCurrentDate()"
+	[navigation]="navigation"
+	[startDate]="startDate"
+	(dateSelect)="setCurrentDate()"
 >
+
 </ngb-datepicker>
 

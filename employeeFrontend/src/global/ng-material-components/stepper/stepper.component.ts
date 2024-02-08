@@ -7,7 +7,7 @@ import {MatButton, MatButtonModule} from '@angular/material/button';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatDividerModule } from '@angular/material/divider';
 import { NavService } from 'src/global/nav/nav.service';
-import { NgbDateStruct, NgbDatepicker, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbDateStruct, NgbDatepicker, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ListService } from 'src/list/list_component/list.service';
 import { DatepickerService } from 'src/global/bootstrap-components/datepicker/datepicker.service';
 import { EnvironmentService } from 'src/global/utility/environment.service';
@@ -34,6 +34,7 @@ import { Router } from '@angular/router';
 import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/drag-drop';
 import { UserOrderInfo } from 'src/list/models/UserOrderInfo';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { DateComparison } from 'src/global/bootstrap-components/datepicker/DateComparison';
 
 /**
  * @title Stepper overview
@@ -103,7 +104,8 @@ export class StepperComponent implements OnInit, AfterViewInit{
 
   stepCounter:number=0
   resetDatePicker:boolean=false
-  currentSelectedDate:NgbDateStruct
+  currentSelectedDate:NgbDate
+  dpStartDate:NgbDate
 
 
   @ViewChild('we')we:ElementRef
@@ -207,12 +209,17 @@ export class StepperComponent implements OnInit, AfterViewInit{
 
 
   //STEPPER 2
-  getDate(date:NgbDateStruct){
-    this.previousHourSelected = this.we.nativeElement;
+  getDate(dates:DateComparison){
+    let currentDate = new Date(dates.currentDate.year,dates.currentDate.month-1,dates.currentDate.day).getTime()
+    let currentDateToString = new Date(dates.currentDate.year,dates.currentDate.month-1,dates.currentDate.day).toLocaleDateString()
+    let selectedDate = new Date(dates.selectedDate.year,dates.selectedDate.month-1,dates.selectedDate.day).getTime()
+    this.dpStartDate = dates.currentDate
+    if(currentDate <= selectedDate){
+      this.previousHourSelected = this.we.nativeElement;
     this.dateSelected = false
     this.datePickedFromCalendar = true;
-    this.currentSelectedDate = date
-    this.currentDate = date.year + "-" + date.month + "-" + date.day;
+    this.currentSelectedDate = dates.selectedDate
+    this.currentDate = dates.currentDate.year + "-" + dates.currentDate.month + "-" + dates.currentDate.day;
     //means date is clicked
     //unhide hours
     this.renderer2.removeClass(this.hoursContainer.nativeElement,'container')
@@ -250,6 +257,13 @@ export class StepperComponent implements OnInit, AfterViewInit{
       }
     
     }
+    }else{
+      //show notification
+      this.datePickedFromCalendar = false
+      this.dateNotification.open("Please select a date after "+currentDateToString,"",{duration:2000})
+    }
+
+    
   }
 
 
@@ -287,12 +301,13 @@ export class StepperComponent implements OnInit, AfterViewInit{
       this.listService.getShopperDates(this.userService.getEnvironment().token, 1).subscribe(d => {
         if(d.find(dates=>dates==this.dateService.getDateToDb())){
           this.takenUserDates = d
-          this.getDate(this.currentSelectedDate)
+          this.getDate(new DateComparison(this.currentSelectedDate,this.dpStartDate))
           this.dateNotification.open("Date has been taken, retry", "X", {"duration": 2000,panelClass: 'date-snackbar'})
           stepper.previous()
         }else{
           this.listToDb.date = this.dateService.getDateToDb();
-          stepper.next()
+          this.listToDb.token = this.userService.getEnvironment().token;
+          this.listService.postList(this.listToDb).subscribe(d=>this.yes = d.list);
         }
       })
       
@@ -300,17 +315,16 @@ export class StepperComponent implements OnInit, AfterViewInit{
       this.listService.getShopperDates(this.userService.getEnvironment().token, 2).subscribe(d => {
         if(d.find(dates=>dates==this.dateService.getDateToDb())){
           this.takenUserDates = d
-          this.getDate(this.currentSelectedDate)
+          this.getDate(new DateComparison(this.currentSelectedDate,this.dpStartDate))
           this.dateNotification.open("Date has been taken, retry", "X", {"duration": 2000,panelClass: 'date-snackbar'})
           stepper.previous()
         }else{
           this.listToDb.date = this.dateService.getDateToDb();
-          stepper.next()
+          this.listToDb.token = this.userService.getEnvironment().token;
+          this.listService.postList(this.listToDb).subscribe(d=>this.yes = d.list);
         }
       })
     }
-    //console.log(this.listToDb.date)
-    //console.log(this.listToDb)
   }
 
   getShopperDates(shopperId){
@@ -362,9 +376,8 @@ export class StepperComponent implements OnInit, AfterViewInit{
 
 
   //STEPPER 3
-  sendList(){
-    this.listToDb.token = this.userService.getEnvironment().token;
-    this.listService.postList(this.listToDb).subscribe(d=>this.yes = d.list);
+  sendList(stepper:MatStepper){
+    this.addDate(stepper)
   }
 
 
