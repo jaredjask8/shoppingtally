@@ -94,7 +94,6 @@ mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-top: 20px;
     /* background-color: black; */
   }
 
@@ -121,6 +120,10 @@ mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-
     justify-content: center;
   }
 
+  .showTimeSlot{
+    display: flex !important;
+  }
+
 
 .timeSlotContainer{
     background-color: white;
@@ -130,7 +133,8 @@ mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-
     justify-content: center;
     align-items: center;
     border-radius: 10px;
-    margin: 20px;
+    margin: 10px;
+    display: none;
   }
 
   .hours:hover{

@@ -356,6 +356,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
     this.currentDate = ''
     this.selectedHour = ''
     this.dateSelected=false
+    this.datePickedFromCalendar= false
     this.renderer2.addClass(this.hoursContainer.nativeElement,'container')
   }
 
