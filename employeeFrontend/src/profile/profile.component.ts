@@ -32,7 +32,9 @@ export class ProfileComponent implements OnInit{
   areaCode:string
   middleOfNumber:string
   endOfNumber:string
-
+  rippleColor:string="#f7f603"
+  ripplePlacement:boolean=true
+  rippleBound:boolean=false
 
   currentData:string
   currentUpdateTitle:string
@@ -91,6 +93,7 @@ export class ProfileComponent implements OnInit{
       this.userData = d
     })
     this._showUpdate = false;
+    this.phoneFieldShown = false
   }
 
 

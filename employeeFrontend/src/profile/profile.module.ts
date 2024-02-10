@@ -10,7 +10,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { PhoneNumberPipe } from '../pipes/phone-number.pipe';
-
+import {MatRippleModule} from '@angular/material/core';
 
 
 @NgModule({
@@ -27,7 +27,8 @@ import { PhoneNumberPipe } from '../pipes/phone-number.pipe';
     MatSelectModule,
     MatOptionModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatRippleModule
   ]
 })
 export class ProfileModule { }

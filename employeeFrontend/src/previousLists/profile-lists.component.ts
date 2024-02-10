@@ -84,28 +84,57 @@ export class ProfileListsComponent implements OnInit{
   addItemToOrderState(index){
     if(this.hasOrder && !this.isActive){
       //send to current order if item passes check
-      if(this.checkItemValidity(this.fullList[index].name)){
-        this.listService.addItemToCurrentOrder(this.fullList[index]).subscribe(d=> {
-          this.current.list = d
-        })
-        this.snackBar.open("Item added")
-        setTimeout(()=>{this.snackBar.dismiss()},2000)
+      if(!this.inputUsed){
+        if(this.checkItemValidity(this.fullList[index].name)){
+          this.listService.addItemToCurrentOrder(this.fullList[index]).subscribe(d=> {
+            this.current.list = d
+          })
+          this.snackBar.open("Item added")
+          setTimeout(()=>{this.snackBar.dismiss()},2000)
+        }else{
+          this.snackBar.open("Item already in current order")
+          setTimeout(()=>{this.snackBar.dismiss()},2000)
+        }
       }else{
-        this.snackBar.open("Item already in current order")
-        setTimeout(()=>{this.snackBar.dismiss()},2000)
+        console.log("test")
+        if(this.checkItemValidity(this.filteredList[index].name)){
+          this.listService.addItemToCurrentOrder(this.filteredList[index]).subscribe(d=> {
+            this.current.list = d
+          })
+          this.snackBar.open("Item added")
+          setTimeout(()=>{this.snackBar.dismiss()},2000)
+        }else{
+          this.snackBar.open("Item already in current order")
+          setTimeout(()=>{this.snackBar.dismiss()},2000)
+        }
       }
+      
     }else{
-      //send to active order if item passes check
-      if(this.checkItemValidity(this.fullList[index].name)){
-        this.listService.addItemToActiveOrder(this.fullList[index]).subscribe(d=>{
-          this.active = d
-        })
-        this.snackBar.open("Item added")
-        setTimeout(()=>{this.snackBar.dismiss()},2000)
+      if(!this.inputUsed){
+        if(this.checkItemValidity(this.fullList[index].name)){
+          this.listService.addItemToActiveOrder(this.fullList[index]).subscribe(d=>{
+            this.active = d
+          })
+          this.snackBar.open("Item added")
+          setTimeout(()=>{this.snackBar.dismiss()},2000)
+        }else{
+          this.snackBar.open("Item already in current order")
+          setTimeout(()=>{this.snackBar.dismiss()},2000)
+        }
       }else{
-        this.snackBar.open("Item already in current order")
-        setTimeout(()=>{this.snackBar.dismiss()},2000)
+        if(this.checkItemValidity(this.filteredList[index].name)){
+          this.listService.addItemToActiveOrder(this.filteredList[index]).subscribe(d=>{
+            this.active = d
+          })
+          this.snackBar.open("Item added")
+          setTimeout(()=>{this.snackBar.dismiss()},2000)
+        }else{
+          this.snackBar.open("Item already in current order")
+          setTimeout(()=>{this.snackBar.dismiss()},2000)
+        }
       }
+      //send to active order if item passes check
+      
       
       
     }
@@ -115,18 +144,24 @@ export class ProfileListsComponent implements OnInit{
     let itemFound = true;
     if(!this.hasOrder && !this.isActive){
       //cart state
-      this.cart.list.forEach(d=>{
-        if(d.name === item){
-          itemFound = false;
-        }
-      })
+      
+        this.cart.list.forEach(d=>{
+          if(d.name === item){
+            itemFound = false;
+          }
+        })
+        
+      
     }else if(this.hasOrder && !this.isActive){
       //current order state
-      this.current.list.forEach(d=>{
-        if(d.name === item){
-          itemFound = false;
-        }
-      })
+      
+        this.current.list.forEach(d=>{
+          if(d.name === item){
+            itemFound = false;
+            //console.log(item + "   " + d.name)
+          }
+        })
+      
     }else{
       //active order state
       let tempArray = [];
@@ -150,12 +185,14 @@ export class ProfileListsComponent implements OnInit{
         this.active.bakery,
         this.active.completed
       )
-      fullActiveArray.forEach(d=>{
-        //console.log(d.name)
-        if(d.name === item){
-          itemFound = false;
-        }
-      })
+
+        fullActiveArray.forEach(d=>{
+          //console.log(d.name)
+          if(d.name === item){
+            itemFound = false;
+          }
+        })
+      
     }
 
     return itemFound;
@@ -166,17 +203,33 @@ export class ProfileListsComponent implements OnInit{
     let that = this
     this.listService.getCurrentList().subscribe(d=>{
       that.cart = d
-      if(that.checkItemValidity(that.fullList[index].name)){
-        that.listService.addListItem(that.fullList[index]).subscribe(d=>{
-          that.navService.cartCount.next(d.itemCount.toString())
-          that.cart = d
-        })
-        that.snackBar.open("Item added")
-        setTimeout(()=>{that.snackBar.dismiss()},2000)
+      if(!this.inputUsed){
+        if(that.checkItemValidity(that.fullList[index].name)){
+          that.listService.addListItem(that.fullList[index]).subscribe(d=>{
+            that.navService.cartCount.next(d.itemCount.toString())
+            that.cart = d
+          })
+          that.snackBar.open("Item added")
+          setTimeout(()=>{that.snackBar.dismiss()},2000)
+        }else{
+          that.snackBar.open("Item already in current order")
+          setTimeout(()=>{that.snackBar.dismiss()},2000)
+        }
       }else{
-        that.snackBar.open("Item already in current order")
-        setTimeout(()=>{that.snackBar.dismiss()},2000)
+        console.log(that.filteredList[index].name)
+        if(that.checkItemValidity(that.filteredList[index].name)){
+          that.listService.addListItem(that.filteredList[index]).subscribe(d=>{
+            that.navService.cartCount.next(d.itemCount.toString())
+            that.cart = d
+          })
+          that.snackBar.open("Item added")
+          setTimeout(()=>{that.snackBar.dismiss()},2000)
+        }else{
+          that.snackBar.open("Item already in current order")
+          setTimeout(()=>{that.snackBar.dismiss()},2000)
+        }
       }
+      
     })
     
     

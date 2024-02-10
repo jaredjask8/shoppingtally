@@ -31,9 +31,9 @@
             <img src="../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="nameContainer">{{item.name}}</div>
-          <button *ngIf="!hasOrder else orderButtonTemplate" mat-raised-button (click)="addItemToCart(i)">Add to cart</button>
+          <app-buttons buttonText="Add to cart" *ngIf="!hasOrder else orderButtonTemplate" (click)="addItemToCart(i)"></app-buttons>
           <ng-template #orderButtonTemplate>
-            <button mat-raised-button (click)="addItemToOrderState(i)">Add to order</button>
+            <app-buttons buttonText="Add to order" (click)="addItemToOrderState(i)"></app-buttons>
           </ng-template>
         </div>
       </div>
@@ -45,9 +45,9 @@
               <img src="../assets/img/bag.png" height="auto" width="50px">
             </ng-template>
             <div class="nameContainer">{{item.name}}</div>
-            <button *ngIf="!hasOrder else orderButtonTemplate" mat-raised-button (click)="addItemToCart(i)">Add to cart</button>
+            <app-buttons buttonText="Add to cart" *ngIf="!hasOrder else orderButtonTemplate" (click)="addItemToCart(i)"></app-buttons>
             <ng-template #orderButtonTemplate>
-              <button mat-raised-button (click)="addItemToOrderState(i)">Add to order</button>
+              <app-buttons buttonText="Add to order" (click)="addItemToOrderState(i)"></app-buttons>
             </ng-template>
           </div>
         </div>

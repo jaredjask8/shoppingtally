@@ -161,6 +161,13 @@
     width: 200px;
   }
 
+  app-buttons{
+    margin-left: 5px;
+    margin-bottom: 10px;
+    padding: 10px;
+    height: auto;
+  }
+
   .mdc-button{
     margin-left: 5px;
     margin-bottom: 10px;

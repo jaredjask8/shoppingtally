@@ -14,6 +14,8 @@ import { DatepickerComponent } from 'src/global/bootstrap-components/datepicker/
 import { MatStepperModule } from '@angular/material/stepper';
 import {MatDividerModule} from '@angular/material/divider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatRippleModule } from '@angular/material/core';
+import { ButtonsComponent } from 'src/global/components/buttons/buttons.component';
 
 
 @NgModule({
@@ -35,8 +37,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatStepperModule,
     MatDividerModule,
     MatSnackBarModule,
-    ReactiveFormsModule
-    
+    ReactiveFormsModule,
+    MatRippleModule,
+    ButtonsComponent
   ],
   
 })

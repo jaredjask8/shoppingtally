@@ -49,6 +49,8 @@ export class ListComponent implements OnInit, OnDestroy {
   cancelFromItem:boolean=false
   cancelFromUser:boolean=false
 
+  rippleColor:string="#f7f603"
+
   list: ListItem[] = [];
   listToDb: ListToDB = new ListToDB;
   value: string;
@@ -359,6 +361,7 @@ export class ListComponent implements OnInit, OnDestroy {
         this.currentItem = item;
       }else{
         //hide button and display message
+        
         this.isItemValid = false;
         this.snackBar.open("Item already in current order","",{duration:1000})
       }
@@ -947,13 +950,17 @@ export class ListComponent implements OnInit, OnDestroy {
         if(d.name === item){
           itemFound = false;
         }
+
+        console.log(item + "   " + d.name)
       })
     }else if(this.hasCurrentOrder && !this.isActiveOrder){
       //current order state
       this.currentOrderList.forEach(d=>{
         if(d.name === item){
           itemFound = false;
+          
         }
+        
       })
     }else{
       //active order state

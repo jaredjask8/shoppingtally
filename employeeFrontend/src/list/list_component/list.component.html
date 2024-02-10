@@ -23,7 +23,7 @@
           <input matInput #input placeholder="Ex. Nougat" [formControl]="itemFormControl">
           <!-- (keyup)="getItems($event)" -->
         </mat-form-field>
-        <button mat-raised-button (click)="setItemName(input.value);getImages(input.value)">Search</button> <!-- getImages(input.value); -->
+        <app-buttons buttonText="Search" (click)="setItemName(input.value);getImages(input.value);"></app-buttons>
       </div>
 
       <div class="finalizedItemContainer mb-2">

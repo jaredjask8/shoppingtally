@@ -9,6 +9,7 @@ import { PreviousListsRoutingModule } from './previous-lists-routing.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ButtonsComponent } from 'src/global/components/buttons/buttons.component';
 
 
 
@@ -23,7 +24,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    ButtonsComponent
   ]
 })
 export class PreviousListsModule { }
