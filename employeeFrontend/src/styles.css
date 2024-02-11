@@ -18,7 +18,10 @@ body {
     src: url('assets/fonts/coolvetica.OTF');
 }
 
-
+@font-face{
+    font-family: 'orderFont';
+    src: url('assets/fonts/RobotoCondensed-Regular.ttf');
+  }
 
 
 
