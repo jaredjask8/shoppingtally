@@ -14,24 +14,7 @@
             <div style="width: 150px; text-align: center;">
               {{item.name}}
             </div>
-            <div class="quantityContainer">
-              <div class="upArrow" (click)="increaseQuantity(item.name)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-                </svg>
-              </div>
-              
-              <div style="padding: 0; margin: 0;text-align: center;">
-                {{item.quantity}}
-              </div>
-              <div class="downArrow" (click)="decreaseQuantity(item.name, item.quantity)"> 
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
-                  <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8"/>
-                </svg>
-              </div>
-              
-              
-            </div>
+            <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event,item.name,item.quantity)"></app-quantity>
             <div class="delete" (click)="removeItem(item.name)">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>

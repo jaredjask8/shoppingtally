@@ -35,6 +35,7 @@ import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/d
 import { UserOrderInfo } from 'src/list/models/UserOrderInfo';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DateComparison } from 'src/global/bootstrap-components/datepicker/DateComparison';
+import { QuantityComponent } from 'src/global/components/quantity/quantity.component';
 
 /**
  * @title Stepper overview
@@ -62,7 +63,8 @@ import { DateComparison } from 'src/global/bootstrap-components/datepicker/DateC
     MatButtonToggleModule,
     CdkDropList,
     CdkDrag,
-    MatSnackBarModule
+    MatSnackBarModule,
+    QuantityComponent
   ],
   providers: [{
     provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }
@@ -165,6 +167,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
 
   }
 
+
   removeItem(itemName:string){
     var tempArray = this.yes.filter(d=>d.name != itemName);
     var tempList:string='';
@@ -191,15 +194,21 @@ export class StepperComponent implements OnInit, AfterViewInit{
     
   }
 
+  updateQuantity(update:boolean,item:string,quantity?:string){
+    if(update){
+      this.increaseQuantity(item)
+    }else{
+      this.decreaseQuantity(item,quantity)
+    }
+  }
+
   increaseQuantity(itemName){
     //take current list 
     //find item we are changing 
     //change string to update quantity
     //post updated string to api
-    console.log(this.yes)
     this.listService.increaseQuantity(this.yes,itemName).subscribe(d=>{
-      this.yes = d.list
-      console.log(this.yes)   
+      this.yes = d.list 
   })
 
 

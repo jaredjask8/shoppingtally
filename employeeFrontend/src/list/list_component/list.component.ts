@@ -1015,7 +1015,6 @@ export class ListComponent implements OnInit, OnDestroy {
             this.deli.forEach((d, index) => {
               if (item.name == d.name) {
                 this.deli.splice(index, 1)
-                console.log("weeeeeeeeeeeee")
               }
             })
             break;
@@ -1030,7 +1029,6 @@ export class ListComponent implements OnInit, OnDestroy {
         break
       case 'added':
         this.todo.unshift(item);
-        console.log("SWEEEET")
         break;
     }
 
