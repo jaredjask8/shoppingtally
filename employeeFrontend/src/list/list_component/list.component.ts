@@ -458,6 +458,16 @@ export class ListComponent implements OnInit, OnDestroy {
     this.resetItem()
   }
 
+  updateQuantity(update:boolean, listType:string, item:ListItemInterface, category?:string){
+    console.log(update + "   " + listType)
+    if(listType == "current"){
+      update ? this.increaseCurrentOrderQuantity(item) : this.decreaseCurrentOrderQuantity(item)
+    }else{
+      update ? this.increaseActiveOrderQuantity(item,category,'increased') : this.decreaseActiveOrderQuantity(item,category,'decreased')
+    }
+
+  }
+
   increaseCurrentOrderQuantity(item: ListItem) {
     this.listService.increaseCurrentOrderQuantity(item).subscribe(d => this.currentOrderList = d)
   }
@@ -501,6 +511,7 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   decreaseActiveOrderQuantity(item: ListItem, category: string, choice: string) {
+    console.log(item.name + "   " + category + "    " + choice  )
     if (parseInt(item.quantity) > 1) {
       this.listService.decreaseActiveOrderQuantity(item, category).subscribe(d => {
         this.todo = d.todo
@@ -530,6 +541,7 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   deleteActiveOrderItem(item: ListItem, category: string, choice: string) {
+    console.log(item.name + "   " + category + "    " + choice  )
     this.listService.deleteActiveOrderItem(item, category).subscribe(d=>{
       this.todo = d.todo
         this.deli = d.deli
@@ -897,7 +909,120 @@ export class ListComponent implements OnInit, OnDestroy {
             this.todo.forEach((d, index) => {
               if (item.name == d.name) {
                 this.todo.splice(index, 1)
-                console.log("yes")
+              }
+            })
+            break;
+            case 'health':
+              this.health.forEach((d, index) => {
+                if (item.name == d.name) {
+                  this.health.splice(index, 1)
+                }
+              })
+              break;
+              case 'dairy':
+                this.dairy.forEach((d, index) => {
+                  if (item.name == d.name) {
+                    this.dairy.splice(index, 1)
+                  }
+                })
+                break;
+                case 'breakfast':
+            this.breakfast.forEach((d, index) => {
+              if (item.name == d.name) {
+                this.breakfast.splice(index, 1)
+              }
+            })
+            break;
+            case 'international':
+            this.international.forEach((d, index) => {
+              if (item.name == d.name) {
+                this.international.splice(index, 1)
+              }
+            })
+            break;
+            case 'grains':
+            this.grains.forEach((d, index) => {
+              if (item.name == d.name) {
+                this.grains.splice(index, 1)
+              }
+            })
+            break;
+            case 'snacks':
+            this.snacks.forEach((d, index) => {
+              if (item.name == d.name) {
+                this.snacks.splice(index, 1)
+              }
+            })
+            break;
+            case 'pet':
+            this.pet.forEach((d, index) => {
+              if (item.name == d.name) {
+                this.pet.splice(index, 1)
+              }
+            })
+            break;
+            case 'household':
+            this.household.forEach((d, index) => {
+              if (item.name == d.name) {
+                this.household.splice(index, 1)
+              }
+            })
+            break;
+            case 'beverages':
+            this.beverages.forEach((d, index) => {
+              if (item.name == d.name) {
+                this.beverages.splice(index, 1)
+              }
+            })
+            break;
+            case 'bread':
+            this.bread.forEach((d, index) => {
+              if (item.name == d.name) {
+                this.bread.splice(index, 1)
+              }
+            })
+            break;
+            case 'frozen':
+            this.frozen.forEach((d, index) => {
+              if (item.name == d.name) {
+                this.frozen.splice(index, 1)
+              }
+            })
+            break;
+            case 'meat':
+            this.meat.forEach((d, index) => {
+              if (item.name == d.name) {
+                this.meat.splice(index, 1)
+              }
+            })
+            break;
+            case 'produce':
+            this.produce.forEach((d, index) => {
+              if (item.name == d.name) {
+                this.produce.splice(index, 1)
+              }
+            })
+            break;
+            case 'bakery':
+            this.bakery.forEach((d, index) => {
+              if (item.name == d.name) {
+                this.bakery.splice(index, 1)
+              }
+            })
+            break;
+            case 'deli':
+              
+            this.deli.forEach((d, index) => {
+              if (item.name == d.name) {
+                this.deli.splice(index, 1)
+                console.log("weeeeeeeeeeeee")
+              }
+            })
+            break;
+            case 'completed':
+            this.completed.forEach((d, index) => {
+              if (item.name == d.name) {
+                this.completed.splice(index, 1)
               }
             })
             break;

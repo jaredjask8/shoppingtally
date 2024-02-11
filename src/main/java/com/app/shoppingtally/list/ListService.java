@@ -677,12 +677,12 @@ public class ListService {
 						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
 					}
 				}
-				activeOrder.setDairyList(newList);
+				activeOrder.setPetList(newList);
 				currentOrderRepo.save(activeOrder);
 				return CurrentOrderEntityUserResponse.builder()
 						.todo(convertStringListToArray(activeOrder.getTodoList()))
 						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
-						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.pet(convertStringListToArray(newList))
 						.produce(convertStringListToArray(activeOrder.getProduceList()))
 						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
 						.bread(convertStringListToArray(activeOrder.getBreadList()))
@@ -696,7 +696,7 @@ public class ListService {
 						.household(convertStringListToArray(activeOrder.getHouseholdList()))
 						.health(convertStringListToArray(activeOrder.getHealthList()))
 						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
-						.dairy(convertStringListToArray(newList))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
 						.completed(convertStringListToArray(activeOrder.getCompletedList()))
 						.build();
 			case "household":
@@ -1267,12 +1267,12 @@ public class ListService {
 						newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+newQuantity+"~";
 					}
 				}
-				activeOrder.setDairyList(newList);
+				activeOrder.setPetList(newList);
 				currentOrderRepo.save(activeOrder);
 				return CurrentOrderEntityUserResponse.builder()
 						.todo(convertStringListToArray(activeOrder.getTodoList()))
 						.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
-						.pet(convertStringListToArray(activeOrder.getPetList()))
+						.pet(convertStringListToArray(newList))
 						.produce(convertStringListToArray(activeOrder.getProduceList()))
 						.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
 						.bread(convertStringListToArray(activeOrder.getBreadList()))
@@ -1286,7 +1286,7 @@ public class ListService {
 						.household(convertStringListToArray(activeOrder.getHouseholdList()))
 						.health(convertStringListToArray(activeOrder.getHealthList()))
 						.frozen(convertStringListToArray(activeOrder.getFrozenList()))
-						.dairy(convertStringListToArray(newList))
+						.dairy(convertStringListToArray(activeOrder.getDairyList()))
 						.completed(convertStringListToArray(activeOrder.getCompletedList()))
 						.build();
 			case "household":
@@ -1821,12 +1821,12 @@ public class ListService {
 					newList+=activeOrderItem.getImage()+"+"+activeOrderItem.getName()+"+"+activeOrderItem.getQuantity()+"~";
 				}
 			}
-			activeOrder.setDairyList(newList);
+			activeOrder.setPetList(newList);
 			currentOrderRepo.save(activeOrder);
 			return CurrentOrderEntityUserResponse.builder()
 					.todo(convertStringListToArray(activeOrder.getTodoList()))
 					.breakfast(convertStringListToArray(activeOrder.getBreakfastList()))
-					.pet(convertStringListToArray(activeOrder.getPetList()))
+					.pet(convertStringListToArray(newList))
 					.produce(convertStringListToArray(activeOrder.getProduceList()))
 					.beverages(convertStringListToArray(activeOrder.getBeveragesList()))
 					.bread(convertStringListToArray(activeOrder.getBreadList()))
@@ -1840,7 +1840,7 @@ public class ListService {
 					.household(convertStringListToArray(activeOrder.getHouseholdList()))
 					.health(convertStringListToArray(activeOrder.getHealthList()))
 					.frozen(convertStringListToArray(activeOrder.getFrozenList()))
-					.dairy(convertStringListToArray(newList))
+					.dairy(convertStringListToArray(activeOrder.getDairyList()))
 					.completed(convertStringListToArray(activeOrder.getCompletedList()))
 					.build();
 		case "household":

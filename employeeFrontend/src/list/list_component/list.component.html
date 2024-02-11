@@ -84,28 +84,7 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseCurrentOrderQuantity(item)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseCurrentOrderQuantity(item)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'current', item)"></app-quantity>
           <div class="delete" (click)="deleteCurrentOrderItem(item,content)">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
@@ -136,28 +115,7 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'todo','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'todo','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'todo')"></app-quantity>
           <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
@@ -174,29 +132,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'health','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'health','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'health')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'health','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -212,29 +149,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'dairy','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'dairy','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'dairy')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'dairy','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -250,29 +166,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'breakfast','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'breakfast','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'breakfast')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'breakfast','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -288,29 +183,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'international','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'international','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'international')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'international','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -326,29 +200,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'baking','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'baking','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'baking')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'baking','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -364,29 +217,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'grains','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'grains','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'grains')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'grains','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -402,29 +234,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'snacks','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'snacks','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'snacks')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'snacks','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -440,29 +251,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'pet','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'pet','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'pet')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'pet','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -478,29 +268,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'household','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'household','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'household')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'household','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -516,29 +285,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'beverages','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'beverages','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'beverages')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'beverages','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -554,29 +302,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'bread','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'bread','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'bread')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'bread','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -592,29 +319,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'frozen','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'frozen','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'frozen')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'frozen','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -630,29 +336,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'meat','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'meat','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'meat')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'meat','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -668,29 +353,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'produce','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'produce','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'produce')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'produce','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -706,29 +370,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'bakery','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'bakery','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'bakery')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'bakery','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -744,29 +387,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'deli','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'deli','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'deli')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'deli','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path
@@ -783,29 +405,8 @@
             <img src="../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
           <div class="orderNameContainer">{{item.name}}</div>
-          <div class="quantityContainer">
-            <div class="upArrow" (click)="increaseActiveOrderQuantity(item,'completed','increased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up"
-                viewBox="0 0 16 16">
-                <path
-                  d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z" />
-              </svg>
-            </div>
-
-            <div style="padding: 0; margin: 0;text-align: center;">
-              {{item.quantity}}
-            </div>
-            <div class="downArrow" (click)="decreaseActiveOrderQuantity(item,'completed','decreased')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-caret-down" viewBox="0 0 16 16">
-                <path
-                  d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z" />
-              </svg>
-            </div>
-
-
-          </div>
-          <div class="delete" (click)="deleteActiveOrderItem(item,'todo','deleted')">
+          <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event, 'active', item, 'completed')"></app-quantity>
+          <div class="delete" (click)="deleteActiveOrderItem(item,'completed','deleted')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
               viewBox="0 0 16 16">
               <path

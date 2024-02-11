@@ -16,6 +16,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatRippleModule } from '@angular/material/core';
 import { ButtonsComponent } from 'src/global/components/buttons/buttons.component';
+import { QuantityComponent } from 'src/global/components/quantity/quantity.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { ButtonsComponent } from 'src/global/components/buttons/buttons.componen
     MatSnackBarModule,
     ReactiveFormsModule,
     MatRippleModule,
-    ButtonsComponent
+    ButtonsComponent,
+    QuantityComponent
   ],
   
 })
