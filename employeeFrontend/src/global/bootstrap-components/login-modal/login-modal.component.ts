@@ -37,6 +37,7 @@ export class LoginModalComponent implements OnInit{
   password = new FormControl()
   token:string;
   @ViewChild('content', { static: true }) content;
+  passwordType:string="password"
 
   getErrorMessage() {
     if (this.email.hasError('required')) {
@@ -79,6 +80,14 @@ export class LoginModalComponent implements OnInit{
       this.service.setEnvironment()
     }
 
+  }
+
+  setPasswordType(){
+    if(this.passwordType == "password"){
+      this.passwordType = "text"
+    }else{
+      this.passwordType = "password"
+    }
   }
 
   setEnvironment(email:string,password:string){
