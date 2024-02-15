@@ -56,6 +56,8 @@ export class AffiliateComponent implements OnInit{
   checkFormStatus(){
     if(this.affiliateForm.status == "VALID"){
       this.formStatus = true
+    }else{
+      this.formStatus = false
     }
     // if(this.affiliateEditForm.status == "VALID"){
     //   this.formEditStatus = true

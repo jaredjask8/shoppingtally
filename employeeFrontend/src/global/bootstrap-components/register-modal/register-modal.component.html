@@ -1,44 +1,166 @@
-<ng-template #content let-modal>
-	<div class="modal-header">
-		<h4 class="modal-title">Register</h4>
-		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-	</div>
-	<div class="modal-body">
-		<div class="body">
-            <div class="formContainer">
-                  <mat-form-field>
-                    <mat-label>Firstname</mat-label>
-                    <input matInput [formControl]="firstname" required>
-                  </mat-form-field>
-                  <mat-form-field>
-                    <mat-label>Lastname</mat-label>
-                    <input matInput [formControl]="lastname" required>
-                  </mat-form-field>
-                  <mat-form-field>
-                    <mat-label>Email</mat-label>
-                    <input matInput placeholder="pat@example.com" [formControl]="email" required>
-                  </mat-form-field>
-                  <mat-form-field>
-                    <mat-label>Password</mat-label>
-                    <input matInput [formControl]="password" required>
-                  </mat-form-field>
-                  <mat-form-field>
-                    <mat-label>Address</mat-label>
-                    <input matInput [formControl]="address" required>
-                  </mat-form-field>
-                  <mat-form-field>
-                    <mat-label>Phone</mat-label>
-                    <input matInput [formControl]="phone" required>
-                  </mat-form-field>
-                  <button mat-raised-button (click)="submit(email.value, firstname.value, lastname.value, password.value,phone.value,address.value)">Go</button>
-            </div>
-                
-        </div>
-          
-	</div>
-	<div class="modal-footer success" *ngIf="showSuccess">
-		<div>User is registered</div>
-	</div>
+<ng-template #successTemplate>
+  <div class="successContainer">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-check-circle-fill"
+      viewBox="0 0 16 16">
+      <path
+        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+    </svg>
+  </div>
+</ng-template>
 
-    
+<ng-template #content let-modal>
+  <div class="registerBody">
+    <div class="modal-header">
+      <h4 class="modal-title">Register</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <div class="body">
+        <form class="formContainer" [formGroup]="registerForm">
+          <div class="d-flex flex-column position-relative">
+            <mat-form-field class="formFieldBorder">
+              <mat-label>Firstname</mat-label>
+              <input matInput formControlName="firstname" (ngModelChange)="checkFormStatus()">
+            </mat-form-field>
+            <div class="errorContainer" *ngIf="!firstnameStatus else successTemplate">
+              <ng-container *ngFor="let keyControls of registerForm.controls | keyvalue">
+                <ng-container *ngFor="let keyErrors of registerForm.get(keyControls.key).errors| keyvalue">
+                  <ng-container *ngIf="keyControls.key == 'firstname'">
+                    <ng-container *ngIf="keyErrors.key == 'required'">
+                      {{keyControls.key.toUpperCase()}} is required
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+  
+          </div>
+          <div class="d-flex flex-column position-relative">
+            <mat-form-field class="formFieldBorder">
+              <mat-label>Lastname</mat-label>
+              <input matInput formControlName="lastname" (ngModelChange)="checkFormStatus()">
+            </mat-form-field>
+            <div class="errorContainer" *ngIf="!lastnameStatus else successTemplate">
+              <ng-container *ngFor="let keyControls of registerForm.controls | keyvalue">
+                <ng-container *ngFor="let keyErrors of registerForm.get(keyControls.key).errors| keyvalue">
+                  <ng-container *ngIf="keyControls.key == 'lastname'">
+                    <ng-container *ngIf="keyErrors.key == 'required'">
+                      {{keyControls.key.toUpperCase()}} is required
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+  
+          </div>
+  
+  
+          <div class="d-flex flex-column position-relative">
+            <mat-form-field class="formFieldBorder">
+              <mat-label>Email</mat-label>
+              <input matInput placeholder="Ex. shoppingtally@example.com" formControlName="email" (ngModelChange)="checkFormStatus()">
+            </mat-form-field>
+            <div class="errorContainer" *ngIf="!emailStatus else successTemplate">
+              <ng-container *ngFor="let keyControls of registerForm.controls | keyvalue">
+                <ng-container *ngFor="let keyErrors of registerForm.get(keyControls.key).errors| keyvalue">
+                  <ng-container *ngIf="keyControls.key == 'email'">
+                    <ng-container *ngIf="keyErrors.key == 'email'">
+                      {{keyControls.key.toUpperCase()}} must be proper
+                    </ng-container>
+                    <ng-container *ngIf="keyErrors.key == 'required'">
+                      {{keyControls.key.toUpperCase()}} is required
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+  
+          </div>
+          <div class="d-flex flex-column position-relative">
+            <mat-form-field class="formFieldBorder">
+              <mat-label>Password</mat-label>
+              <input matInput formControlName="password" (ngModelChange)="checkFormStatus()">
+            </mat-form-field>
+            <div class="errorContainer" *ngIf="!passwordStatus else successTemplate">
+              <ng-container *ngFor="let keyControls of registerForm.controls | keyvalue">
+                <ng-container *ngFor="let keyErrors of registerForm.get(keyControls.key).errors| keyvalue">
+                  <ng-container *ngIf="keyControls.key == 'password'">
+                    <ng-container *ngIf="keyErrors.key == 'minlength'">
+                      {{keyControls.key.toUpperCase()}} must be 8 characters
+                    </ng-container>
+                    <ng-container *ngIf="keyErrors.key == 'required'">
+                      {{keyControls.key.toUpperCase()}} is required
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+  
+          </div>
+  
+          <div class="d-flex flex-column position-relative">
+            <mat-form-field class="formFieldBorder">
+              <mat-label>Address</mat-label>
+              <input matInput formControlName="address" (ngModelChange)="checkFormStatus()">
+            </mat-form-field>
+            <div class="errorContainer" *ngIf="!addressStatus else successTemplate">
+              <ng-container *ngFor="let keyControls of registerForm.controls | keyvalue">
+                <ng-container *ngFor="let keyErrors of registerForm.get(keyControls.key).errors| keyvalue">
+                  <ng-container *ngIf="keyControls.key == 'address'">
+                    <ng-container *ngIf="keyErrors.key == 'minlength'">
+                      {{keyControls.key.toUpperCase()}} must be 8 characters
+                    </ng-container>
+                    <ng-container *ngIf="keyErrors.key == 'required'">
+                      {{keyControls.key.toUpperCase()}} is required
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+  
+          </div>
+          <div class="d-flex flex-column position-relative">
+            <mat-form-field class="formFieldBorder">
+              <mat-label>Phone</mat-label>
+              <input matInput formControlName="phone" placeholder="Ex. 4523652462" (ngModelChange)="checkFormStatus()">
+            </mat-form-field>
+            <div class="errorContainer" *ngIf="!phoneStatus else successTemplate">
+              <ng-container *ngFor="let keyControls of registerForm.controls | keyvalue">
+                <ng-container *ngFor="let keyErrors of registerForm.get(keyControls.key).errors| keyvalue">
+                  <ng-container *ngIf="keyControls.key == 'phone'">
+                    <div class="d-flex-column">
+                      <ng-container *ngIf="keyErrors.key == 'minlength'">
+                        {{keyControls.key.toUpperCase()}} must be 10 numbers
+                      </ng-container>
+                      <ng-container *ngIf="keyErrors.key == 'pattern'">
+                        {{keyControls.key.toUpperCase()}} must be all numbers
+                      </ng-container>
+                      <ng-container *ngIf="keyErrors.key == 'maxlength'">
+                        {{keyControls.key.toUpperCase()}} must be 10 numbers
+                      </ng-container>
+                      <ng-container *ngIf="keyErrors.key == 'required'">
+                        {{keyControls.key.toUpperCase()}} is required
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+  
+          </div>
+          
+          
+          <button mat-raised-button [disabled]="!formStatus" (click)="submit()">Register</button>
+        </form>
+  
+      </div>
+  
+    </div>
+    <div class="modal-footer success" *ngIf="showSuccess">
+      <div>User is registered</div>
+    </div>
+  
+  </div>
+  
+
 </ng-template>
