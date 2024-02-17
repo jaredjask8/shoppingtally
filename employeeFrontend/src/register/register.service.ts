@@ -34,6 +34,9 @@ export class RegisterService {
     
   }
 
+  checkUser(email:string):Observable<boolean>{
+    return this.http.get<boolean>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/checkUser");
+  }
 
   getUser(token:string):Observable<JwtUserResponse>{
     return this.http.post<JwtUserResponse>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/user", {token:token});

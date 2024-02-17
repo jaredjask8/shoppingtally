@@ -21,7 +21,8 @@ import { RegisterService } from 'src/register/register.service';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSnackBar
   ]
 })
 export class RegisterModalComponent implements OnInit{
@@ -35,7 +36,7 @@ export class RegisterModalComponent implements OnInit{
   @ViewChild('content', { static: true }) content;
   showSuccess:boolean;
   
-  constructor(private modalService: NgbModal, private navService:NavService, private service:RegisterService){}
+  constructor(private modalService: NgbModal, private navService:NavService, private service:RegisterService, private userFoundNotification:MatSnackBar){}
   ngOnInit(): void {
     this.navService.registerClicked$.subscribe(d => {
       if(d == true){
@@ -46,14 +47,22 @@ export class RegisterModalComponent implements OnInit{
   }
 
   submit(email:string, firstname:string, lastname:string,  password:string, phone:string, address:string){
-    this.service.registerUser(new User(email,firstname,lastname,password,phone,address)).subscribe(x => {
-      if(x){
-        this.showSuccess = true;
-      setTimeout(() =>{
-        this.showSuccess = false;
-        this.modalReference.close();
-      },1000)
-      }
+    this.registerService.checkUser(email).subscribe(d => {
+      if(d){
+        //user found
+        this.userFoundNotification.open("Email already in use, please try a different email","",{duration:2000})
+      }else{
+        this.service.registerUser(new User(email,firstname,lastname,password,phone,address)).subscribe(x => {
+          if(x){
+            this.showSuccess = true;
+            setTimeout(() =>{
+              this.showSuccess = false;
+              this.modalReference.close();
+            },1000)
+          }
+        })
+      } 
+      
     })
   }
 }
