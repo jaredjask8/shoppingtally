@@ -191,16 +191,6 @@ public class AuthenticationService {
 				.build();
 	}
 	
-	public boolean checkUser(String requestedEmail) {
-		try {
-			repository.findByEmail(requestedEmail);
-			return true;
-		}catch(Exception e) {
-			//user not found
-			return false;
-		}
-	}
-	
 	public ListToFrontendWithCount deleteListItem(ListFromFrontend list) {
 		User user = repository.findByEmail(jwtService.extractUsername(list.getToken())).get();
 		user.setCurrentList(list.getList());

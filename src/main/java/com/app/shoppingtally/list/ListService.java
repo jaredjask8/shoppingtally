@@ -145,7 +145,7 @@ public class ListService {
 	List<String> getAllUserDates(ShopperRequest shopperRequest){
 		if(shopperRequest.getShopperId() == 1) {
 			return listRepo.getJaysOrderDates();
-		}else if(shopperRequest.getShopperId() == 2){
+		}else {
 			return listRepo.getJoshsOrderDates();
 		}
 	}

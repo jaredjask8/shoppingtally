@@ -7,7 +7,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -65,11 +64,6 @@ public class AuthenticationController {
 	@PostMapping("/addToList")
 	public ListToFrontendWithCount addToList(@RequestBody ListItemRequest item, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 		return service.updateCurrentList(item,token);
-	}
-	
-	@GetMapping("/checkUser")
-	public boolean checkUser(@RequestBody String requestedEmail) {
-		return service.checkUser(requestedEmail);
 	}
 	
 	@CrossOrigin
