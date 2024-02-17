@@ -8,11 +8,15 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import { DatepickerComponent } from 'src/global/bootstrap-components/datepicker/datepicker.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import {MatDividerModule} from '@angular/material/divider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatRippleModule } from '@angular/material/core';
+import { ButtonsComponent } from 'src/global/components/buttons/buttons.component';
+import { QuantityComponent } from 'src/global/components/quantity/quantity.component';
 
 
 @NgModule({
@@ -32,8 +36,12 @@ import {MatDividerModule} from '@angular/material/divider';
     MatIconModule,
     DatepickerComponent,
     MatStepperModule,
-    MatDividerModule
-    
+    MatDividerModule,
+    MatSnackBarModule,
+    ReactiveFormsModule,
+    MatRippleModule,
+    ButtonsComponent,
+    QuantityComponent
   ],
   
 })

@@ -6,7 +6,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { NgbActiveModal, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbDateStruct, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { NavService } from 'src/global/nav/nav.service';
 import { ListService } from 'src/list/list_component/list.service';
@@ -40,22 +40,27 @@ import { EditListComponent } from '../edit-list/edit-list.component';
     MatDividerModule,
     StepperComponent,
     EditListComponent
+  ],
+  providers:[
+    NgbActiveModal
   ]
 })
 export class OrderModalComponent implements OnInit{
 
   @ViewChild("content") content;
-  orderModal:any
 
 
-  constructor(private navService:NavService, private modal:NgbModal, private listService:ListService){}
+  constructor(private orderModal:NgbActiveModal, private navService:NavService, private modal:NgbModal, private listService:ListService, private userService:EnvironmentService){}
   
   ngOnInit(): void {
     this.navService.cartClicked$.subscribe(d => {
       if(d == true){
-        console.log("in")
         this.orderModal = this.modal.open(this.content, { backdropClass: 'light-blue-backdrop', size: 'lg'})
       }
+    })
+
+    this.userService.userLoggedIn$.subscribe(d=>{
+      if(!d){this.orderModal.close()}
     })
 
 

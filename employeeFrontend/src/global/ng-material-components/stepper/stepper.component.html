@@ -2,38 +2,19 @@
 
 
 <div #we class="confettiContainer"></div>
-<mat-stepper *ngIf="showStepper" class="stepperContainer" labelPosition="bottom">
+<mat-stepper #stepper *ngIf="showStepper" class="stepperContainer" labelPosition="bottom">
   
   <mat-step label="Review">
       <div class="tableContainer">
           <div class="rowContainer pt-2 pb-3" *ngFor="let item of yes">
-            <div *ngIf="item.image == 'null'">
-              <img src='../../../assets/img/bag.png' height="70px" width="70px">
-            </div>
-            <div *ngIf="item.image != 'null'">
-              <img [src]='item.image' height="auto" width="70px">
-            </div>
+            <img *ngIf="item.image != 'undefined' && item.image != 'null' else imageTemplate" [src]=item.image height="70px" width="70px">
+            <ng-template #imageTemplate>
+              <img src="../../../assets/img/bag.png" height="auto" width="50px">
+            </ng-template>
             <div style="width: 150px; text-align: center;">
               {{item.name}}
             </div>
-            <div class="quantityContainer">
-              <div class="upArrow" (click)="increaseQuantity(item.name)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up" viewBox="0 0 16 16">
-                  <path d="M3.204 11h9.592L8 5.519 3.204 11zm-.753-.659 4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
-                </svg>
-              </div>
-              
-              <div style="padding: 0; margin: 0;text-align: center;">
-                {{item.quantity}}
-              </div>
-              <div class="downArrow" (click)="decreaseQuantity(item.name, item.quantity)"> 
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
-                  <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
-                </svg>
-              </div>
-              
-              
-            </div>
+            <app-quantity [itemQuantity]=item.quantity (quantityEvent)="updateQuantity($event,item.name,item.quantity)"></app-quantity>
             <div class="delete" (click)="removeItem(item.name)">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
@@ -87,14 +68,14 @@
     <div class="body">
       
       <app-datepicker *ngIf="isShopperPicked" (newItemEvent)="getDate($event)"></app-datepicker>
-      <div class="timeSlotContainer mt-3">
+      <div class="timeSlotContainer" [ngClass]="datePickedFromCalendar ? 'showTimeSlot' : 'timeSlotContainer'">
         <div class="mt-2 mb-3">Available time slots for {{currentShopper}} on: {{currentDate | date}}</div>
         <div class="container" #hourContainer>
           <div class="row gx-5 gy-2">
-            <div  class="col col-sm-2 col-md-2 col-lg-2" *ngFor="let i of [10,11]" >
+            <div  class="col-3 col-sm-3 col-md-2 col-lg-2" *ngFor="let i of [10,11]" >
               <div matRipple #hours class="hours" (click)="setHour(i,hours);dateIsSelected()">{{i}}am</div>
             </div>
-            <div class="col col-sm-2 col-md-2 col-lg-2" *ngFor="let i of [12,1,2,3,4,5,6,7,8,9]">
+            <div class="col-3 col-sm-3 col-md-2 col-lg-2" *ngFor="let i of [12,1,2,3,4,5,6,7,8,9]">
               <div matRipple #hours class="hours" (click)="setHour(i,hours);dateIsSelected()">{{i}}pm</div>
             </div>
             
@@ -115,7 +96,7 @@
         Back
       </button>
       <mat-divider [vertical]="true"></mat-divider>
-      <button [disabled]="!dateSelected" mat-button matStepperNext (click)="addDate();increaseStepCounter()">Next
+      <button [disabled]="!dateSelected" mat-button (click)="sendList(stepper);test();resetStepCounter()">Finalize
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
         </svg>
@@ -123,12 +104,18 @@
     </div>
     
   </mat-step>
-  <mat-step label="Finalize">
+  <!-- <mat-step label="Finalize">
     <div class="body">
       <mat-table [dataSource]="yes" class="table">
         <ng-container matColumnDef="image">
           <mat-header-cell *matHeaderCellDef> Image</mat-header-cell>
-          <mat-cell *matCellDef="let row"> <img [src]=row.image> </mat-cell>
+          <mat-cell *matCellDef="let row"> 
+            <img *ngIf="row.image != 'undefined' && row.image != 'null' else imageTemplate" [src]=row.image height="auto" width="70px"> 
+            <ng-template #imageTemplate>
+              <img src="../../../assets/img/bag.png" height="auto" width="70px">
+            </ng-template>
+          </mat-cell>
+          
         </ng-container>  
         
         <ng-container matColumnDef="name">
@@ -168,7 +155,7 @@
       </button>
     </div>
     
-  </mat-step>
+  </mat-step> -->
 
 </mat-stepper>
 

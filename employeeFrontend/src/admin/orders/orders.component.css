@@ -2,18 +2,61 @@
     text-align: center;
 }
 
-.orderContainer{
+.container{
+    padding-top: 70px;
+}
+
+.ordersContainer{
     display: flex;
     flex-direction: column;
 }
 
-.test{
-    background-color: blue;
+.orderContainer{
+    background-color: white;
+    border-radius: 20px;
+}
+
+
+.nice{
+    height: 600px;
+    width: 100%;
+    background-color: rgb(42, 36, 106);
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 20px;
+    position: relative;
+}
+
+.noOrder{
+    color: white;
+    position: absolute;
+    width: 100%;
+    top:300px;
+    text-align: center;
+    margin: -10px;
 }
 
 wee{
     align-self: center;
 }
+
+h1{
+    text-align: center;
+}
+
+.buttonContainer{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+
+div{
+    
+}
+
+
 
 
 

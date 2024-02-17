@@ -1,11 +1,15 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, HostListener, OnInit} from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { NavService } from 'src/global/nav/nav.service';
+import { EnvironmentService } from 'src/global/utility/environment.service';
 import { ListService } from 'src/list/list_component/list.service';
 import { UserOrderInfo } from 'src/list/models/UserOrderInfo';
 import { RegisterService } from 'src/register/register.service';
+
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -17,13 +21,57 @@ export class AppComponent implements OnInit{
   displayLoadingIndicator=false;
   showModal:Observable<boolean>
   closeResult: string;
-
   
 
-  constructor(private router:Router, private registerService: RegisterService, private navService:NavService, private modalService: NgbModal, private listService:ListService){
+  @HostListener('document:click', ['$event'])
+    handlerFunction(e: MouseEvent) {
+      if(this.userService.getEnvironment().log == "1"){
+        this.userService.stopLogoutTimer()
+        this.userService.startLogoutTimer()
+      }
+      
+    }
+
+    //listens for change in visibility
+    //if the user is signed in call function
+    //function checks when the document is not hidden / its browser use
+    @HostListener('document:visibilitychange', ['$event'])
+    visibilitychange() {
+      if(this.userService.getEnvironment().log == "1"){
+        this.checkHiddenDocumentForMobile();
+      }
+    }
+
+    checkHiddenDocumentForMobile() {
+      if (!document.hidden && navigator.userAgent.includes("Mobile/")) {
+        this.userService.refreshLogin().subscribe(d=>{
+          if(d.token == "expired"){
+            this.userService.signOut()
+          }else{
+            this.userService.setToken(d.token)
+            this.userService.startLoginTimer()
+            this.userService.startLogoutTimer()
+          }
+          
+        })
+      }else if(document.hidden && navigator.userAgent.includes("Mobile/")){
+        this.userService.stopLoginTimer()
+        this.userService.stopLogoutTimer()
+      }
+    }
+
+  constructor(private router:Router, private navService:NavService, private modalService: NgbModal, private listService:ListService, private userService:EnvironmentService,private snackBar: MatSnackBar, private registerService:RegisterService){
     
   }
   ngOnInit(): void {
+    if(this.registerService.getCredentials()){
+      this.registerService.userCredentials.next(true)
+    }else{
+      this.registerService.userCredentials.next(false)
+    }
+    
+    //this.userService.initializeWebSocketConnection()
+    
     this.router.events.subscribe(e => {
       if(e instanceof NavigationStart){
         this.displayLoadingIndicator = true;
@@ -31,16 +79,37 @@ export class AppComponent implements OnInit{
 
       if(e instanceof NavigationEnd){
         this.displayLoadingIndicator = false;
-        console.log("ended")
       }
     })
 
     this.showModal = this.navService.loginClicked$;
-    this.listService.getUserHasOrder().subscribe(d => {
-      console.log(d)
-      d.hasCurrentOrder
-      this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
+    
+    this.userService.signOutSnackbar$.subscribe(d=>{
+      if(d){
+        this.snackBar.open("You have been signed out","",{duration:10000,panelClass:'light-blue-backdrop'})
+      }
     })
+
+
+    //check if user is logged in on refresh
+    //when refreshed start timers again
+    if(this.userService.getEnvironment().log == "1"){
+      
+      this.userService.refreshLogin().subscribe(d=>{
+        if(d.token == "expired"){
+          this.userService.signOut()
+        }else{
+          this.userService.setToken(d.token)
+          this.userService.startLoginTimer()
+          this.userService.startLogoutTimer()
+        }
+      })
+      
+      this.listService.getUserHasOrder().subscribe(d => {
+        this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
+      })
+      
+    }
   }
 
   openBackDropCustomClass(content) {
@@ -48,4 +117,7 @@ export class AppComponent implements OnInit{
 	}
 
   
+  
 }
+
+

@@ -2,3 +2,49 @@
     background-color: green;
     color: white;
 }
+
+.registerBody{
+    font-family: orderFont;
+}
+
+
+.formFieldBorder{
+    position: relative;
+    border: #2a246a solid;
+    border-radius: 3px;
+}
+
+.errorContainer{
+    display: flex;
+    flex-direction: column;
+    background-color: #2a246a;
+    color:white;
+    width: 100%;
+    top:0px;
+    right: -50px;
+    z-index: 100;
+    font-size: 10px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    padding: 5px;
+    margin-top: -27px;
+    margin-bottom: 15px;
+}
+
+.successContainer{
+    display: flex;
+    flex-direction: column;
+    background-color: #2a246a;
+    color:white;
+    width: 100%;
+    top:0px;
+    right: -50px;
+    z-index: 100;
+    font-size: 10px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    padding: 5px;
+    margin-top: -27px;
+    margin-bottom: 15px;
+    align-items: center;
+}

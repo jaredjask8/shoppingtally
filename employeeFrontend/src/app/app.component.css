@@ -15,8 +15,8 @@
     100% { transform: rotate(-360deg) }
   }
 
-  .light-blue-backdrop {
-    background-color: #5cb3fd;
+  ::ng-deep .mat-mdc-snack-bar-container {
+    --mdc-snackbar-container-color:#B613F6 !important;
   }
 
   .modal{

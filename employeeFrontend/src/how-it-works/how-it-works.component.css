@@ -1,0 +1,37 @@
+video{
+    max-width: 700px;
+}
+
+.body{
+    width: 100%;
+    padding-top: 100px;
+    display: flex;
+    flex-direction: column;
+}
+
+.videoContainerPicLeft{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.videoContainer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: white;
+    padding: 30px;
+}
+
+h1{
+    text-align: center;
+}
+
+h3{
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-top: 30px;
+}
+
+

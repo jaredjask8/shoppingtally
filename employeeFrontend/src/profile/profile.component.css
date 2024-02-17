@@ -1,15 +1,45 @@
-.body{
-    padding-top: 100px;
+.profileBody{
     width: 100%;
+    height: 100%;
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
     align-items: center;
+    justify-content: space-around;
+}
+
+h1{
+    text-align: center;
+}
+
+.layoutContainer{
+    width: 70%;
+    max-width: 800px;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    
+}
+
+.phoneInput{
+    background-color: white;
+    border: none;
+    width: 35px;
+    margin-left: 5px;
+    margin-right: 5px;
+    background-color: #33FFFF;
+}
+
+.phoneInput:focus{
+    background-color: beige;
 }
 
 .nav-container{
     height: 500px;
     width:20%;
+    padding: 20px;
+    min-width: 150px;
+    max-width: 200px;
+    background-color: white;
 }
 
 .nav{
@@ -21,12 +51,40 @@
     align-items: center;
 }
 
+.userFieldContainer{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.userField{
+    width: 120px;
+    font-size: 20px;
+}
+
+.userData{
+    width: 200px;
+    margin-right: 10px;
+}
+
 .profileData{
-    height: 700px;
-    width:50%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: white;
+}
+
+.editButton{
+    margin-left: 5px;
+}
+
+.profileContainer{
+    padding: 20px;
+    width: 100%;
+}
+
+.mat-success{
+    background-color: #33FFFF !important;
 }
 
 a{
@@ -36,4 +94,40 @@ a{
 
 .listContainer{
     width: 100%;
+}
+
+.updateContainer{
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+
+
+@media (max-width:500px){
+    .userFieldContainer{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .userField{
+        width: auto;
+        text-decoration: underline;
+    }
+
+    .layoutContainer{
+        background-color: white;
+    }
+
+    .userData{
+        width: auto;
+        margin-right: 0px;
+    }
+
+    .nav-container{
+        border-right: solid rgb(42, 36, 106,.4);
+    }
 }

@@ -2,6 +2,7 @@ package com.app.shoppingtally.reviews;
 
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -33,7 +34,7 @@ public class ReviewController {
 		return reviewService.getReviews();
 	}
 	
-	@PostMapping("/all")
+	@GetMapping("/all")
 	public List<Review> getReviews() {
 		return reviewService.getReviews();
 	}

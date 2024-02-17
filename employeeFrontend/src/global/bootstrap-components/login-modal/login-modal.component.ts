@@ -37,6 +37,7 @@ export class LoginModalComponent implements OnInit{
   password = new FormControl()
   token:string;
   @ViewChild('content', { static: true }) content;
+  passwordType:string="password"
 
   getErrorMessage() {
     if (this.email.hasError('required')) {
@@ -54,39 +55,48 @@ export class LoginModalComponent implements OnInit{
       },2000)
       
     }else{
+      //user successful login
+      this.service.setToken(token);
       this.showLoginSuccess = true;
       setTimeout(() =>{
         this.showLoginSuccess = false;
         this.modalReference.close();
       },1000)
-      this.service.setEnvironment(token);
-      this.service.setLogin();
-
-      this.registerService.getUser(this.service.getEnvironment().token).subscribe( (d) => {
-        this.service.setUser(d);
-        this.registerService.setAdmin(d);
-      });
-
+      
+      this.service.userLoggedIn.next(true)
+      
+      //check if the user has an order
+      //update the cartVisibility observable 
       this.listService.getUserHasOrder(token).subscribe(d => {
-        console.log(d)
         this.navService.cartVisibility.next(new UserOrderInfo(d.hasActive,d.hasCurrentOrder))
       })
 
+      //////////// fix ///////////
+      //if cart state
+      //get cart count 
       this.navService.getCartCount().subscribe(d=>{
         this.navService.cartCount.next(d)
       })
-  
+      this.service.setEnvironment()
     }
 
+  }
+
+  setPasswordType(){
+    if(this.passwordType == "password"){
+      this.passwordType = "text"
+    }else{
+      this.passwordType = "password"
+    }
   }
 
   setEnvironment(email:string,password:string){
     this.registerService.authLogin(email,password).subscribe(d => {
       this.checkToken(d.token)
-      this.cdr.detectChanges()
+      
     });
-
-    this.router.navigateByUrl("/home")
+    
+    //this.router.navigateByUrl("/home")
   }
 
   

@@ -1,3 +1,5 @@
+
+<app-loader></app-loader>
 <h1 class="whatsNewTitle">Whats New</h1>
 <div class="whatsNewContainer mt-3 mb-5 py-3" *ngFor="let item of whatsNewArray; let i = index">
     <h2 *ngIf="i == 0">Top</h2>
@@ -10,6 +12,7 @@
             <div>Description: {{item.description}}</div>
         </div>
     </div>
+    
     <div class="whatsNewUploadContainer">
         <div class="whatsNewUpload">
             <div class="whatsNewUploadImage">
@@ -41,3 +44,5 @@
 <div class="whatsNewForm1" >
     
 </div>
+
+

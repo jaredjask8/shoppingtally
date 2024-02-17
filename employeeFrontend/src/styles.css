@@ -9,8 +9,8 @@ html, body {
 }
 body { 
     margin: 0; 
-    background: #33FFFF; 
     user-select: none;
+    background-color: #33FFFF;
 }
 
 @font-face {
@@ -18,6 +18,10 @@ body {
     src: url('assets/fonts/coolvetica.OTF');
 }
 
+@font-face{
+    font-family: 'orderFont';
+    src: url('assets/fonts/RobotoCondensed-Regular.ttf');
+  }
 
 
 

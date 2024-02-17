@@ -2,6 +2,10 @@
     padding: 0 !important;
 }
 
+::ng-deep .modal-backdrop.show{
+    z-index: 10 !important;
+}
+
 
 
 

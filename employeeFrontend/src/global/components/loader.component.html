@@ -1,0 +1,2 @@
+<div [class.freezeScreen]="isLoading | async"></div>
+<div *ngIf="isLoading | async" class="loader position-fixed top-50 end-50"></div>

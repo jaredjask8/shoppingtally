@@ -109,7 +109,6 @@ export class HomeComponent implements OnInit,AfterViewInit{
     }else if(window.innerWidth <= 900){
       this.mobileResolution.next(true)
       this.cdr.detectChanges()
-      console.log("in")
       this.initialMobileInterval = setInterval(() => {
       
         for(let i = 0; i < 7; i++){
@@ -158,6 +157,11 @@ export class HomeComponent implements OnInit,AfterViewInit{
     if(window.innerWidth >= 900){
       this.mobileResolution.next(false)
     }
+
+    if(this.userService.getEnvironment().log == "1"){
+      this.userService.initializeWebSocketConnection()
+    }
+    
 
     this.adminService.getWhatsNew().subscribe(d => {
       this.array = d;

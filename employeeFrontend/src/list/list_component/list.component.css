@@ -1,9 +1,18 @@
+
+
+::ng-deep .mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color:#F7F603 !important;
+}
+::ng-deep .mat-mdc-snack-bar-container .mdc-snackbar__label{
+  color: #2a246a !important;
+}
+
 .activeOrderContainer{
   background-color: white;
   width: 90%;
-  margin-top: 50px;
+  margin-top: 20px;
   border-radius: 20px;
-  
+  margin-bottom: 100px;
 }
 .activeOrderScrollContainer{
   height: 500px;
@@ -62,6 +71,7 @@
   width:400px !important;
 }
 
+
 .input-container{
   display: flex;
   width:100%;
@@ -98,12 +108,39 @@
     width: 100%;
     display:flex;
     flex-direction: column;
-    justify-content: center;
     flex-grow: 1;
     align-items: center;
+    overflow: scroll;
     padding: 0;
     margin: 0;
-    background: #2A246A;
+    font-family: orderFont;
+  }
+
+
+  
+
+  .affiliateContainer{
+    position: fixed;
+    height: 600px;
+    width: 150px;
+    top: 50px;
+    right: 0;
+    margin-top: 50px;
+    background-color: white;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+  }
+
+  .affiliateImage{
+    margin: 20px;
+  }
+
+  .affiliateLogo{
+    height: auto;
+    width: 100%;
   }
 
   .orderNav{
@@ -123,6 +160,13 @@
   .mdc-button.imageBtnTemplate{
     height: 150px;
     width: 200px;
+  }
+
+  app-buttons{
+    margin-left: 5px;
+    margin-bottom: 10px;
+    padding: 10px;
+    height: auto;
   }
 
   .mdc-button{
@@ -246,6 +290,24 @@
 
     .finalizedItemContainer{
       width: 70%;
+    }
+
+    .affiliateContainer{
+      display: flex;
+      flex-direction: row;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      top: auto;
+      right: auto;
+      height: 100px;
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .affiliateLogo{
+      height: 100%;
+      width: auto;
     }
 
     

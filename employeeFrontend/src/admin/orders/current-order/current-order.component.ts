@@ -11,6 +11,9 @@ import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { EnvironmentService } from 'src/global/utility/environment.service';
 import { CurrentOrderUser } from 'src/list/models/CurrentOrderUser';
+import { CurrentOrderUserClassWithUpdateMessage } from 'src/list/models/CurrentOrderUserClassWithUpdateMessage';
+import { MatButtonModule } from '@angular/material/button';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-current-order',
@@ -21,14 +24,18 @@ import { CurrentOrderUser } from 'src/list/models/CurrentOrderUser';
     CommonModule,
     CdkDropList,
     CdkDrag,
-    CdkScrollableModule
+    CdkScrollableModule,
+    MatButtonModule
   ]
 })
 export class CurrentOrderComponent implements OnInit,OnDestroy{
   currentOrder:CurrentOrderShopper;
-  serverUrl = 'https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket'
+  //'http://localhost/test/our-websocket'
+  //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket"
+  serverUrl = environment.socketUrl+'/our-websocket'
   title = 'WebSockets chat';
   stompClient;
+  updateLog:string[]=[]
   
   
 
@@ -64,16 +71,19 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
 
   ngOnDestroy(){
     this.stompClient.disconnect(function() {
-      alert("See you next time!");
+      
     });
   }
 
   endCurrentOrder(){
-    this.listService.endCurrentOrder(this.currentOrder.customer_email, this.currentOrder.date).subscribe(d=>console.log(d));
-    let that = this;
-    setTimeout(() => {
-      that.router.navigate(["/admin/orders"])
-    },1000)
+    this.listService.endCurrentOrder(this.currentOrder.customer_email, this.currentOrder.date).subscribe({
+      next:d=>console.log("next"),
+      error:d=>console.log("nice"),
+      complete:()=>{
+        this.router.navigate(["/admin/orders"])
+        console.log("wtf")
+      }
+    });
     
   }
 
@@ -259,6 +269,9 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
         case 'bread':
           this.bread = d.list
           break;
+        case 'frozen':
+          this.frozen = d.list
+          break;
       }
 
       this.completed = d.completed
@@ -275,7 +288,7 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
     this.stompClient.connect({token:this.userService.getEnvironment().token}, function(frame) {
 
       that.stompClient.subscribe("/user/topic/activeOrder", function (message) {
-        let activeOrderUpdate:CurrentOrderUser = JSON.parse(message.body)
+        let activeOrderUpdate:CurrentOrderUserClassWithUpdateMessage = JSON.parse(message.body)
         that.todo = activeOrderUpdate.todo
         that.deli = activeOrderUpdate.deli
         that.health = activeOrderUpdate.health
@@ -294,8 +307,9 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
         that.produce = activeOrderUpdate.produce
         that.bakery = activeOrderUpdate.bakery
         that.completed = activeOrderUpdate.completed
-
-        console.log(that.produce)
+        //activeOrderUpdate.updateMessage
+        that.updateLog.unshift(activeOrderUpdate.updateMessage);
+        console.log(that.updateLog)
       })
     });
   }

@@ -2,12 +2,12 @@ import {AfterViewInit, Component, ElementRef, OnInit, QueryList, Renderer2, View
 import {FormBuilder, Validators, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatStepperModule} from '@angular/material/stepper';
+import {MatStepper, MatStepperModule} from '@angular/material/stepper';
 import {MatButton, MatButtonModule} from '@angular/material/button';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatDividerModule } from '@angular/material/divider';
 import { NavService } from 'src/global/nav/nav.service';
-import { NgbDateStruct, NgbDatepicker, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbDateStruct, NgbDatepicker, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ListService } from 'src/list/list_component/list.service';
 import { DatepickerService } from 'src/global/bootstrap-components/datepicker/datepicker.service';
 import { EnvironmentService } from 'src/global/utility/environment.service';
@@ -33,6 +33,9 @@ import { List } from 'src/list/models/List';
 import { Router } from '@angular/router';
 import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/drag-drop';
 import { UserOrderInfo } from 'src/list/models/UserOrderInfo';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { DateComparison } from 'src/global/bootstrap-components/datepicker/DateComparison';
+import { QuantityComponent } from 'src/global/components/quantity/quantity.component';
 
 /**
  * @title Stepper overview
@@ -59,7 +62,9 @@ import { UserOrderInfo } from 'src/list/models/UserOrderInfo';
     EditListComponent,
     MatButtonToggleModule,
     CdkDropList,
-    CdkDrag
+    CdkDrag,
+    MatSnackBarModule,
+    QuantityComponent
   ],
   providers: [{
     provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }
@@ -101,13 +106,14 @@ export class StepperComponent implements OnInit, AfterViewInit{
 
   stepCounter:number=0
   resetDatePicker:boolean=false
-
+  currentSelectedDate:NgbDate
+  dpStartDate:NgbDate
 
 
   @ViewChild('we')we:ElementRef
 
 
-  constructor(private listService:ListService, private elem:ElementRef, private dateService:DatepickerService, private userService:EnvironmentService, private renderer2: Renderer2, private router:Router, private datePickerComponent:ViewContainerRef, private navService:NavService){
+  constructor(private listService:ListService, private elem:ElementRef, private dateService:DatepickerService, private userService:EnvironmentService, private renderer2: Renderer2, private router:Router, private datePickerComponent:ViewContainerRef, private navService:NavService, private dateNotification: MatSnackBar){
     
   }
   ngAfterViewInit(): void {
@@ -126,16 +132,16 @@ export class StepperComponent implements OnInit, AfterViewInit{
     this.listService.getCurrentList().subscribe(d => {
       this.yes = d.list
       this.doesListHaveItems(d.itemCount);
-      
     });
     
     this.stepCounter = 1;
+
+    console.log(this.router.url)
   }
 
 
   increaseStepCounter(){
     this.stepCounter++;
-    console.log(this.stepCounter)
   }
 
   decreaseStepCounter(){
@@ -160,6 +166,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
     }) 
 
   }
+
 
   removeItem(itemName:string){
     var tempArray = this.yes.filter(d=>d.name != itemName);
@@ -187,15 +194,21 @@ export class StepperComponent implements OnInit, AfterViewInit{
     
   }
 
+  updateQuantity(update:boolean,item:string,quantity?:string){
+    if(update){
+      this.increaseQuantity(item)
+    }else{
+      this.decreaseQuantity(item,quantity)
+    }
+  }
+
   increaseQuantity(itemName){
     //take current list 
     //find item we are changing 
     //change string to update quantity
     //post updated string to api
-    console.log(this.yes)
     this.listService.increaseQuantity(this.yes,itemName).subscribe(d=>{
-      this.yes = d.list
-      console.log(this.yes)   
+      this.yes = d.list 
   })
 
 
@@ -205,15 +218,20 @@ export class StepperComponent implements OnInit, AfterViewInit{
 
 
   //STEPPER 2
-  getDate(date:NgbDateStruct){
-    this.previousHourSelected = this.we.nativeElement;
+  getDate(dates:DateComparison){
+    let currentDate = new Date(dates.currentDate.year,dates.currentDate.month-1,dates.currentDate.day).getTime()
+    let currentDateToString = new Date(dates.currentDate.year,dates.currentDate.month-1,dates.currentDate.day).toLocaleDateString()
+    let selectedDate = new Date(dates.selectedDate.year,dates.selectedDate.month-1,dates.selectedDate.day).getTime()
+    this.dpStartDate = dates.currentDate
+    if(currentDate <= selectedDate){
+      this.previousHourSelected = this.we.nativeElement;
     this.dateSelected = false
     this.datePickedFromCalendar = true;
-    this.currentDate = date.year + "-" + date.month + "-" + date.day;
+    this.currentSelectedDate = dates.selectedDate
+    this.currentDate = dates.currentDate.year + "-" + dates.currentDate.month + "-" + dates.currentDate.day;
     //means date is clicked
     //unhide hours
     this.renderer2.removeClass(this.hoursContainer.nativeElement,'container')
-    //console.log(this.takenUserDates)
     //get all hour elements and set them to init
     let hourArray:NodeList = this.elem.nativeElement.querySelectorAll('.hours');
     let unavailableHours:string[]=[];
@@ -221,8 +239,6 @@ export class StepperComponent implements OnInit, AfterViewInit{
     for(let i = 0; i < hourArray.length;i++){
       hourArray[i].firstChild.parentElement.style.opacity="1"
       hourArray[i].firstChild.parentElement.style.pointerEvents="auto"
-      //hourArray[i].parentElement.setAttribute("disabled","false")
-      //hourArray[i].parentElement.style.opacity="1"
     }
     
     //format the date to string to match the substring of the hour in the dates
@@ -234,9 +250,6 @@ export class StepperComponent implements OnInit, AfterViewInit{
         unavailableHours.push(d.substring(d.indexOf('T')+1))
       }
     })
-    //console.log(unavailableHours)
-    //console.log(hourArray)
-    //console.log(unavailableHours)
     
 
     //loop through the elements and the unavailable hours
@@ -244,9 +257,6 @@ export class StepperComponent implements OnInit, AfterViewInit{
     for(let i = 0; i < hourArray.length;i++){
       for(let k = 0; k < unavailableHours.length;k++){
         if(hourArray[i].firstChild.textContent.substring(0,hourArray[i].firstChild.textContent.indexOf('p')) == unavailableHours[k]){
-          console.log("in")
-          //hourArray[i].parentElement.setAttribute("disabled","true");
-          //hourArray[i].parentElement.style.opacity=".3"
           hourArray[i].firstChild.parentElement.style.opacity=".3"
           hourArray[i].firstChild.parentElement.style.pointerEvents="none"
         }else if((hourArray[i].firstChild.textContent.substring(0,hourArray[i].firstChild.textContent.indexOf('a')) == unavailableHours[k])){
@@ -256,6 +266,13 @@ export class StepperComponent implements OnInit, AfterViewInit{
       }
     
     }
+    }else{
+      //show notification
+      this.datePickedFromCalendar = false
+      this.dateNotification.open("Please select a date after "+currentDateToString,"",{duration:2000})
+    }
+
+    
   }
 
 
@@ -285,25 +302,54 @@ export class StepperComponent implements OnInit, AfterViewInit{
     moveItemInArray(this.yes, event.previousIndex, event.currentIndex);
   }
 
-  addDate(){
-    this.listToDb.date = this.dateService.getDateToDb();
-    console.log(this.listToDb.date)
-    console.log(this.listToDb)
+  addDate(stepper:MatStepper){
+    //called when moving into finalize state of form
+    //~steps~
+    //call to get all shopper dates before setting data
+    if(this.currentShopper == "Jay"){
+      this.listService.getShopperDates(this.userService.getEnvironment().token, 1).subscribe(d => {
+        if(d.find(dates=>dates==this.dateService.getDateToDb())){
+          this.takenUserDates = d
+          this.getDate(new DateComparison(this.currentSelectedDate,this.dpStartDate))
+          this.dateNotification.open("Date has been taken, retry", "X", {"duration": 2000,panelClass: 'date-snackbar'})
+          stepper.previous()
+        }else{
+          this.listToDb.date = this.dateService.getDateToDb();
+          this.listToDb.token = this.userService.getEnvironment().token;
+          this.listService.postList(this.listToDb).subscribe(d=>this.yes = d.list);
+        }
+      })
+      
+    }else{
+      this.listService.getShopperDates(this.userService.getEnvironment().token, 2).subscribe(d => {
+        if(d.find(dates=>dates==this.dateService.getDateToDb())){
+          this.takenUserDates = d
+          this.getDate(new DateComparison(this.currentSelectedDate,this.dpStartDate))
+          this.dateNotification.open("Date has been taken, retry", "X", {"duration": 2000,panelClass: 'date-snackbar'})
+          stepper.previous()
+        }else{
+          this.listToDb.date = this.dateService.getDateToDb();
+          this.listToDb.token = this.userService.getEnvironment().token;
+          this.listService.postList(this.listToDb).subscribe(d=>this.yes = d.list);
+        }
+      })
+    }
   }
 
   getShopperDates(shopperId){
     this.listService.getShopperDates(this.userService.getEnvironment().token, shopperId).subscribe(d => {
       this.takenUserDates = d;
-      console.log(d)
     })
   }
 
   dateIsSelected(){
+    console.log(this.yes)
     if(this.selectedHour == ""){
       return true;
     }else{
       return false;
     }
+    
   }
 
   //if shopper is different from previous and clicked reset the date with this.model
@@ -333,14 +379,14 @@ export class StepperComponent implements OnInit, AfterViewInit{
     this.currentDate = ''
     this.selectedHour = ''
     this.dateSelected=false
+    this.datePickedFromCalendar= false
     this.renderer2.addClass(this.hoursContainer.nativeElement,'container')
   }
 
 
   //STEPPER 3
-  sendList(){
-    this.listToDb.token = this.userService.getEnvironment().token;
-    this.listService.postList(this.listToDb).subscribe(d=>this.yes = d.list);
+  sendList(stepper:MatStepper){
+    this.addDate(stepper)
   }
 
 
@@ -381,6 +427,10 @@ export class StepperComponent implements OnInit, AfterViewInit{
       this.listService.resetStepper()
       this.router.navigateByUrl("/home")
       this.listService.modalAfterOrderCreated.next(true)
+      // if(this.router.url == "/list"){
+      //   //send observable
+      //   this.listService.updateOrderScreen.next(true)
+      // }
     },4000)
 
 

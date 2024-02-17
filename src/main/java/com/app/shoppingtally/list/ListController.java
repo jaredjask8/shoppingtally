@@ -3,6 +3,7 @@ package com.app.shoppingtally.list;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -85,8 +86,8 @@ public class ListController {
 	
 	@CrossOrigin
 	@PostMapping("/endCurrentOrder")
-	public String endCurrentOrder(@RequestBody CurrentOrder currentOrder, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-		return listService.endCurrentOrder(currentOrder,token);
+	public void endCurrentOrder(@RequestBody CurrentOrder currentOrder, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		listService.endCurrentOrder(currentOrder,token);
 	}
 	
 	@CrossOrigin
@@ -114,9 +115,27 @@ public class ListController {
 	}
 	
 	@CrossOrigin
+	@GetMapping("/cancelCurrentOrder")
+	public UserOrderInfo cancelCurrentOrder(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.cancelCurrentOrder(token);
+	}
+	
+	@CrossOrigin
 	@PostMapping("/getUserList")
 	public ListToFrontendWithCount getUserList(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 		return listService.getUserList(token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/addListToCurrentOrder")
+	public List<ListItemResponse> addListToCurrentOrder(@RequestBody List<ListItemResponse> list, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.addListToCurrentOrder(list,token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/addListToActiveOrder")
+	public CurrentOrderEntity addListToActiveOrder(@RequestBody List<ListItemResponse> list, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return listService.addListToActiveOrder(list,token);
 	}
 	
 	@CrossOrigin

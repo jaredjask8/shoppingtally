@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,15 +19,18 @@ import com.app.shoppingtally.auth.models.FullListRequest;
 import com.app.shoppingtally.auth.models.ListFromFrontend;
 import com.app.shoppingtally.auth.models.ListItemResponse;
 import com.app.shoppingtally.auth.models.ListToFrontendWithCount;
+import com.app.shoppingtally.auth.models.UserUpdateRequest;
 import com.app.shoppingtally.auth.models.ListItemRequest;
 import com.app.shoppingtally.config.JwtService;
 import com.app.shoppingtally.list.ListRepository;
+import com.app.shoppingtally.list.ListService;
 import com.app.shoppingtally.list.UserList;
 import com.app.shoppingtally.token.Token;
 import com.app.shoppingtally.token.TokenRepository;
 import com.app.shoppingtally.token.TokenType;
 import com.app.shoppingtally.user.Role;
 import com.app.shoppingtally.user.User;
+import com.app.shoppingtally.user.UserDTO;
 import com.app.shoppingtally.user.UserRepo;
 
 
@@ -44,6 +48,7 @@ public class AuthenticationService {
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
 	private final TokenRepository tokenRepository;
+	ListUtils listUtils = new ListUtils();
 	
 	
 	public AuthenticationResponse register(RegisterRequest request) {
@@ -64,7 +69,8 @@ public class AuthenticationService {
 
 	private void saveUserToken(User user, String jwtToken) {
 		var token = Token.builder()
-		        .user(user)
+		        .id(user.getId())
+				.user(user)
 		        .token(jwtToken)
 		        .tokenType(TokenType.BEARER)
 		        .expired(false)
@@ -85,41 +91,104 @@ public class AuthenticationService {
 		}catch(Exception e){
 			return AuthenticationResponse.builder().token(e.getMessage()).build();
 		}
+	}
+	
+	public AuthenticationResponse refresh(String token) {
+		try {
+			jwtService.isTokenExpired(jwtService.extractFromBearer(token));
+		}catch(Exception e) {
+			return AuthenticationResponse.builder().token("expired").build();
+		}
 		
-		
-		
-		
+		var tokenUser = tokenRepository.findByToken(jwtService.extractFromBearer(token)).get();
+		var user = repository.findUserById(Long.valueOf(tokenUser.getUser().getId()) ).get();
+		tokenRepository.delete(tokenUser);
+		var jwtToken = jwtService.generateToken(user);
+		saveUserToken(user, jwtToken);
+		return AuthenticationResponse.builder().token(jwtToken).build();
+	}
+	
+	public AuthenticationResponse signOut(String token) {
+		var tokenUser = tokenRepository.findByToken(jwtService.extractFromBearer(token)).get();
+		tokenRepository.delete(tokenUser);
+		return AuthenticationResponse.builder().token("nice").build();
 	}
 	
 	
-	public User getUser(Token token) {
-		return repository.findByEmail(jwtService.extractUsername(token.getToken())).get();
+	public UserDTO getUser(String token) {
+		User user = repository.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token))).get();
+		return UserDTO.builder()
+				.firstname(user.getFirstname())
+				.lastname(user.getLastname())
+				.address(user.getAddress())
+				.email(user.getEmail())
+				.phone(user.getPhone())
+				.role(user.getRole())
+				.build();
 	}
 	
-	public String updateCurrentList(ListItemRequest item) {
-		User user = repository.findByEmail(jwtService.extractUsername(item.getToken())).get();
+	public UserDTO updateUser(UserUpdateRequest update, String token) {
+		User user = repository.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token))).get();
+		switch(update.getChoice()) {
+			case "first name":
+				user.setFirstname(update.getUserUpdate());
+				break;
+			case "last name":
+				user.setLastname(update.getUserUpdate());
+				break;
+			case "email":
+				user.setEmail(update.getUserUpdate());
+				break;
+			case "address":
+				user.setAddress(update.getUserUpdate());
+				break;
+			case "phone":
+				user.setPhone(update.getUserUpdate());
+				break;
+		}
+		
+		repository.save(user);
+		
+		return UserDTO.builder()
+				.firstname(user.getFirstname())
+				.lastname(user.getLastname())
+				.address(user.getAddress())
+				.email(user.getEmail())
+				.phone(user.getPhone())
+				.build();
+	}
+	
+	public ListToFrontendWithCount updateCurrentList(ListItemRequest item, String token) {
+		User user = repository.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token))).get();
 		String currentList = user.getCurrentList();
 		user.setCurrentList(currentList+=item.getCurrentItem());
 		repository.save(user);
 		Integer count = user.getCurrentList().split("~").length;
-		return count.toString();
+		return ListToFrontendWithCount.builder()
+				.itemCount(count)
+				.list(convertStringListToArray(user.getCurrentList()))
+				.date("")
+				.build();
 	}
 	
-	public String updateCurrentListWithFullList(FullListRequest list) {
+	public ListToFrontendWithCount updateCurrentListWithFullList(List<ListItemResponse> list, String token) {
 		//log.info(list.toString());
-		User user = repository.findByEmail(jwtService.extractUsername(list.getToken())).get();
-		String currentList = user.getCurrentList();
+		Optional<User> user = repository.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
+		String currentList = user.get().getCurrentList();
 		String tempList="";
 		
-		for(ListItemResponse d:list.getList()) {
+		for(ListItemResponse d:list) {
 			tempList+=d.getImage()+"+"+d.getName()+"+"+d.getQuantity()+"~";
 		}
 		
-		user.setCurrentList(currentList+=tempList);
-		repository.save(user);
+		user.get().setCurrentList(currentList+=tempList);
+		repository.save(user.get());
 		
 		
-		return tempList;
+		return ListToFrontendWithCount.builder()
+				.itemCount(listUtils.convertStringListToArray(user.get().getCurrentList()).size())
+				.list(listUtils.convertStringListToArray(user.get().getCurrentList()))
+				.build();
 	}
 	
 	public boolean checkUser(String requestedEmail) {
@@ -170,29 +239,64 @@ public class AuthenticationService {
 				.build();
 	}
 	
-	public ListToFrontendWithCount updateQuantity(FullListRequest list) {
-		log.info(list.getToken());
-		User user = repository.findByEmail(jwtService.extractUsername(list.getToken())).get();
+	public ListToFrontendWithCount updateQuantity(List<ListItemResponse> list, String token) {
+		User user = repository.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token))).get();
 		String tempList = "";
 		//passing new array with new quantity
 		//get new array parse into currentlist string
 		//set currentlist to new string
 		//return new list
-		for(ListItemResponse d : list.getList()) {
+		for(ListItemResponse d : list) {
 			tempList+=d.getImage()+"+"+d.getName()+"+"+d.getQuantity()+"~";
 		}
 		
 		user.setCurrentList(tempList);
 		repository.save(user);
 		
-		return getCurrentList(list.getToken());
+		return getCurrentList(jwtService.extractFromBearer(token));
 	}
 	
 	
 	public String getCartCount(String token) {
+		List<String> tempList = new ArrayList<String>();
 		Optional<User> user = repository.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token)));
 		Integer count = user.get().getCurrentList().split("~").length;
-		return count.toString();
+		tempList = Arrays.asList(user.get().getCurrentList().split("~"));
+		log.info(tempList.toString());
+		
+		if(tempList.get(0).equals("")) {
+			return "0";
+		}else {
+			log.info("INNNNNNNNN");
+			return count.toString();
+		}
+		
+	}
+	
+	List<ListItemResponse> convertStringListToArray(String list){
+		if( list != null) {
+			List<ListItemResponse> listArray = new ArrayList<ListItemResponse>();
+			var tempArray = list.split("~");
+			
+			Stream<String> arr_stream = Arrays.stream(tempArray);
+			arr_stream.forEach((d) -> {
+				
+				if(d != "") {
+					var splitByCategory = d.split("\\+");
+					var image = splitByCategory[0];
+					var name = splitByCategory[1];
+					var quantity = splitByCategory[2];
+					listArray.add(new ListItemResponse(image,name,quantity));
+				}
+				
+				
+			});
+			
+			return listArray;
+		}else {
+			return new ArrayList<ListItemResponse>();
+		}
+		
 		
 	}
 }

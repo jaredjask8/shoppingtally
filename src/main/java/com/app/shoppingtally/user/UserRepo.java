@@ -15,6 +15,7 @@ public interface UserRepo extends JpaRepository<User, Long>{
 	Optional<User> findUserById(Long id);
 	Optional<User> findByEmail(String email);
 	
+	
 	@Query(value="SELECT socket_key FROM _user WHERE id=:id", nativeQuery=true)
 	String getSocketKeyById(@Param("id")Long id);
 	

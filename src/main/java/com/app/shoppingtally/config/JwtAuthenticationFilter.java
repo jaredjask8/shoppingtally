@@ -1,12 +1,16 @@
 package com.app.shoppingtally.config;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -33,12 +37,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 		final String authHeader = request.getHeader("Authorization");
 		final String jwt;
 		final String userEmail;
-		
-		if(authHeader == null || !authHeader.startsWith("Bearer ")) {
-			filterChain.doFilter(request, response);
-			log.info("not valid");
-			return;
+		final List<RequestMatcher> ignoredPaths = Arrays.asList(new AntPathRequestMatcher("/api/v1/reviews/**"), new AntPathRequestMatcher("/api/v1/auth/**"),new AntPathRequestMatcher("/api/v1/admin/whatsNew/**"),new AntPathRequestMatcher("/our-websocket/**")) ;
+		for(RequestMatcher path : ignoredPaths) {
+			log.info(path.toString() + "   " +request.getRequestURI());
+			if(path.matches(request)) { 
+	            filterChain.doFilter(request, response);
+	            return;
+	       }
 		}
+		
 		
 		jwt = authHeader.substring(7);
 		userEmail = jwtService.extractUsername(jwt);

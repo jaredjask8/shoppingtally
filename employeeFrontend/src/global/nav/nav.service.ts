@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { UserOrderInfo } from 'src/list/models/UserOrderInfo';
 import { EnvironmentService } from '../utility/environment.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,15 +17,18 @@ export class NavService implements OnInit{
   cartClicked$:Observable<boolean>
   cartVisibility:BehaviorSubject<UserOrderInfo> = new BehaviorSubject<UserOrderInfo>({hasActive:false,hasCurrentOrder:false})
   cartVisibility$:Observable<UserOrderInfo>
+  cartVisibilityFromUser:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true)
+  cartVisibilityFromUser$:Observable<boolean>
   cartCount:BehaviorSubject<string> = new BehaviorSubject<string>("")
   cartCount$:Observable<string>
 
-  constructor(private userService:EnvironmentService, private http:HttpClient) { 
+  constructor(private http:HttpClient) { 
 
     this.loginClicked$ = this.loginClicked.asObservable();
     this.registerClicked$ = this.registerClicked.asObservable();
     this.cartClicked$ = this.cartClicked.asObservable();
     this.cartVisibility$ = this.cartVisibility.asObservable()
+    this.cartVisibilityFromUser$ = this.cartVisibilityFromUser.asObservable()
     this.cartCount$ = this.cartCount.asObservable()
   }
 
@@ -34,9 +38,7 @@ export class NavService implements OnInit{
   }
 
   getCartCount():Observable<string>{
-    let token = this.userService.getEnvironment().token
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this.http.post<string>("http://localhost:8080/api/v1/auth/getCartCount",null,{headers:headers})
+    return this.http.post<string>(environment.apiUrl+"/api/v1/auth/getCartCount",null)
   }
 
 

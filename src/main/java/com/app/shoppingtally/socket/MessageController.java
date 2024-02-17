@@ -46,6 +46,14 @@ public class MessageController {
         return message.getMessageContent();
     }
     
+    @SendToUser("/topic/affiliate")
+    public String getAffiliate(final Message message,
+                                             final Principal principal) throws InterruptedException {
+		log.info(message.toString());
+		Thread.sleep(1000);
+        return message.getMessageContent();
+    }
+    
     @MessageMapping("/test")
     public void sendActiveOrderToShopper(String message,
                                              final Principal principal) throws JsonMappingException, JsonProcessingException {

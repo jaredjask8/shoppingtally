@@ -5,6 +5,7 @@
     margin-right: 20px;
     
   }
+
   
   /* Track */
   ::-webkit-scrollbar-track {
@@ -84,7 +85,6 @@
 }
 
 h1{
-    color: white;
     text-align: center;
 }
 
@@ -94,7 +94,6 @@ h1{
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    background-color: #2a246a;
     padding-top: 100px;
 }
 

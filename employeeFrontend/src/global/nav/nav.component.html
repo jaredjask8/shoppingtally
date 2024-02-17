@@ -1,76 +1,90 @@
 <ng-template #content let-offcanvas class="nav-button">
 	<div class="side-nav-container">
 		<div class="offcanvas-header">
-			<h4 class="offcanvas-title">Welcome, {{username}}</h4>
+			<h4 *ngIf="!userLoggedIn else guestTemplate" class="offcanvas-title">Welcome, Guest</h4>
+			<ng-template #guestTemplate>
+				<h4 class="offcanvas-title">Welcome, {{username}}</h4>
+			</ng-template>
 			<button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
 		</div>
 		<div class="offcanvas-body">
 			<div class="side-nav-body-content mb-3">
 				<a class="mt-3 option-container" routerLink="/home" (click)="offcanvas.dismiss()">
-					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-house margin-icons" viewBox="0 0 16 16">
+					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#31f5f5" class="bi bi-house margin-icons" viewBox="0 0 16 16">
 						<path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
 					</svg>
 					Home
 				</a>
 				<a class="mt-3 option-container" routerLink="/about" (click)="offcanvas.dismiss()">
-					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-file-earmark-person margin-icons" viewBox="0 0 16 16">
+					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#ffc477" class="bi bi-file-earmark-person margin-icons" viewBox="0 0 16 16">
 						<path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
 						<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2v9.255S12 12 8 12s-5 1.755-5 1.755V2a1 1 0 0 1 1-1h5.5v2z"/>
 					</svg>
-					About
+					About Us
 				</a>
 				<a class="mt-3 option-container" routerLink="/reviews" (click)="offcanvas.dismiss()">
-					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-hearts margin-icons" viewBox="0 0 16 16">
+					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="red" class="bi bi-hearts margin-icons" viewBox="0 0 16 16">
 						<path fill-rule="evenodd" d="M4.931.481c1.627-1.671 5.692 1.254 0 5.015-5.692-3.76-1.626-6.686 0-5.015Zm6.84 1.794c1.084-1.114 3.795.836 0 3.343-3.795-2.507-1.084-4.457 0-3.343ZM7.84 7.642c2.71-2.786 9.486 2.09 0 8.358-9.487-6.268-2.71-11.144 0-8.358Z"/>
 					</svg>
 					Reviews
 				</a>
-				<a class="mt-3 option-container" routerLink="/list" (click)="offcanvas.dismiss()">
-					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-card-checklist margin-icons" viewBox="0 0 16 16">
-						<path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-						<path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
-					</svg>
-					Order
-				</a>
+				<ng-container *ngIf="userLoggedIn">
+					<a class="mt-3 option-container" routerLink="/howItWorks" (click)="offcanvas.dismiss()">
+						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#3c8c2b" class="bi bi-question-lg margin-icons" viewBox="0 0 16 16">
+							<path fill-rule="evenodd" d="M4.475 5.458c-.284 0-.514-.237-.47-.517C4.28 3.24 5.576 2 7.825 2c2.25 0 3.767 1.36 3.767 3.215 0 1.344-.665 2.288-1.79 2.973-1.1.659-1.414 1.118-1.414 2.01v.03a.5.5 0 0 1-.5.5h-.77a.5.5 0 0 1-.5-.495l-.003-.2c-.043-1.221.477-2.001 1.645-2.712 1.03-.632 1.397-1.135 1.397-2.028 0-.979-.758-1.698-1.926-1.698-1.009 0-1.71.529-1.938 1.402-.066.254-.278.461-.54.461h-.777ZM7.496 14c.622 0 1.095-.474 1.095-1.09 0-.618-.473-1.092-1.095-1.092-.606 0-1.087.474-1.087 1.091S6.89 14 7.496 14"/>
+						  </svg>
+						How it works!
+					</a>
 
-				<a class="mt-3 option-container" routerLink="/previousLists" (click)="offcanvas.dismiss()">
-					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-credit-card margin-icons" viewBox="0 0 16 16">
-						<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
-						<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
-					</svg>	
-					 Previous Lists
-				</a>
+					<a class="mt-3 option-container" routerLink="/list" (click)="offcanvas.dismiss()">
+						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#c69bff" class="bi bi-card-checklist margin-icons" viewBox="0 0 16 16">
+							<path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+							<path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
+						</svg>
+						Order
+					</a>
 
-				<a class="mt-3 option-container" routerLink="/deals" (click)="offcanvas.dismiss()">
-					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-credit-card margin-icons" viewBox="0 0 16 16">
-						<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
-						<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
-					</svg>	
-					 Weekly Deals
-				</a>
+					
+	
+					<a class="mt-3 option-container" routerLink="/previousLists" (click)="offcanvas.dismiss()">
+						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-list-check margin-icons" viewBox="0 0 16 16">
+							<path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3.854 2.146a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 3.293l1.146-1.147a.5.5 0 0 1 .708 0m0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 7.293l1.146-1.147a.5.5 0 0 1 .708 0m0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0"/>
+						</svg>
+						 Previous Lists
+					</a>
+	
+					<a class="mt-3 option-container" routerLink="/mealkit" (click)="offcanvas.dismiss()">
+						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#3c8c2b" class="bi bi-bag-heart-fill margin-icons" viewBox="0 0 16 16">
+							<path d="M11.5 4v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m0 6.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132"/>
+						  </svg>
+						 Meal Delivery Kit
+					</a>
+
+					<!-- <a class="mt-3 option-container" routerLink="/deals" (click)="offcanvas.dismiss()">
+						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#2A246A" class="bi bi-credit-card margin-icons" viewBox="0 0 16 16">
+							<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
+							<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
+						</svg>	
+						 Weekly Deals
+					</a>
+					
+					<a class="mt-3 option-container" routerLink="/treats" (click)="offcanvas.dismiss()">
+						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#2A246A" class="bi bi-credit-card margin-icons" viewBox="0 0 16 16">
+							<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
+							<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
+						</svg>
+						Sweet Treats
+					</a> -->
+
+					<a class="mt-3 option-container" *ngIf="showAdmin" routerLink="/admin"  (click)="offcanvas.dismiss()"> <!-- *ngIf="showAdmin" -->
+						<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#31f5f5" class="bi bi-person-badge margin-icons" viewBox="0 0 16 16">
+							<path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+							<path d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492z"/>
+						  </svg>	
+						 Admin Panel
+					</a>
+				</ng-container>
 				
-				<a class="mt-3 option-container" routerLink="/treats" (click)="offcanvas.dismiss()">
-					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-credit-card margin-icons" viewBox="0 0 16 16">
-						<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
-						<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
-					</svg>
-					Sweet Treats
-				</a>
-
-				<a class="mt-3 option-container" routerLink="/kit" (click)="offcanvas.dismiss()">
-					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-credit-card margin-icons" viewBox="0 0 16 16">
-						<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
-						<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
-					</svg>	
-					 Meal Delivery Kit
-				</a>
-				<a class="mt-3 option-container" routerLink="/admin"  (click)="offcanvas.dismiss()"> <!-- *ngIf="showAdmin" -->
-					<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="rgb(182,136,104)" class="bi bi-credit-card margin-icons" viewBox="0 0 16 16">
-						<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
-						<path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
-					</svg>	
-					 Admin Panel
-				</a>
 			</div>
 			<!-- <div class="side-nav-body-user">
 				<a class="mt-5 option-container" *ngIf="showLogin" (click)="offcanvas.dismiss(); loginClicked()">
@@ -100,7 +114,7 @@
 			</div> -->
 
 			<div class="side-nav-body-payment py-4">
-				<div>Payment</div>
+				<h3>Payment</h3>
 				<div class="iconsContainer mt-2">
 					<img style="height: 35px; width: 35px;" src="../../assets/img/payment_icons/venmoicon.png">
 					<img src="../../assets/img/payment_icons/applepayicon.png">
@@ -114,7 +128,7 @@
 			</div>
 
 				<div class="side-nav-body-contact py-4">
-					<div>Contact</div>
+					<h3>Contact</h3>
 					<div class="contactContainer mt-2">
 						<div class="contacts">
 							<div>Jay</div>
@@ -125,20 +139,28 @@
 							<div>(386)-365-6869</div>
 						</div>
 					</div>
+					
 				</div>
-
+			
+				<div class="side-nav-footer mt-3">
+					<h3 class="mt-2">Social</h3>
+					<div class="side-nav-footer-icons">
+						<a href="https://www.facebook.com/ShoppingTally/">
+							<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#4267B2" class="bi bi-facebook" viewBox="0 0 16 16">
+								<path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+							</svg>
+						</a>
+						<a href="https://www.instagram.com/shopping.tally/">
+							<img src="../../assets/img/instagramLogo.png" height="40px" width="40px">
+						</a>
+					</div>
+					
+					
+				</div>
 			
 		</div>
 		
-		<div class="side-nav-footer mb-5">
-			<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="rgb(182,136,104)" class="bi bi-facebook" viewBox="0 0 16 16">
-				<path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
-			  </svg>
-			  <div style="align-self: center;">@shoppingtally</div>
-			  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="rgb(182,136,104)" class="bi bi-instagram" viewBox="0 0 16 16">
-				<path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
-			  </svg>
-		</div>
+		
 		
 	</div>
 </ng-template>
@@ -152,14 +174,14 @@
 		<div class="showLoginRegister">
 			
 			
-			<button mat-raised-button class="margin-icons" (click)="registerClicked()">
+			<button color="success" mat-raised-button class="margin-icons" (click)="registerClicked()">
 				Register
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
 					<path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
 				</svg>
 			</button>
 			<a *ngIf="showLogin" class="showLoginRegister" (click)="loginClicked()">
-				<button mat-raised-button class="margin-icons">
+				<button color="success" mat-raised-button class="margin-icons">
 					Login
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
 					  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
@@ -179,7 +201,7 @@
 		
 		
 	</div>
-	<div class="iconContainer" *ngIf=!cartVisibility>
+	<div class="iconContainer" *ngIf=cartVisibility>
 		<img class="cartIcon" src="../../assets/img/cartIcon.png" (click)="cartClicked()">
 		<div class="cartItemCounter">{{cartItemCounter}}</div>
 	</div>

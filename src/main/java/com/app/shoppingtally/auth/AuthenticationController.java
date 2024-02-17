@@ -20,11 +20,15 @@ import com.app.shoppingtally.auth.models.ListFromFrontend;
 import com.app.shoppingtally.auth.models.ListItemRequest;
 import com.app.shoppingtally.auth.models.ListItemResponse;
 import com.app.shoppingtally.auth.models.ListToFrontendWithCount;
+import com.app.shoppingtally.auth.models.UserUpdateRequest;
 import com.app.shoppingtally.token.Token;
 import com.app.shoppingtally.user.User;
+import com.app.shoppingtally.user.UserDTO;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -42,15 +46,25 @@ public class AuthenticationController {
 		return service.authenticate(request);
 	}
 	
-	@PostMapping("/user")
-	public User getUser(@RequestBody Token token){
+	@GetMapping("/refresh")
+	public AuthenticationResponse refresh(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+		return service.refresh(token);
+	}
+	
+	@GetMapping("/signOut")
+	public AuthenticationResponse signOut(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+		return service.signOut(token);
+	}
+	
+	@GetMapping("/user")
+	public UserDTO getUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
 		return service.getUser(token);
 	}
 	
 	@CrossOrigin
 	@PostMapping("/addToList")
-	public String addToList(@RequestBody ListItemRequest item) {
-		return service.updateCurrentList(item);
+	public ListToFrontendWithCount addToList(@RequestBody ListItemRequest item, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		return service.updateCurrentList(item,token);
 	}
 	
 	@GetMapping("/checkUser")
@@ -60,8 +74,9 @@ public class AuthenticationController {
 	
 	@CrossOrigin
 	@PostMapping("/addFullList")
-	public String addToList(@RequestBody FullListRequest list) {
-		return service.updateCurrentListWithFullList(list);
+	public ListToFrontendWithCount addToList(@RequestBody List<ListItemResponse> list, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		log.info(token);
+		return service.updateCurrentListWithFullList(list,token);
 		
 	}
 	
@@ -80,13 +95,19 @@ public class AuthenticationController {
 	
 	@CrossOrigin
 	@PostMapping("/updateQuantity")
-	public ListToFrontendWithCount increaseQuantity(@RequestBody FullListRequest list){
-		return service.updateQuantity(list);
+	public ListToFrontendWithCount increaseQuantity(@RequestBody List<ListItemResponse> list, @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+		return service.updateQuantity(list,token);
 	}
 	
 	@CrossOrigin
 	@PostMapping("/getCartCount")
 	public String getCartCount(@RequestHeader(HttpHeaders.AUTHORIZATION) String token){
 		return service.getCartCount(token);
+	}
+	
+	@CrossOrigin
+	@PostMapping("/updateUser")
+	public UserDTO updateUser(@RequestBody UserUpdateRequest update, @RequestHeader(HttpHeaders.AUTHORIZATION) String token){
+		return service.updateUser(update,token);
 	}
 }

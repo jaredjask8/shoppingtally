@@ -25,8 +25,9 @@ export class NavComponent implements OnInit{
   //control nav components on login and logout
   showLogin:boolean=true;
   showAdmin:boolean;
-  username:string="Guest"
-  cartVisibility:boolean
+  username:string
+  cartVisibility:boolean=false
+  userLoggedIn:boolean
  
 
 	constructor(private offcanvasService: NgbOffcanvas, private registerService:RegisterService, private userService:EnvironmentService, private profileService:ProfileService, private navService:NavService) {
@@ -43,13 +44,37 @@ export class NavComponent implements OnInit{
     
   }
   ngOnInit(): void {
-    console.log(this.cartVisibility)
-    this.navService.cartVisibility$.subscribe(d=>{
-      console.log(d)
-      this.cartVisibility = d.hasCurrentOrder
+    this.userService.userLoggedIn$.subscribe(d=>{
+      this.userLoggedIn = d
+      if(d){
+        this.registerService.getUser().subscribe(d=>{
+          this.username = d.firstname
+        })
+      }
     })
+    
+    if(this.userService.getEnvironment().log == "1"){
+      this.navService.getCartCount().subscribe(d=>{
+        this.cartItemCounter = d
+      })
 
-    this.navService.getCartCount().subscribe(d=>this.cartItemCounter = d)
+      this.userService.userLoggedIn.next(true)
+      
+      this.navService.cartVisibility$.subscribe(d=>{
+        this.cartVisibility = !d.hasCurrentOrder
+      })
+
+      this.navService.cartVisibilityFromUser$.subscribe(d=>{
+        this.cartVisibility = d
+      })
+
+      
+      
+    }else{
+      this.userLoggedIn = false
+    }
+
+    
     this.navService.cartCount$.subscribe(d=>this.cartItemCounter=d)
   }
   

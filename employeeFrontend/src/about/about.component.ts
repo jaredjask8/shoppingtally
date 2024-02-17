@@ -1,4 +1,5 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { EnvironmentService } from 'src/global/utility/environment.service';
 
 
 
@@ -12,7 +13,7 @@ export class AboutComponent implements AfterViewChecked{
 
   
   
-  constructor(private renderer : Renderer2){}
+  constructor(private userService:EnvironmentService){}
   ngAfterViewChecked(): void {
   }
   
@@ -20,7 +21,9 @@ export class AboutComponent implements AfterViewChecked{
   
   ngOnInit(): void {
     
-
+    if(this.userService.getEnvironment().log == "1"){
+      this.userService.initializeWebSocketConnection()
+    }
     
   }
   
