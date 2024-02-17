@@ -11,9 +11,12 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.app.shoppingtally.auth.models.CheckUserRequest;
+import com.app.shoppingtally.auth.models.CheckUserResponse;
 import com.app.shoppingtally.auth.models.CurrentList;
 import com.app.shoppingtally.auth.models.FullListRequest;
 import com.app.shoppingtally.auth.models.ListFromFrontend;
@@ -106,6 +109,16 @@ public class AuthenticationService {
 		var jwtToken = jwtService.generateToken(user);
 		saveUserToken(user, jwtToken);
 		return AuthenticationResponse.builder().token(jwtToken).build();
+	}
+	
+	public CheckUserResponse checkUser(CheckUserRequest requestedEmail) {
+		if(repository.findByEmail(requestedEmail.getEmail()).isPresent()) {
+			return CheckUserResponse.builder().found(true).build();
+		}else {
+			return CheckUserResponse.builder().found(false).build();
+		}
+		
+		
 	}
 	
 	public AuthenticationResponse signOut(String token) {

@@ -4,6 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErr
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { min } from 'rxjs';
 import { NavService } from 'src/global/nav/nav.service';
@@ -23,7 +24,7 @@ import { RegisterService } from 'src/register/register.service';
     ReactiveFormsModule,
     CommonModule,
     MatButtonModule,
-    MatSnackBar
+    MatSnackBarModule
   ]
 })
 export class RegisterModalComponent implements OnInit{
@@ -60,8 +61,8 @@ export class RegisterModalComponent implements OnInit{
   }
 
   submit(){
-    this.registerService.checkUser(email).subscribe(d => {
-      if(d){
+    this.service.checkUser(this.registerForm.controls.email.value).subscribe(d => {
+      if(d.found){
         //user found
         this.userFoundNotification.open("Email already in use, please try a different email","",{duration:2000})
       }else{
@@ -75,7 +76,7 @@ export class RegisterModalComponent implements OnInit{
           }
         })
       }
-    }
+    })
   } 
       
 

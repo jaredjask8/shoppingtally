@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { CheckUser } from 'src/global/bootstrap-components/register-modal/models/CheckUser';
 import { EnvironmentService } from 'src/global/utility/environment.service';
 import { JwtUserResponse } from 'src/models/JwtUserResponse';
 import { TokenResponse } from 'src/models/TokenResponse';
@@ -39,8 +40,8 @@ export class RegisterService {
     
   }
 
-  checkUser(email:string):Observable<boolean>{
-    return this.http.get<boolean>("https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/api/v1/auth/checkUser");
+  checkUser(email:string):Observable<CheckUser>{
+    return this.http.post<CheckUser>(environment.apiUrl+"/api/v1/auth/checkUser",{email:email});
   }
 
   getCredentials(){

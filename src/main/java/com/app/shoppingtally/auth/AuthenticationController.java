@@ -7,12 +7,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.shoppingtally.auth.models.CheckUserRequest;
+import com.app.shoppingtally.auth.models.CheckUserResponse;
 import com.app.shoppingtally.auth.models.CurrentList;
 import com.app.shoppingtally.auth.models.FullListRequest;
 import com.app.shoppingtally.auth.models.ListFromFrontend;
@@ -34,6 +37,11 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin
 public class AuthenticationController {
 	private final AuthenticationService service;
+	
+	@PostMapping("/checkUser")
+	public CheckUserResponse checkUser(@RequestBody CheckUserRequest requestedEmail) {
+		return service.checkUser(requestedEmail);
+	}
 	
 	@PostMapping("/register")
 	public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
