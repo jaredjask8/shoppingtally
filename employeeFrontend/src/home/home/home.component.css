@@ -21,7 +21,16 @@
     align-items: center;
   }
 
-  
+  .asteriskNote{
+    margin-top: 10px;
+    font-size: 9px;
+    width: 300px;
+  }
+
+  span{
+    font-size: 9px;
+    position: absolute;
+  }
 
 
   .whyContainer{
@@ -93,6 +102,7 @@
 
 .test{
   padding: 10px;
+  position: relative;
 }
 
 .whatsNewSection{
