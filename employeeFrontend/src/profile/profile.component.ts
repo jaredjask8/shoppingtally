@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { NavService } from 'src/global/nav/nav.service';
 import { UserOrderInfo } from 'src/list/models/UserOrderInfo';
 import { select } from '@ngrx/store';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-profile',
@@ -40,7 +41,7 @@ export class ProfileComponent implements OnInit{
   currentUpdateTitle:string
   
   
-  constructor(private userService:EnvironmentService, private registerService:RegisterService, private profileService:ProfileService, private router:Router, private navService:NavService){}
+  constructor(private userService:EnvironmentService, private registerService:RegisterService, private profileService:ProfileService, private router:Router, private navService:NavService, private emailFoundNotification:MatSnackBar){}
   ngOnInit(): void {
     this.registerService.getUser().subscribe(d=>this.userData = d)
   }
@@ -88,10 +89,36 @@ export class ProfileComponent implements OnInit{
   }
 
   updateUserData(data:string){
-    console.log(data)
-    this.userService.updateUserData(data,this.currentUpdateTitle).subscribe(d=>{
-      this.userData = d
-    })
+    if(this.currentUpdateTitle == "email"){
+      if(data != this.userData.email){
+        this.registerService.checkUser(data).subscribe(d=>{
+          if(!d.found){
+            this.userService.updateUserData(data,this.currentUpdateTitle).subscribe(
+              {
+                next: d => this.userData = d,
+                complete: () => {
+                  this.registerService.authLogin(data,"t").subscribe({
+                    next: d=>{
+                      this.userService.setToken(d.token)
+                    },
+                    complete:()=>{
+                      this.router.navigateByUrl("home")
+                    }
+                  })
+                }
+              }
+            )
+          }else{
+            this.emailFoundNotification.open("Email already in use, please try another email.","",{duration:2000})
+          }
+        })
+      }
+    }else{
+      this.userService.updateUserData(data,this.currentUpdateTitle).subscribe(d=>{
+        this.userData = d
+      })
+    }
+    
     this._showUpdate = false;
     this.phoneFieldShown = false
   }

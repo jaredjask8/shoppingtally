@@ -129,7 +129,9 @@ public class AuthenticationService {
 	
 	
 	public UserDTO getUser(String token) {
+		log.info(token);
 		User user = repository.findByEmail(jwtService.extractUsername(jwtService.extractFromBearer(token))).get();
+		log.info(user.toString());
 		return UserDTO.builder()
 				.firstname(user.getFirstname())
 				.lastname(user.getLastname())
