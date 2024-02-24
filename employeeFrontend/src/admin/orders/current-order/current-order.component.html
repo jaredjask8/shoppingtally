@@ -33,7 +33,7 @@
         <div class="example-box" *ngFor="let item of todo" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -74,7 +74,7 @@
         <div class="example-box" *ngFor="let item of health" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -115,7 +115,7 @@
         <div class="example-box" *ngFor="let item of dairy" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -156,7 +156,7 @@
         <div class="example-box" *ngFor="let item of breakfast" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -197,7 +197,7 @@
         <div class="example-box" *ngFor="let item of international" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -238,7 +238,7 @@
         <div class="example-box" *ngFor="let item of baking" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -279,7 +279,7 @@
         <div class="example-box" *ngFor="let item of grains" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -320,7 +320,7 @@
         <div class="example-box" *ngFor="let item of snacks" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -361,7 +361,7 @@
         <div class="example-box" *ngFor="let item of pet" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -402,7 +402,7 @@
         <div class="example-box" *ngFor="let item of household" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -443,7 +443,7 @@
         <div class="example-box" *ngFor="let item of beverages" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -484,7 +484,7 @@
         <div class="example-box" *ngFor="let item of bread" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -525,7 +525,7 @@
         <div class="example-box" *ngFor="let item of frozen" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -566,7 +566,7 @@
         <div class="example-box" *ngFor="let item of meat" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -607,7 +607,7 @@
         <div class="example-box" *ngFor="let item of produce" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -648,7 +648,7 @@
         <div class="example-box" *ngFor="let item of bakery" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -689,7 +689,7 @@
         <div class="example-box" *ngFor="let item of deli" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>
@@ -712,7 +712,7 @@
         <div class="example-box" *ngFor="let item of completed" cdkDrag>
           <div style="width: 100px;">{{item.name}}</div>
           <div>{{item.quantity}}</div>
-          <img *ngIf="item.image != 'null' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
+          <img *ngIf="item.image != 'null' && item.image != '' else imageTemplate" (click)="expandImage()" [src]=item.image height="auto" width="40px">
           <ng-template #imageTemplate>
             <img src="../../../assets/img/bag.png" height="auto" width="50px">
           </ng-template>

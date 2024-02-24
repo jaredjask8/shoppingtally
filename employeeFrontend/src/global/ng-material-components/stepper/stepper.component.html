@@ -7,9 +7,9 @@
   <mat-step label="Review">
       <div class="tableContainer">
           <div class="rowContainer pt-2 pb-3" *ngFor="let item of yes">
-            <img *ngIf="item.image != 'undefined' && item.image != 'null' else imageTemplate" [src]=item.image height="70px" width="70px">
+            <img *ngIf="item.image != 'undefined' && item.image != 'null' && item.image != '' else imageTemplate" [src]=item.image height="70px" width="70px">
             <ng-template #imageTemplate>
-              <img src="../../../assets/img/bag.png" height="auto" width="50px">
+              <img src="../../../assets/img/bag.png" height="auto" width="70px">
             </ng-template>
             <div style="width: 150px; text-align: center;">
               {{item.name}}
