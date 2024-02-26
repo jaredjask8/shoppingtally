@@ -1,4 +1,4 @@
-import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDragExit, CdkDragMove, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -118,9 +118,6 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
         event.currentIndex,
       );
     }
-
-
-
     // let test = event.previousContainer.element.nativeElement.innerText;
     // console.log(test.substring(0,test.indexOf('\n')))
 
@@ -211,6 +208,19 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
     }
     
 
+    
+  }
+
+  draggableScroll(event:CdkDragMove<any>){
+
+    if((window.screenY + (window.outerHeight-100))-event.pointerPosition.y <= 400){
+      window.scrollBy(0,200)
+    }
+
+    if((event.pointerPosition.y - window.screenY) <= 100){
+      window.scrollBy(0,-200)
+      
+    }
     
   }
 
