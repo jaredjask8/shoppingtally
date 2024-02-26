@@ -359,6 +359,7 @@ export class ListComponent implements OnInit, OnDestroy {
       if(this.checkItemValidity(item)){
         this.isItemValid = true;
         this.currentItem = item;
+        this.getImages(item)
       }else{
         //hide button and display message
         
