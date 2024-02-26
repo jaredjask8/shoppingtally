@@ -213,7 +213,7 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
 
   draggableScroll(event:CdkDragMove<any>){
 
-    if((window.screenY + (window.outerHeight-100))-event.pointerPosition.y <= 400){
+    if((window.screenY + (window.outerHeight-100))-event.pointerPosition.y <= 100){
       window.scrollBy(0,200)
     }
 
