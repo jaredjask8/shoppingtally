@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { WhatsNew } from 'src/models/WhatsNew';
+import { WhatsNew } from '../../../src/models/WhatsNew';
 import { AdminService } from '../admin.service';
 import { CommonModule } from '@angular/common';
 
@@ -10,8 +10,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { LoaderComponent } from 'src/global/components/loader.component';
-import { LoaderService } from 'src/global/components/loader.service';
+import { LoaderComponent } from '../../../src/global/components/loader.component';
+import { LoaderService } from '../../../src/global/components/loader.service';
 
 @Component({
   selector: 'app-whats-new',

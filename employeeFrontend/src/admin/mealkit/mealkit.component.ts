@@ -4,7 +4,7 @@ import { IngredientsInterface } from './models/IngredientsInterface';
 import { Ingredients } from './models/Ingredients';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Recipes } from './models/Recipes';
-import { LoaderService } from 'src/global/components/loader.service';
+import { LoaderService } from '../../../src/global/components/loader.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -222,14 +222,14 @@ export class MealkitComponent implements OnInit{
 
   finishRecipeEdit(){
     this.mealkitService.updateRecipe(this.currentEditRecipe).subscribe(d=>this.recipeArray = d)
-    this.currentEditRecipe = null
+    this.currentEditRecipe = null!
     this.isCreateRecipeShown = true
   }
 
   deleteRecipe(){
     this.mealkitService.deleteRecipe(this.currentEditRecipe).subscribe(d => {
       this.recipeArray = d
-      this.currentEditRecipe = null
+      this.currentEditRecipe = null!
       this.isCreateRecipeShown = true
       
     })

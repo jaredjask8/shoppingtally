@@ -4,13 +4,13 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, from } from 'rxjs';
-import { ListService } from 'src/list/list_component/list.service';
-import { CurrentOrderShopper } from 'src/list/models/CurrentOrderShopper';
-import { ListItemInterface } from 'src/list/models/ListItemInterface';
+import { ListService } from '../../../../src/list/list_component/list.service';
+import { CurrentOrderShopper } from '../../../../src/list/models/CurrentOrderShopper';
+import { ListItemInterface } from '../../../../src/list/models/ListItemInterface';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
-import { EnvironmentService } from 'src/global/utility/environment.service';
-import { CurrentOrderUserClassWithUpdateMessage } from 'src/list/models/CurrentOrderUserClassWithUpdateMessage';
+import { EnvironmentService } from '../../../../src/global/utility/environment.service';
+import { CurrentOrderUserClassWithUpdateMessage } from '../../../../src/list/models/CurrentOrderUserClassWithUpdateMessage';
 import { MatButtonModule } from '@angular/material/button';
 import { environment } from '../../../environments/environment';
 
@@ -120,7 +120,7 @@ export class CurrentOrderComponent implements OnInit,OnDestroy{
     // let test = event.previousContainer.element.nativeElement.innerText;
     // console.log(test.substring(0,test.indexOf('\n')))
 
-    let fromCategory:string = event.previousContainer.element.nativeElement.parentElement.getElementsByTagName('h2')[0].innerText.toLowerCase().replace(/\s/g, "")
+    let fromCategory:string = event.previousContainer.element.nativeElement.parentElement?.getElementsByTagName('h2')[0].innerText.toLowerCase().replace(/\s/g, "")!
     if(fromCategory != toCategory){
 
       switch(toCategory){

@@ -1,29 +1,27 @@
 import { Component, ElementRef, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild, ViewEncapsulation, inject } from '@angular/core';
-import { GroceryService } from 'src/global/grocery_items/grocery.service';
+import { GroceryService } from '../../../src/global/grocery_items/grocery.service';
 import { Branded } from '../models/Branded';
 import { ListItem } from '../models/ListItem';
 import { MatTable } from '@angular/material/table';
-import { EnvironmentService } from 'src/global/utility/environment.service';
+import { EnvironmentService } from '../../../src/global/utility/environment.service';
 import { ListService } from './list.service';
-import { DatepickerService } from 'src/global/bootstrap-components/datepicker/datepicker.service';
+import { DatepickerService } from '../../../src/global/bootstrap-components/datepicker/datepicker.service';
 import { ListToDB } from '../models/ListToDB';
 import { Common } from '../models/Common';
 import { Observable, of } from 'rxjs';
-import { NavService } from 'src/global/nav/nav.service';
+import { NavService } from '../../../src/global/nav/nav.service';
 import { ListItemInterface } from '../models/ListItemInterface';
 
 
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
-import { CurrentOrderComponent } from 'src/admin/orders/current-order/current-order.component';
-import { CurrentOrderUserClass } from '../models/CurrentOrderUserClass';
 import { CurrentOrderUser } from '../models/CurrentOrderUser';
 import { CurrentOrderUserClassWithUpdateMessage } from '../models/CurrentOrderUserClassWithUpdateMessage';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import { NgbCollapseModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl } from '@angular/forms';
-import { AffiliateData } from 'src/admin/affiliate/models/AffiliateData';
-import { AffiliateService } from 'src/admin/affiliate/affiliate.service';
+import { AffiliateData } from '../../../src/admin/affiliate/models/AffiliateData';
+import { AffiliateService } from '../../../src/admin/affiliate/affiliate.service';
 import { environment } from '../../environments/environment';
 import { UserOrderInfo } from '../models/UserOrderInfo';
 
@@ -35,9 +33,6 @@ import { UserOrderInfo } from '../models/UserOrderInfo';
   
 })
 export class ListComponent implements OnInit, OnDestroy {
-  //socket
-  //"http://localhost/test/our-websocket"
-  //"https://shoppingtally.click/test/shoppingtally-0.0.2-SNAPSHOT/our-websocket"
   serverUrl = environment.socketUrl+"/our-websocket"
   title = 'WebSockets chat';
   stompClient;
@@ -413,7 +408,7 @@ export class ListComponent implements OnInit, OnDestroy {
     this.renderer.setStyle(image.parentElement, 'backgroundColor', '#2A246A')
     this.renderer.setStyle(this.previousImage.parentElement, 'backgroundColor', 'transparent')
     this.previousImage = image;
-    this.currentImage = image.getAttribute("src")
+    this.currentImage = image.getAttribute("src")!
     console.log(this.currentImage)
   }
 
@@ -444,7 +439,7 @@ export class ListComponent implements OnInit, OnDestroy {
       })
 
       let newItem:ListItem = new ListItem(this.currentItem,this.currentQuantity,this.currentImage);
-      this.updateActiveOrderFrontend('todo',newItem,'added');
+      this.updateActiveOrderFrontend(newItem,'added','todo');
       this.snackBar.open("Item added","",{panelClass:"light-blue-backdrop",duration:2000})
     } else {
       //send to currentOrder
@@ -462,7 +457,7 @@ export class ListComponent implements OnInit, OnDestroy {
     if(listType == "current"){
       update ? this.increaseCurrentOrderQuantity(item) : this.decreaseCurrentOrderQuantity(item)
     }else{
-      update ? this.increaseActiveOrderQuantity(item,category,'increased') : this.decreaseActiveOrderQuantity(item,category,'decreased')
+      update ? this.increaseActiveOrderQuantity(item,'increased',category) : this.decreaseActiveOrderQuantity(item,'decreased',category)
     }
 
   }
@@ -479,7 +474,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
   }
 
-  increaseActiveOrderQuantity(item: ListItem, category: string, choice: string) {
+  increaseActiveOrderQuantity(item: ListItem, choice: string,category?: string) {
     this.listService.increaseActiveOrderQuantity(item, category).subscribe(d => {
       this.todo = d.todo
       this.deli = d.deli
@@ -503,13 +498,13 @@ export class ListComponent implements OnInit, OnDestroy {
 
     
 
-    this.updateActiveOrderFrontend(category, item, choice)
+    this.updateActiveOrderFrontend(item, choice,category)
 
 
 
   }
 
-  decreaseActiveOrderQuantity(item: ListItem, category: string, choice: string) {
+  decreaseActiveOrderQuantity(item: ListItem, choice: string,category?: string) {
     console.log(item.name + "   " + category + "    " + choice  )
     if (parseInt(item.quantity) > 1) {
       this.listService.decreaseActiveOrderQuantity(item, category).subscribe(d => {
@@ -533,7 +528,7 @@ export class ListComponent implements OnInit, OnDestroy {
         this.completed = d.completed
       })
 
-      this.updateActiveOrderFrontend(category, item, choice)
+      this.updateActiveOrderFrontend(item, choice,category)
     }
 
     
@@ -561,10 +556,10 @@ export class ListComponent implements OnInit, OnDestroy {
         this.bakery = d.bakery
         this.completed = d.completed
     });
-    this.updateActiveOrderFrontend(category,item,choice);
+    this.updateActiveOrderFrontend(item,choice,category);
   }
 
-  updateActiveOrderFrontend(category: string, item: ListItem, choice: string) {
+  updateActiveOrderFrontend(item: ListItem, choice: string,category?: string) {
     let updateMessage = "";
     let newQuantity = 0;
     switch (choice) {
