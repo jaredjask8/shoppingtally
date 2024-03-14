@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatepickerComponent } from './datepicker.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('DatepickerComponent', () => {
   let component: DatepickerComponent;
@@ -9,7 +10,7 @@ describe('DatepickerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ ],
-      imports:[DatepickerComponent]
+      imports:[DatepickerComponent,MatSnackBarModule]
     })
     .compileComponents();
 

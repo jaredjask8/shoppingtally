@@ -63,11 +63,11 @@
                 <ng-template #phoneField>
                     <div class="d-flex flex-row justify-content-center mb-3">
                         <div>(</div>
-                        <input class="phoneInput" #areaInput [value]=areaCode>
+                        <input class="phoneInput" type="number" #areaInput [value]=areaCode>
                         <div>)-</div>
-                        <input class="phoneInput" #middleInput [value]=middleOfNumber>
+                        <input class="phoneInput" type="number" #middleInput [value]=middleOfNumber>
                         <div>-</div>
-                        <input class="phoneInput" #endInput [value]=endOfNumber>
+                        <input class="phoneInput" type="number" #endInput [value]=endOfNumber>
                     </div>
                     <button mat-raised-button matRipple style="overflow: hidden;" [matRippleColor]="rippleColor" (click)="updateUserData(areaInput.value+middleInput.value+endInput.value)">Submit</button>
                 </ng-template>

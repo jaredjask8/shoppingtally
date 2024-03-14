@@ -6,9 +6,9 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { RegisterService } from "src/register/register.service";
 import { TokenResponse } from "src/models/TokenResponse";
 import { NavService } from "../nav/nav.service";
-import { ProfileService } from "src/profile/profile.service";
+import { ProfileService } from "../../profile/profile.service";
 import { Router } from "@angular/router";
-import { environment } from "src/environments/environment";
+import { environment } from "../../environments/environment";
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 

@@ -81,27 +81,27 @@ export class ListComponent implements OnInit, OnDestroy {
   editClicked: boolean = false;
   isActiveOrder: boolean
   hasCurrentOrder: boolean
-  currentOrderList: ListItemInterface[]
-  cart:ListItemInterface[]
+  currentOrderList: ListItemInterface[]=[]
+  cart:ListItemInterface[]=[]
   //lists
-  todo: ListItemInterface[]
-  breakfast: ListItemInterface[]
-  bread: ListItemInterface[]
-  pet: ListItemInterface[]
-  produce: ListItemInterface[]
-  beverages: ListItemInterface[]
-  international: ListItemInterface[]
-  baking: ListItemInterface[]
-  grains: ListItemInterface[]
-  snacks: ListItemInterface[]
-  deli: ListItemInterface[]
-  bakery: ListItemInterface[]
-  meat: ListItemInterface[]
-  household: ListItemInterface[]
-  health: ListItemInterface[]
-  frozen: ListItemInterface[]
-  dairy: ListItemInterface[]
-  completed: ListItemInterface[]
+  todo: ListItemInterface[]=[]
+  breakfast: ListItemInterface[]=[]
+  bread: ListItemInterface[]=[]
+  pet: ListItemInterface[]=[]
+  produce: ListItemInterface[]=[]
+  beverages: ListItemInterface[]=[]
+  international: ListItemInterface[]=[]
+  baking: ListItemInterface[]=[]
+  grains: ListItemInterface[]=[]
+  snacks: ListItemInterface[]=[]
+  deli: ListItemInterface[]=[]
+  bakery: ListItemInterface[]=[]
+  meat: ListItemInterface[]=[]
+  household: ListItemInterface[]=[]
+  health: ListItemInterface[]=[]
+  frozen: ListItemInterface[]=[]
+  dairy: ListItemInterface[]=[]
+  completed: ListItemInterface[]=[]
 
   stringArray: any[] = []
   componentInstance = this;
@@ -116,7 +116,7 @@ export class ListComponent implements OnInit, OnDestroy {
     this.initializeWebSocketConnection();
   }
   ngOnInit(): void {
-
+    
     let that = this
     //oninit call get order status
     this.listService.getUserHasOrder().subscribe(d => {
@@ -208,7 +208,7 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   initializeWebSocketConnection() {
-
+    
     let ws = new SockJS(this.serverUrl);
     this.stompClient = Stomp.over(ws);
     let that = this;
@@ -307,7 +307,7 @@ export class ListComponent implements OnInit, OnDestroy {
   }
   
 
-  cancelProcess(content: TemplateRef<any>,choice:string){
+  cancelProcess(choice:string,content?: TemplateRef<any>){
     this.cancelOrderModal.open(content).result.then(
       (result) => {
         if(result == "cancel"){
@@ -329,19 +329,19 @@ export class ListComponent implements OnInit, OnDestroy {
       })
   }
 
-  cancelOrder(content: TemplateRef<any>){
+  cancelOrder(content?: TemplateRef<any>){
     this.cancelFromUser = true
-    this.cancelProcess(content,"user")
+    this.cancelProcess("user",content)
   }
 
-  deleteCurrentOrderItem(item: ListItem, content: TemplateRef<any>) {
+  deleteCurrentOrderItem(item: ListItem, content?: TemplateRef<any>) {
     //check if last item in order before deleting
     //if last prompt shown to cancel order
     //else continue
     if(this.currentOrderList.length == 1){
       this.cancelFromItem = true
       //modal for prompt to cancel order
-      this.cancelProcess(content,"item")
+      this.cancelProcess("item",content)
     }else{
       this.listService.deleteCurrentOrderItem(item).subscribe(d => this.currentOrderList = d)
     }
@@ -379,10 +379,7 @@ export class ListComponent implements OnInit, OnDestroy {
       let count = d.itemCount.toString()
       this.navService.cartCount.next(count);
     })
-    
     this.snackBar.open("Item added","",{duration:1000})
-    //this.list.push(item)
-    //this.table.renderRows();
     this.resetItem()
   }
 
@@ -1075,8 +1072,6 @@ export class ListComponent implements OnInit, OnDestroy {
         if(d.name === item){
           itemFound = false;
         }
-
-        console.log(item + "   " + d.name)
       })
     }else if(this.hasCurrentOrder && !this.isActiveOrder){
       //current order state
@@ -1085,7 +1080,6 @@ export class ListComponent implements OnInit, OnDestroy {
           itemFound = false;
           
         }
-        
       })
     }else{
       //active order state

@@ -8,7 +8,7 @@ describe('EditListComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [EditListComponent]
+      imports: [EditListComponent]
     });
     fixture = TestBed.createComponent(EditListComponent);
     component = fixture.componentInstance;

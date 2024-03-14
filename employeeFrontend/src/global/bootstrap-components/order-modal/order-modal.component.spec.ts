@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OrderModalComponent } from './order-modal.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('OrderModalComponent', () => {
   let component: OrderModalComponent;
@@ -8,7 +9,7 @@ describe('OrderModalComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [OrderModalComponent]
+      imports: [OrderModalComponent, HttpClientTestingModule]
     });
     fixture = TestBed.createComponent(OrderModalComponent);
     component = fixture.componentInstance;

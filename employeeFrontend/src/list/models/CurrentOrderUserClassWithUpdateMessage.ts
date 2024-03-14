@@ -1,4 +1,3 @@
-import { CurrentOrderUserClass } from "./CurrentOrderUserClass";
 import { ListItemInterface } from "./ListItemInterface";
 
 export class CurrentOrderUserClassWithUpdateMessage{

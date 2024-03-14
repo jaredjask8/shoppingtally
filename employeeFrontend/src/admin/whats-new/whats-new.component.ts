@@ -71,7 +71,9 @@ export class WhatsNewComponent implements OnInit{
           console.log(data)
         },
         error:err=>{
+          this.loaderService.isLoading.next(false)
           this.uploadMessage.open("Failed to upload : " +err,"",{duration:1000})
+          
         },
         complete:()=>{
           this.loaderService.isLoading.next(false)
@@ -79,7 +81,20 @@ export class WhatsNewComponent implements OnInit{
         }
       })
     }else{
-      this.adminService.submitWhatsNew(new WhatsNew(2,this.title2,this.description2,this.imgUrl2)).subscribe(d => console.log(d))
+      this.adminService.submitWhatsNew(new WhatsNew(2,this.title2,this.description2,this.imgUrl2)).subscribe({
+        next:data => {
+          console.log(data)
+        },
+        error:err=>{
+          this.loaderService.isLoading.next(false)
+          this.uploadMessage.open("Failed to upload : " +err,"",{duration:1000})
+          
+        },
+        complete:()=>{
+          this.loaderService.isLoading.next(false)
+          this.uploadMessage.open("Uploaded successfully","",{duration:1000})
+        }
+      })
     }
     
   }

@@ -10,7 +10,6 @@ import { ListItemInterface } from 'src/list/models/ListItemInterface';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { EnvironmentService } from 'src/global/utility/environment.service';
-import { CurrentOrderUser } from 'src/list/models/CurrentOrderUser';
 import { CurrentOrderUserClassWithUpdateMessage } from 'src/list/models/CurrentOrderUserClassWithUpdateMessage';
 import { MatButtonModule } from '@angular/material/button';
 import { environment } from '../../../environments/environment';

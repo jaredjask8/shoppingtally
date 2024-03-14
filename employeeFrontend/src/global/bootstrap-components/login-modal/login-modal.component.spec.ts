@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { LoginModalComponent } from './login-modal.component';
 
 describe('LoginModalComponent', () => {
@@ -8,7 +8,7 @@ describe('LoginModalComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [LoginModalComponent]
+      imports: [LoginModalComponent,HttpClientTestingModule]
     });
     fixture = TestBed.createComponent(LoginModalComponent);
     component = fixture.componentInstance;

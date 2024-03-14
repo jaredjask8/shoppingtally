@@ -199,7 +199,7 @@ export class MealkitComponent implements OnInit{
       }
     })
 
-    let finalImage:string = "https://shoppingtally.click/images/"+image+".png"
+    let finalImage:string = "https://shoppingtally.com/images/"+image+".png"
     this.mealkitService.addRecipe(new Recipes(this.recipeIngredients,this.recipeSteps,this.recipeName,this.recipeDescription,finalImage,this.recipeTags,this.recipeServingSize,false)).subscribe({
       next:d=>this.recipeArray = d,
       error:err=>console.error(err),
