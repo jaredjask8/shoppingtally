@@ -228,7 +228,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
     this.dateSelected = false
     this.datePickedFromCalendar = true;
     this.currentSelectedDate = dates.selectedDate
-    this.currentDate = dates.currentDate.year + "-" + dates.currentDate.month + "-" + dates.currentDate.day;
+    this.currentDate = dates.selectedDate.year + "-" + dates.selectedDate.month + "-" + dates.selectedDate.day;
     //means date is clicked
     //unhide hours
     this.renderer2.removeClass(this.hoursContainer.nativeElement,'container')
