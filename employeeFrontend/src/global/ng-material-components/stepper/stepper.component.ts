@@ -222,6 +222,7 @@ export class StepperComponent implements OnInit, AfterViewInit{
     let currentDate = new Date(dates.currentDate.year,dates.currentDate.month-1,dates.currentDate.day).getTime()
     let currentDateToString = new Date(dates.currentDate.year,dates.currentDate.month-1,dates.currentDate.day).toLocaleDateString()
     let selectedDate = new Date(dates.selectedDate.year,dates.selectedDate.month-1,dates.selectedDate.day).getTime()
+    let selectedDateToString = new Date(dates.selectedDate.year,dates.selectedDate.month-1,dates.selectedDate.day).toLocaleDateString()
     this.dpStartDate = dates.currentDate
     if(currentDate <= selectedDate){
       this.previousHourSelected = this.we.nativeElement;
@@ -266,6 +267,26 @@ export class StepperComponent implements OnInit, AfterViewInit{
       }
     
     }
+
+      //compare todays date with selected date
+      if(currentDateToString == selectedDateToString){
+        //take all hours behind current hour an mark them disabled
+        //first get current hour
+        console.log(new Date().getHours())
+        for(let i = 0; i < hourArray.length;i++){
+          if(parseInt(hourArray[i].firstChild.textContent.substring(0,hourArray[i].firstChild.textContent.indexOf('a'))) <= new Date().getHours()){
+            hourArray[i].firstChild.parentElement.style.opacity=".3"
+            hourArray[i].firstChild.parentElement.style.pointerEvents="none"
+          }else if(parseInt(hourArray[i].firstChild.textContent.substring(0,hourArray[i].firstChild.textContent.indexOf('p'))) == new Date().getHours()){
+            hourArray[i].firstChild.parentElement.style.opacity=".3"
+            hourArray[i].firstChild.parentElement.style.pointerEvents="none"
+          }else if(parseInt(hourArray[i].firstChild.textContent.substring(0,hourArray[i].firstChild.textContent.indexOf('p'))) <= new Date().getHours() - 12){
+            hourArray[i].firstChild.parentElement.style.opacity=".3"
+            hourArray[i].firstChild.parentElement.style.pointerEvents="none"
+          }
+        }
+      }
+
     }else{
       //show notification
       this.datePickedFromCalendar = false
