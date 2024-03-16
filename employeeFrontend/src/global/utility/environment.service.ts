@@ -136,7 +136,7 @@ import * as SockJS from 'sockjs-client';
         that.stompClient.subscribe("/user/topic/messages", function (message) {
           if (message.body == "false") {
             that.navService.cartVisibility.next({ hasActive: false, hasCurrentOrder: false })
-  
+            that.navService.cartCount.next("0")
           }
   
   
