@@ -14,7 +14,7 @@ const routes: Routes = [
 	{ path: 'reviews', loadChildren: () => import('../reviews/reviews.module').then(m => m.ReviewsModule) },
 	{ path: 'admin', loadChildren: () => import('../admin/admin.module').then(m => m.AdminModule), canActivate:[adminGuard]}, //, canActivate:[adminGuard]
 	{ path: 'mealkit', loadChildren: () => import('../mealkit/mealkit.module').then(m => m.MealkitModule),canActivate:[loggedInGuard] },
-	{ path: 'howItWorks', loadChildren: () => import('../how-it-works/how-it-works.module').then(m => m.HowItWorksModule),canActivate:[loggedInGuard] },
+	{ path: 'howItWorks', loadChildren: () => import('../how-it-works/how-it-works.module').then(m => m.HowItWorksModule)},
 	{ path: '**', redirectTo: 'home' }
 ];
 
